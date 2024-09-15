@@ -57,7 +57,7 @@ class CalmosModel(nn.Module):
         mlp_output_size: int = 1,
         mlp_dropout: float = 0.1,
         use_bias: bool = True,
-        layer_weight_strategy: str = "transformer", # "transformer" or "weighted_sum"
+        layer_weight_strategy: str = "transformer", # "transformer" or "weighted_sum" or "last_hidden_state"
         num_feature_layers: int = 25,
     ):
         super().__init__()
@@ -117,6 +117,9 @@ class CalmosModel(nn.Module):
                         init.zeros_(param)
 
     def _weighted_sum(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Do a weighted sum of the layers in the sequence
+        """
         # Stack the weights into a tensor
         layer_weights = torch.stack([w for w in self.layer_weights]).view(1, -1, 1)  # Shape: [1, seq_length, 1]
         # Multiply and sum over the sequence dimension
@@ -134,6 +137,9 @@ class CalmosModel(nn.Module):
 
         return x
 
+    def _last_hidden_state(self, x: torch.Tensor) -> torch.Tensor:
+        return x[:, -1, :]
+
     def forward(self, x):
         if self.layer_weight_strategy == "transformer":
             # Transformer
@@ -141,6 +147,9 @@ class CalmosModel(nn.Module):
         elif self.layer_weight_strategy == "weighted_sum":
             # Weighted sum
             x = self._weighted_sum(x)
+        elif self.layer_weight_strategy == "last_hidden_state":
+            # Last hidden state
+            x = self._last_hidden_state(x)
         # MLP
         logits = self.mlp(x).squeeze(-1)
 
