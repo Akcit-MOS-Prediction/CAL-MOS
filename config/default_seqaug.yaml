@@ -1,4 +1,4 @@
-title: MOSPred-MMS1B-(steps-${trainer.max_steps})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})-(wd-${optimizer.params.weight_decay})-Pretraining
+title: MOSPred-MMS1B-SeqAug-(steps-${trainer.max_steps})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})-(wd-${optimizer.params.weight_decay})-Pretraining
 
 datasets:
     train:
@@ -24,7 +24,7 @@ datasets:
 
 data:
     aggregation_strategy: "mean"
-    use_seqaug: False
+    use_seqaug: True
 
 train:
     batch_size: 128
@@ -44,7 +44,7 @@ model:
     mlp_dropout: 0.1
     use_bias: True
     layer_weight_strategy: "transformer" # "transformer" or "weighted_sum"
-    num_feature_layers: 48
+    num_feature_layers: 49
 
 optimizer:
     name: "Adam"

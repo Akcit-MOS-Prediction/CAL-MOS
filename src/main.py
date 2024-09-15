@@ -2,6 +2,7 @@ import os
 import json
 import logging
 import argparse
+from pprint import pprint
 
 import wandb
 import torch
@@ -51,6 +52,10 @@ def main() -> None:
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
 
+    print(f"Using {config.model.layer_weight_strategy} for layer weights")
+    if config.data.use_seqaug:
+        print(f"Using sequence augmentation!")
+
     if "tags" not in config or config.tags is None:
         raise Exception(
             f"You must add a list of tags in attribute ``tags`` in your experiment \
@@ -79,6 +84,7 @@ def main() -> None:
     model = CALMOSWrapper(config)
 
     print(model)
+    pprint(config, depth=2, indent=4)
 
     trainer = pl.Trainer(
         **config["trainer"],

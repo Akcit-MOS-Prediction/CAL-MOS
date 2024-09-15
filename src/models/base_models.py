@@ -117,10 +117,10 @@ class CalmosModel(nn.Module):
                         init.zeros_(param)
 
     def _weighted_sum(self, x: torch.Tensor) -> torch.Tensor:
-        weighted_sum = torch.zeros_like(x)
-        for i, weight in enumerate(self.layer_weights):
-            weighted_sum += weight * x[:, i, :]
-
+        # Stack the weights into a tensor
+        layer_weights = torch.stack([w for w in self.layer_weights]).view(1, -1, 1)  # Shape: [1, seq_length, 1]
+        # Multiply and sum over the sequence dimension
+        weighted_sum = (x * layer_weights).sum(dim=1)  # Shape: [batch_size, feature_size]
         return weighted_sum
 
     def _transformer_aggregation(self, x: torch.Tensor) -> torch.Tensor:
@@ -133,7 +133,6 @@ class CalmosModel(nn.Module):
         x = x[:, 0, :]
 
         return x
-
 
     def forward(self, x):
         if self.layer_weight_strategy == "transformer":
