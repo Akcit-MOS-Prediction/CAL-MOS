@@ -1,0 +1,95 @@
+import os
+import json
+import logging
+import argparse
+
+import wandb
+import torch
+from transformers import AutoTokenizer
+import pandas as pd
+import pytorch_lightning as pl
+from torch import nn
+from omegaconf import OmegaConf
+from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
+from pytorch_lightning.loggers import WandbLogger
+
+from models.calmos_wrapper import CALMOSWrapper
+from utils.utils import build_dataloaders
+
+def warn(*args, **kwargs):
+    pass
+
+import warnings
+warnings.warn = warn
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-c",
+        "--config_path",
+        required=True,
+        type=str,
+        help="YAML file with configurations"
+    )
+    parser.add_argument(
+        "-g",
+        "--gpu",
+        required=True,
+        type=int
+    )
+    parser.add_argument(
+        "-ck",
+        "--checkpoint-dir",
+        required=False,
+        type=str,
+        default="../checkpoints/mos-prediction",
+    )
+
+    args = parser.parse_args()
+
+    config = OmegaConf.load(args.config_path)
+
+    device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
+
+    if "tags" not in config or config.tags is None:
+        raise Exception(
+            f"You must add a list of tags in attribute ``tags`` in your experiment \
+                setup file {args.config_path}.\n \
+                E.g.\n\
+                tags:\n\
+                - <your tag>"
+        )
+
+    train_dataloader, val_dataloader, test_dataloader = build_dataloaders(config)
+
+    exp_title = config.title
+
+    tags = ["MOS-Prediction"]
+    tags += [dataset["name"] for dataset in config.datasets.train]  # add training datasets as tags
+    tags += config.tags  # add tags defined for experiments
+    wandb.init(project="MOS-Prediction", name=exp_title, tags=tags, entity="alefiury")
+    logger = WandbLogger(project="MOS-Prediction", name=exp_title, tags=tags, entity="alefiury")
+    config["model_checkpoint"].pop("dirpath")
+
+    callbacks = [
+        ModelCheckpoint(**config["model_checkpoint"]),
+        LearningRateMonitor("step"),
+    ]
+
+    model = CALMOSWrapper(config)
+
+    print(model)
+
+    trainer = pl.Trainer(
+        **config["trainer"],
+        logger=logger,
+        callbacks=callbacks,
+        devices=[args.gpu],
+        default_root_dir=os.path.join(args.checkpoint_dir, config["title"])
+    )
+
+    trainer.fit(model, train_dataloader, val_dataloader)
+
+
+if __name__ == "__main__":
+    main()
