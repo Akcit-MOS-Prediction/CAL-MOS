@@ -44,6 +44,8 @@ class MosDataset(Dataset):
         """
         features = torch.load(filepath)
 
+        # print(features.shape)
+
         return features
 
     def _layer_aggregation_strategy(self, features: torch.Tensor, strategy: str = "mean") -> torch.Tensor:

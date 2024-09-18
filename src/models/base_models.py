@@ -3,6 +3,7 @@ from typing import List, Tuple
 import torch
 from torch import nn
 import torch.nn.init as init
+import torch.nn.functional as F
 
 
 class MLPBase(nn.Module):
@@ -59,6 +60,7 @@ class CalmosModel(nn.Module):
         use_bias: bool = True,
         layer_weight_strategy: str = "transformer", # "transformer" or "weighted_sum" or "last_hidden_state"
         num_feature_layers: int = 25,
+        specific_layer_idx: int = -1, # default to the last layer
     ):
         super().__init__()
 
@@ -93,8 +95,10 @@ class CalmosModel(nn.Module):
 
         elif layer_weight_strategy == "weighted_sum":
             self.layer_weights = nn.ParameterList(
-                [nn.Parameter(torch.randn(1)) for _ in range(num_feature_layers)]
+                [nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)]
             )
+        elif layer_weight_strategy == "specific_layer":
+            self.specific_layer_idx = specific_layer_idx
         else:
             raise ValueError(f"Invalid layer weight strategy: {layer_weight_strategy}")
 
@@ -121,7 +125,10 @@ class CalmosModel(nn.Module):
         Do a weighted sum of the layers in the sequence
         """
         # Stack the weights into a tensor
+        # Apply softmax to normalize the weights
         layer_weights = torch.stack([w for w in self.layer_weights]).view(1, -1, 1)  # Shape: [1, seq_length, 1]
+        layer_weights = F.softmax(layer_weights, dim=1)  # Apply softmax over the sequence dimension
+
         # Multiply and sum over the sequence dimension
         weighted_sum = (x * layer_weights).sum(dim=1)  # Shape: [batch_size, feature_size]
         return weighted_sum
@@ -137,8 +144,8 @@ class CalmosModel(nn.Module):
 
         return x
 
-    def _last_hidden_state(self, x: torch.Tensor) -> torch.Tensor:
-        return x[:, -1, :]
+    def _specific_layer(self, x: torch.Tensor, layer_idx: int) -> torch.Tensor:
+        return x[:, layer_idx, :]
 
     def forward(self, x):
         if self.layer_weight_strategy == "transformer":
@@ -147,9 +154,9 @@ class CalmosModel(nn.Module):
         elif self.layer_weight_strategy == "weighted_sum":
             # Weighted sum
             x = self._weighted_sum(x)
-        elif self.layer_weight_strategy == "last_hidden_state":
+        elif self.layer_weight_strategy == "specific_layer":
             # Last hidden state
-            x = self._last_hidden_state(x)
+            x = self._specific_layer(x, self.specific_layer_idx)
         # MLP
         logits = self.mlp(x).squeeze(-1)
 

@@ -43,14 +43,15 @@ model:
     mlp_output_size: 1
     mlp_dropout: 0.1
     use_bias: True
-    layer_weight_strategy: "last_hidden_state" # "transformer" or "weighted_sum" or "last_hidden_state"
-    num_feature_layers: 48
+    layer_weight_strategy: "specific_layer" # "transformer" or "weighted_sum" or "specific_layer"
+    specific_layer_idx: -1
+    num_feature_layers: 49
 
 optimizer:
     name: "Adam"
     params:
-        min_learning_rate: 1e-5
-        learning_rate: 1e-4
+        min_learning_rate: 1e-4
+        learning_rate: 1e-3
         eps: 1e-8
         weight_decay: 1e-5
         betas: [0.9, 0.98]
@@ -92,14 +93,14 @@ trainer:
     accumulate_grad_batches: 1
 
 model_checkpoint:
-    mode: "min"
+    mode: "max"
     save_last: true
     save_weights_only: true
-    monitor: "val_loss"
+    monitor: "val_spearman"
     dirpath: "../checkpoints/mos-prediction"
-    filename: "{epoch:02d}-{step:02d}-{val_loss:.4f}"
+    filename: "{epoch:02d}-{step:02d}-{val_spearman:.4f}"
 
 early_stopping:
     verbose: true
-    monitor: "val_loss"
+    monitor: "val_spearman"
     patience: 8000
