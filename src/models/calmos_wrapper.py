@@ -5,11 +5,15 @@ import pytorch_lightning as pl
 import torch.nn.functional as F
 from omegaconf import DictConfig
 from torch.optim import Adam, AdamW
+from transformers import AutoFeatureExtractor
 from lightning.pytorch.utilities import grad_norm
 from torchmetrics.regression import MeanSquaredError, PearsonCorrCoef, SpearmanCorrCoef
 
-from models.base_models import CalmosModel
+from models.factory import create_model
+from utils.utils import build_dataloaders
 from utils.schedulers import CosineWarmupLR, LinearLR
+from utils.dataloader import EmbeddingCollate, DynamicCollate
+
 
 class CALMOSWrapper(pl.LightningModule):
     def __init__(self, config: DictConfig):
@@ -18,24 +22,86 @@ class CALMOSWrapper(pl.LightningModule):
 
         self.config = config
 
-        self.model = CalmosModel(
+        self.model = create_model(
             **config.model
         )
         self.loss = MSELoss()
-
         # Metrics
         # Training
         self.train_mse = MeanSquaredError()
         self.train_pearson = PearsonCorrCoef()
         self.train_spearman = SpearmanCorrCoef()
-
         # Validation
         self.val_mse = MeanSquaredError()
         self.val_pearson = PearsonCorrCoef()
         self.val_spearman = SpearmanCorrCoef()
 
+    def setup(self, stage: str):
+        # Assign train/val datasets for use in dataloaders
+        if stage == "fit":
+            self.train_dataset, self.val_dataset = build_dataloaders(self.config)
+
+    def train_dataloader(self):
+        """Return the training dataloader."""
+        if self.config.model.model_type.lower() == "dynamic":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DynamicCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
+        elif self.config.model.model_type.lower() == "embedding":
+            collate_fn = EmbeddingCollate()
+        else:
+            raise ValueError(f"Invalid model type: {self.config.model.model_type}")
+
+        return torch.utils.data.DataLoader(
+            self.train_dataset,
+            batch_size=self.config.train.batch_size,
+            shuffle=self.config.train.shuffle,
+            num_workers=self.config.train.num_workers,
+            pin_memory=True,
+            collate_fn=collate_fn,
+        )
+
+    def val_dataloader(self):
+        """Return the validation dataloader."""
+        if self.config.model.model_type.lower() == "dynamic":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DynamicCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
+        elif self.config.model.model_type.lower() == "embedding":
+            collate_fn = EmbeddingCollate()
+        else:
+            raise ValueError(f"Invalid model type: {self.config.model.model_type}")
+
+        return torch.utils.data.DataLoader(
+            self.val_dataset,
+            batch_size=self.config.train.batch_size,
+            shuffle=False,
+            num_workers=self.config.train.num_workers,
+            pin_memory=True,
+            collate_fn=collate_fn,
+        )
+
+    def num_training_steps(self) -> int:
+        """Total training steps inferred from datamodule and devices."""
+        dataset = self.train_dataloader()
+        if self.trainer.max_steps and self.trainer.max_steps > 0:
+            return self.trainer.max_steps
+        dataset_size = len(dataset)
+        return dataset_size * self.trainer.max_epochs
+
     def configure_optimizers(self):
         """Configures the optimizer and the learning rate scheduler."""
+        # Start dataloaders to be able to get the number of steps per epoch
+        self.trainer.fit_loop.setup_data()
+
+        max_num_steps = self.num_training_steps()
+
+        print(f"Max number of steps: {max_num_steps}")
+
         opt_params = self.config.optimizer["params"]
         scheduler_params = self.config.scheduler["params"]
 
@@ -74,7 +140,7 @@ class CALMOSWrapper(pl.LightningModule):
             scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 optimizer,
                 "min",
-                patience=scheduler_params.get("patience", self.trainer.max_steps*0.25),
+                patience=scheduler_params.get("patience", max_num_steps*0.25),
                 factor=0.9,
                 min_lr=opt_params.get("min_learning_rate", 1.0e-6)
             )
@@ -84,8 +150,8 @@ class CALMOSWrapper(pl.LightningModule):
                 optimizer,
                 lr_min=opt_params.get("min_learning_rate", 1.0e-6),
                 lr_max=opt_params["learning_rate"],
-                warmup=scheduler_params.get("warmup_lr", self.trainer.max_steps*0.05),
-                T_max=self.trainer.max_steps
+                warmup=scheduler_params.get("warmup_lr", max_num_steps*0.05),
+                T_max=max_num_steps
             )
 
         if self.config.scheduler.name.lower() == "linearlr":
@@ -127,10 +193,10 @@ class CALMOSWrapper(pl.LightningModule):
         self.train_pearson(logits, target)
         self.train_spearman(logits, target)
 
-        self.log("train_loss", loss)
-        self.log("train_mse", self.train_mse, on_step=True, on_epoch=True)
-        self.log("train_pearson", self.train_pearson, on_step=True, on_epoch=True)
-        self.log("train_spearman", self.train_spearman, on_step=True, on_epoch=True)
+        self.log("train/loss", loss)
+        self.log("train/mse", self.train_mse, on_step=True, on_epoch=True)
+        self.log("train/pearson", self.train_pearson, on_step=True, on_epoch=True)
+        self.log("train/spearman", self.train_spearman, on_step=True, on_epoch=True)
 
         return loss
 
@@ -145,9 +211,9 @@ class CALMOSWrapper(pl.LightningModule):
         self.val_pearson(logits, target)
         self.val_spearman(logits, target)
 
-        self.log("val_loss", loss)
-        self.log("val_mse", self.val_mse, on_step=False, on_epoch=True)
-        self.log("val_pearson", self.val_pearson, on_step=False, on_epoch=True)
-        self.log("val_spearman", self.val_spearman, on_step=False, on_epoch=True)
+        self.log("val/loss", loss)
+        self.log("val/mse", self.val_mse, on_step=False, on_epoch=True)
+        self.log("val/pearson", self.val_pearson, on_step=False, on_epoch=True)
+        self.log("val/spearman", self.val_spearman, on_step=False, on_epoch=True)
 
         return loss

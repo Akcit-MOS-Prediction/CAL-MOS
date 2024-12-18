@@ -15,8 +15,8 @@ from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import WandbLogger
 
 from models.calmos_wrapper import CALMOSWrapper
-from utils.utils import build_dataloaders
 
+# Disable warnings
 def warn(*args, **kwargs):
     pass
 
@@ -65,15 +65,26 @@ def main() -> None:
                 - <your tag>"
         )
 
-    train_dataloader, val_dataloader, test_dataloader = build_dataloaders(config)
-
     exp_title = config.title
 
     tags = ["MOS-Prediction"]
     tags += [dataset["name"] for dataset in config.datasets.train]  # add training datasets as tags
     tags += config.tags  # add tags defined for experiments
-    wandb.init(project="MOS-Prediction", name=exp_title, tags=tags, entity="alefiury")
-    logger = WandbLogger(project="MOS-Prediction", name=exp_title, tags=tags, entity="alefiury")
+    wandb.init(
+        project="MOS-Prediction",
+        name=exp_title,
+        tags=tags,
+        entity="alefiury",
+        config=OmegaConf.to_container(config, resolve=True)
+    )
+    logger = WandbLogger(
+        project="MOS-Prediction",
+        name=exp_title,
+        tags=tags,
+        entity="alefiury",
+        config=OmegaConf.to_container(config, resolve=True)
+    )
+
     config["model_checkpoint"].pop("dirpath")
 
     callbacks = [
@@ -84,7 +95,6 @@ def main() -> None:
     model = CALMOSWrapper(config)
 
     print(model)
-    pprint(config, depth=2, indent=4)
 
     trainer = pl.Trainer(
         **config["trainer"],
@@ -94,7 +104,7 @@ def main() -> None:
         default_root_dir=os.path.join(args.checkpoint_dir, config["title"])
     )
 
-    trainer.fit(model, train_dataloader, val_dataloader)
+    trainer.fit(model)
 
 
 if __name__ == "__main__":
