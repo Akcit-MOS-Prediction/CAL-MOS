@@ -3,7 +3,6 @@ import pandas as pd
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoFeatureExtractor
 
-from utils.preprocess import preprocess_metadata
 from utils.dataloader import EmbeddingDataset, DynamicDataset
 
 

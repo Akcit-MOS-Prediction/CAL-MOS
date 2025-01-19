@@ -53,6 +53,8 @@ model:
     specific_layer_idx: -1 # Take the last layer
     pooling_strategy: "mean" # Take the mean of the sequence in the last layer
 
+    freeze_backbone: true # Freeze the backbone model
+
 optimizer:
     name: "adamw"
     params:

@@ -1,18 +1,11 @@
 import os
-import json
-import logging
 import argparse
-from pprint import pprint
 
 import wandb
-import torch
-from transformers import AutoTokenizer
-import pandas as pd
 import pytorch_lightning as pl
-from torch import nn
 from omegaconf import OmegaConf
-from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import WandbLogger
+from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 
 from models.calmos_wrapper import CALMOSWrapper
 
@@ -50,10 +43,8 @@ def main() -> None:
 
     config = OmegaConf.load(args.config_path)
 
-    device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
-
     print(f"Using {config.model.layer_weight_strategy} for layer weights")
-    if config.data.use_seqaug:
+    if config.data.get("use_seqaug", False):
         print(f"Using sequence augmentation!")
 
     if "tags" not in config or config.tags is None:
@@ -74,14 +65,14 @@ def main() -> None:
         project="MOS-Prediction",
         name=exp_title,
         tags=tags,
-        entity="alefiury",
+        entity=config.wandb_entity,
         config=OmegaConf.to_container(config, resolve=True)
     )
     logger = WandbLogger(
         project="MOS-Prediction",
         name=exp_title,
         tags=tags,
-        entity="alefiury",
+        entity=config.wandb_entity,
         config=OmegaConf.to_container(config, resolve=True)
     )
 

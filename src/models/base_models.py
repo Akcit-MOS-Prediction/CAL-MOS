@@ -263,8 +263,6 @@ class BaseModel(nn.Module, ABC):
         # Shape: [B, SEQ_LEN, FEAT_DIM]
         weighted_sum = weighted_layers.sum(dim=1)
 
-        print("WEIGHTED SUM SHAPE", weighted_sum.shape)
-
         return weighted_sum
 
     def _specific_layer(self, x: torch.Tensor, layer_idx: int) -> torch.Tensor:
