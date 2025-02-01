@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 from scipy.stats import spearmanr, pearsonr, kendalltau
 
-from utils.dataloader import MosDataset
+from utils.dataloader import DynamicDataset
 from models.calmos_wrapper import CALMOSWrapper
 
 @torch.no_grad
