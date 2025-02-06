@@ -1,7 +1,10 @@
 import os
+import random
+from pathlib import Path
 from typing import List, Tuple, Dict, Optional
 
 import torch
+import numpy as np
 import torchaudio
 import pandas as pd
 from torch.utils.data import Dataset
@@ -100,6 +103,11 @@ class EmbeddingDataset(Dataset):
         Dict[torch.Tensor, np.ndarray]: A dictionary containing the audio and the caption
         """
         filename = self.filenames[index]
+
+        # Ensure the filename has the correct extension
+        if not filename.endswith(".pt"):
+            filename = filename.split(".")[0] + ".pt"
+
         filepath = os.path.join(self.base_dir, filename)
 
         target = self.targets[index]
@@ -231,7 +239,7 @@ class DynamicDataset(Dataset):
 
     def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
         main_target = self.targets[index]
-        main_file = self.filenames[index]
+        main_file = Path(self.filenames[index])
 
         # If using mixup and in training mode
         if self.mixup_alpha > 0.0 and self.data_type == "train":
@@ -243,10 +251,13 @@ class DynamicDataset(Dataset):
                 attempts += 1
 
             rand_target = self.targets[rand_index]
-            rand_file = self.filenames[rand_index]
+            rand_file = Path(self.filenames[rand_index])
 
-            original_path = os.path.join(self.base_dir, main_file)
-            rand_path = os.path.join(self.base_dir, rand_file)
+            original_path = self.base_dir / main_file
+            original_path = original_path.resolve()
+
+            rand_path = self.base_dir / rand_file
+            rand_path = rand_path.resolve()
 
             audio_original, _ = self._load_wav(original_path)
             audio_rand, _ = self._load_wav(rand_path)
@@ -268,7 +279,8 @@ class DynamicDataset(Dataset):
             target[main_target] = mix_lambda
             target[rand_target] = 1 - mix_lambda
         else:
-            filepath = os.path.join(self.base_dir, main_file)
+            filepath = self.base_dir / main_file
+            filepath = filepath.resolve()
             audio, _ = self._load_wav(filepath)
             target = main_target
 

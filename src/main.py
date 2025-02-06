@@ -4,6 +4,7 @@ import logging
 import argparse
 from pprint import pprint
 
+
 import wandb
 import torch
 from transformers import AutoTokenizer
@@ -74,14 +75,14 @@ def main() -> None:
         project="MOS-Prediction",
         name=exp_title,
         tags=tags,
-        entity="alefiury",
+        entity="proga150-ufrn",
         config=OmegaConf.to_container(config, resolve=True)
     )
     logger = WandbLogger(
         project="MOS-Prediction",
         name=exp_title,
         tags=tags,
-        entity="alefiury",
+        entity="proga150-ufrn",
         config=OmegaConf.to_container(config, resolve=True)
     )
 

@@ -5,15 +5,22 @@ wandb_entity: proga150-ufrn
 datasets:
     train:
         - name: Train
-          metadata_path: "/home/pedro-lustosa/mos-finetune-ssl/BRSPEECH_MOS_DATASET_v2/train.csv"
-          base_dir: "/home/pedro-lustosa/mos-finetune-ssl/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "/workspace/BRSPEECH_MOS_DATASET_v2/train.csv"
+          base_dir: "/workspace/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
 
     val:
         - name: Validation
-          metadata_path: "/home/pedro-lustosa/mos-finetune-ssl/BRSPEECH_MOS_DATASET_v2/val.csv"
-          base_dir: "/home/pedro-lustosa/mos-finetune-ssl/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "/workspace/BRSPEECH_MOS_DATASET_v2/val.csv"
+          base_dir: "/workspace/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+    
+    test:
+        - name: Test
+          metadata_path: "/home/pedro-lustosa/mos-finetune-ssl/data/sets/test_mos_list.txt"
+          base_dir: "/home/pedro-lustosa/mos-finetune-ssl/data/wav"
           filename_column: "filepath"
           target_column: "mos"
 
@@ -40,10 +47,10 @@ model:
     model_type: "dynamic"
 
     # model_name: "microsoft/wavlm-large"
-    model_name: "facebook/wav2vec2-base"
+    # model_name: "facebook/wav2vec2-base"
     # model_name: "facebook/wav2vec2-large"
     # model_name: "facebook/wav2vec2-xls-r-300m"
-    # model_name: "facebook/wav2vec2-xls-r-1b"
+    model_name: "facebook/wav2vec2-xls-r-1b"
     # model_name: facebook/mms-300m
     # model_name: facebook/mms-1b
     # model_name: "facebook/hubert-large-ls960-ft"
@@ -55,10 +62,10 @@ model:
     mlp_output_size: ${data.num_classes}
     mlp_dropout: 0.1
     mlp_activation_func: "relu"
-    layer_weight_strategy: "per_layer"
-    num_feature_layers: 13 # Must be adapted to the model
+    layer_weight_strategy: "weighted_sum"
+    num_feature_layers: 49 # Must be adapted to the model
     specific_layer_idx: -1 # Take the last layer
-    pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+    pooling_strategy: "attpool" # Take the mean of the sequence in the last layer
 
 optimizer:
     name: "adamw"

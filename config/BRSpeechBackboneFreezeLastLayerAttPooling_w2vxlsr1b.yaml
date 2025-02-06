@@ -16,6 +16,13 @@ datasets:
           base_dir: "/home/pedro-lustosa/mos-finetune-ssl/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
+    
+    test:
+        - name: Test
+          metadata_path: "/home/pedro-lustosa/mos-finetune-ssl/data/sets/test_mos_list.txt"
+          base_dir: "/home/pedro-lustosa/mos-finetune-ssl/data/wav"
+          filename_column: "filepath"
+          target_column: "mos"
 
 data:
     use_seqaug: false
@@ -40,10 +47,10 @@ model:
     model_type: "dynamic"
 
     # model_name: "microsoft/wavlm-large"
-    model_name: "facebook/wav2vec2-base"
+    # model_name: "facebook/wav2vec2-base"
     # model_name: "facebook/wav2vec2-large"
     # model_name: "facebook/wav2vec2-xls-r-300m"
-    # model_name: "facebook/wav2vec2-xls-r-1b"
+    model_name: "facebook/wav2vec2-xls-r-1b"
     # model_name: facebook/mms-300m
     # model_name: facebook/mms-1b
     # model_name: "facebook/hubert-large-ls960-ft"
@@ -58,7 +65,7 @@ model:
     layer_weight_strategy: "per_layer"
     num_feature_layers: 13 # Must be adapted to the model
     specific_layer_idx: -1 # Take the last layer
-    pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+    pooling_strategy: "attpool" # Take the mean of the sequence in the last layer
 
 optimizer:
     name: "adamw"
