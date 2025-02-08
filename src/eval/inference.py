@@ -16,8 +16,9 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 from scipy.stats import spearmanr, pearsonr, kendalltau
 
-from utils.dataloader import DynamicDataset
+from utils.dataloader import DynamicDataset, DynamicCollate
 from models.calmos_wrapper import CALMOSWrapper
+from transformers import AutoFeatureExtractor
 
 @torch.no_grad
 def inference(model, dataloader, device):
@@ -67,7 +68,9 @@ if __name__ == '__main__':
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
 
-    model = CALMOSWrapper.load_from_checkpoint(args.checkpoint_path, config=config, map_location=device)
+    model = CALMOSWrapper.load_from_checkpoint(args.checkpoint_path, config=config, map_location=device, strict=False)
+    
+    model = model.to(device)
 
     # print(model.model.layer_weights[0])
 
@@ -97,22 +100,23 @@ if __name__ == '__main__':
 
     test_data = pd.read_csv(config.datasets.test[0].metadata_path)
 
-    test_dataset = MosDataset(
+    test_dataset = DynamicDataset(
         data=test_data,
         filename_column=config.datasets.test[0].filename_column,
         target_column=config.datasets.test[0].target_column,
         base_dir=config.datasets.test[0].base_dir,
-        aggregation_strategy=config.data.aggregation_strategy,
-        use_seqaug=config.data.use_seqaug,
         data_type="test",
     )
 
+    processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
+     
     test_dataloader = torch.utils.data.DataLoader(
         test_dataset,
-        batch_size=64,
+        batch_size=16,
         shuffle=False,
         num_workers=config.train.num_workers,
         pin_memory=True,
+        collate_fn=DynamicCollate(processor=processor)
     )
 
     predictions, targets = inference(model, test_dataloader, device)
