@@ -63,6 +63,17 @@ model:
     specific_layer_idx: -1 # Take the last layer
     pooling_strategy: "mean" # Take the mean of the sequence in the last layer
 
+    freeze_backbone: true # Freeze the backbone model
+
+    transformer_hidden_size: ${model.mlp_input_dim} # Must be adapted to the model
+    transformer_nhead: 4
+    transformer_dim_feedforward: 2048
+    transformer_activation: "gelu"
+    transformer_dropout: 0.1
+    transformer_layer_norm_eps: 1e-5
+    transformer_bias: true
+    transformer_num_hidden_layers: 2
+
 optimizer:
     name: "adamw"
     params:
