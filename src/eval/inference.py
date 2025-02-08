@@ -1,7 +1,6 @@
 import os
 import sys
 import argparse
-from transformers import Wav2Vec2Processor, Wav2Vec2FeatureExtractor
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -19,6 +18,7 @@ from scipy.stats import spearmanr, pearsonr, kendalltau
 
 from utils.dataloader import DynamicDataset, DynamicCollate
 from models.calmos_wrapper import CALMOSWrapper
+from transformers import AutoFeatureExtractor
 
 @torch.no_grad
 def inference(model, dataloader, device):
@@ -108,7 +108,7 @@ if __name__ == '__main__':
         data_type="test",
     )
 
-    processor = Wav2Vec2FeatureExtractor.from_pretrained(config.model.model_name)
+    processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
      
     test_dataloader = torch.utils.data.DataLoader(
         test_dataset,
