@@ -8,6 +8,12 @@ import torch.nn.init as init
 import torch.nn.functional as F
 from transformers import AutoModel, AutoConfig
 
+# Backward compatibility with older versions of the repository
+try:
+    from models.add_peft import build_peft_model
+except ImportError:
+    print("PEFT not available. Please install the PEFT package (https://huggingface.co/docs/peft/en/install) to use it.")
+    build_peft_model = None
 
 ACTIVATIONS_FUNCS = {
     "relu": nn.ReLU(),
@@ -139,7 +145,6 @@ class AttentiveStatisticsPooling(Pooling):
         rh = torch.sqrt((torch.sum((xs**2) * w, dim=1) - mu**2).clamp(min=1e-5))
         # Concatenate mean and standard deviation
         pooled = torch.cat((mu, rh), dim=1)
-        print("POOLED SHAPE", pooled.shape)
         return pooled
 
 
@@ -375,18 +380,38 @@ class CalMOSDynamicModel(BaseModel):
         self,
         model_name: str = "microsoft/wavlm-large",
         freeze_backbone: bool = True,
+        # PEFT parameters
+        use_peft: bool = False,
+        lora_keys: List[str] = None,
+        lora_r: int = 0,
+        lora_alpha: int = 0,
+        lora_dropout: float = 0.0,
+        bias: str = "none",
         **kwargs
     ):
         super().__init__(**kwargs)
+
+        if freeze_backbone and use_peft:
+            raise ValueError("Parameters 'freeze_backbone' and 'use_peft' cannot be 'True' at the same time.")
+
         config = AutoConfig.from_pretrained(model_name, output_hidden_states=True)
         self.backbone = AutoModel.from_pretrained(model_name, config=config)
 
-        # Whisper is an encoder-encoder model, we only need the encoder part
+        # Whisper is an encoder-decoder model, we only need the encoder part
         if "whisper" in model_name.lower():
             self.backbone = self.backbone.encoder
 
         self.freeze_backbone = freeze_backbone
-        if freeze_backbone:
+        if use_peft:
+            self.backbone = build_peft_model(
+                self.backbone,
+                lora_keys=lora_keys,
+                lora_r=lora_r,
+                lora_alpha=lora_alpha,
+                lora_dropout=lora_dropout,
+                bias=bias,
+            )
+        elif freeze_backbone:
             self._freeze_backbone()
             self.backbone.eval()
 

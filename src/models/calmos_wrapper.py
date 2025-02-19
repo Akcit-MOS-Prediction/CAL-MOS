@@ -91,7 +91,13 @@ class CALMOSWrapper(pl.LightningModule):
         if self.trainer.max_steps and self.trainer.max_steps > 0:
             return self.trainer.max_steps
         dataset_size = len(dataset)
-        return dataset_size * self.trainer.max_epochs
+
+        gpu_count = self.trainer.num_devices if self.trainer.num_devices else 1
+        accumulate_grad_batches = self.trainer.accumulate_grad_batches
+
+        effective_batches = dataset_size // (gpu_count * accumulate_grad_batches)
+
+        return effective_batches * self.trainer.max_epochs
 
     def configure_optimizers(self):
         """Configures the optimizer and the learning rate scheduler."""
