@@ -327,6 +327,7 @@ class DynamicCollate:
         audios = list(audios)
         targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
 
+        audio_len = torch.tensor([a.shape[-1] for a in audios], dtype=torch.int64)
         processed = self.processor(
             audios,
             sampling_rate=self.target_sr,
@@ -342,4 +343,4 @@ class DynamicCollate:
                 sampling_rate=self.target_sr,
             )
 
-        return processed, targets.float()
+        return processed, targets.float(), audio_len

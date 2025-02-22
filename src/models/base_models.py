@@ -211,7 +211,7 @@ class BaseModel(nn.Module, ABC):
         elif layer_weight_strategy == "weighted_sum":
             self.layer_weights = nn.ParameterList(
                 [nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)]
-            )
+            ) #recuperar o pesos dessa camada e passar por uma softmax e passar por um barplot 
         elif layer_weight_strategy == "per_layer":
             if specific_layer_idx < 0:
                 specific_layer_idx = num_feature_layers - 1
@@ -359,10 +359,11 @@ class BaseModel(nn.Module, ABC):
         else:
             raise ValueError(f"Invalid pooling strategy: {self.pooling_strategy}")
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    #Adicionado o audio_len no forward
+    def forward(self, x: torch.Tensor , audio_len: torch.Tensor) -> torch.Tensor:
         # print("x.shape", x.shape)
         # Get embeddings
-        embeddings = self._get_embeddings(x)
+        embeddings = self._get_embeddings(x, audio_len)
         # Apply layer weighting
         embeddings = self._apply_layer_weighting(embeddings)
         # Apply pooling
@@ -419,7 +420,7 @@ class CalMOSDynamicModel(BaseModel):
         for param in self.backbone.parameters():
             param.requires_grad = False
 
-    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+    def _get_embeddings(self, x: torch.Tensor, audio_len: torch.Tensor) -> torch.Tensor:
         if self.freeze_backbone:
             with torch.no_grad():
                 outputs = self.backbone(**x, output_hidden_states=True)
@@ -430,6 +431,13 @@ class CalMOSDynamicModel(BaseModel):
         all_layers = torch.stack(hidden_states)
         # transform to [B,num_layers,T,F]
         all_layers = all_layers.permute(1, 0, 2, 3)
+        
+        #Recortar o T para cada batch conforme o tamanho do audio 
+        max_len = all_layers.shape[2] #T original 
+        for i in range(all_layers.shape[0]): #para cada batch 
+            real_len = min(audio_len[i] // 320 , max_len) # Whisper usa 320 frames por segundo
+            all_layers[i , :, real_len:, :] = 0 # tirar  o slice dps 
+        
         return all_layers
 
     def _get_embedding_dim(self) -> int:
