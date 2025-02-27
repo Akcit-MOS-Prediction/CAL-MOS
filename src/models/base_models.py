@@ -211,7 +211,7 @@ class BaseModel(nn.Module, ABC):
         elif layer_weight_strategy == "weighted_sum":
             self.layer_weights = nn.ParameterList(
                 [nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)]
-            ) #recuperar o pesos dessa camada e passar por uma softmax e passar por um barplot 
+            ) #recuperar o pesos dessa camada e passar por uma softmax e passar por um barplot
         elif layer_weight_strategy == "per_layer":
             if specific_layer_idx < 0:
                 specific_layer_idx = num_feature_layers - 1
@@ -431,14 +431,23 @@ class CalMOSDynamicModel(BaseModel):
         all_layers = torch.stack(hidden_states)
         # transform to [B,num_layers,T,F]
         all_layers = all_layers.permute(1, 0, 2, 3)
+
+        #batch_size = all_layers.shape[0]
         
-        #Recortar o T para cada batch conforme o tamanho do audio 
-        max_len = all_layers.shape[2] #T original 
-        for i in range(all_layers.shape[0]): #para cada batch 
+        max_len = all_layers.shape[2] 
+        #mask = torch.zeros((batch_size, max_len), device=all_layers.device)
+        slice_embs = []
+        for i in range(all_layers.shape[0]): 
             real_len = min(audio_len[i] // 320 , max_len) # Whisper usa 320 frames por segundo
-            all_layers[i , :, real_len:, :] = 0 # tirar  o slice dps 
+            #mask[i, :real_len] = 1.0
+            slice_embs.append(all_layers[i, :,real_len, :])
+            
+        #mask = mask.unsqueeze(1).unsqueeze(3)  # Shape becomes [B, 1, T, 1]
+        #masked_layers = all_layers * mask  # Broadcasting will handle the dimensions
+
+        slice_embs = torch.nn.utils.rnn.pad_sequence(slice_embs, batch_first=True)
         
-        return all_layers
+        return slice_embs
 
     def _get_embedding_dim(self) -> int:
         return self.mlp.layers[0].in_features

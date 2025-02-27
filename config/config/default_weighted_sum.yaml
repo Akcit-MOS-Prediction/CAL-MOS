@@ -1,0 +1,118 @@
+title: MOSPred-MMS1B-WeightedSUM-(steps-${trainer.max_steps})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})-(wd-${optimizer.params.weight_decay})-Pretraining-WheightSum
+
+
+wandb_entity: proga150-ufrn
+
+datasets:
+    train:
+        - name: Train
+          metadata_path: "/home/rafael/BRSPEECH_MOS_DATASET_v2/train2.csv"
+          base_dir: "/home/rafael/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    val:
+        - name: Validation
+          metadata_path: "/home/rafael/BRSPEECH_MOS_DATASET_v2/val2.csv"
+          base_dir: "/home/rafael/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    test:
+        - name: Test
+          metadata_path: "/home/rafael/BRSPEECH_MOS_DATASET_v2/test2.csv"
+          base_dir: "/home/rafael/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+
+
+data:
+    aggregation_strategy: "mean"
+    use_seqaug: False
+
+train:
+    batch_size: 8
+    shuffle: True
+    num_workers: 12
+
+model:
+
+    model_type: "dynamic"
+
+      #    model_name: "microsoft/wavlm-large"
+    # model_name: "facebook/wav2vec2-xls-r-300m"
+    # model_name: "facebook/hubert-large-ls960-ft"
+    #    model_name: "openai/whisper-large-v3"
+    model_name: "facebook/w2v-bert-2.0"
+
+    hidden_size: 1280
+    num_attention_heads: 8
+    num_hidden_layers: 4
+    intermediate_size: 5120
+    hidden_act: "gelu"
+    layer_norm_eps: 1e-12
+    dropout: 0.1
+    mlp_output_dims: [4096, 2048, 1024]
+    mlp_output_size: 1
+    mlp_dropout: 0.1
+    use_bias: True
+    layer_weight_strategy: "weighted_sum" # "transformer" or "weighted_sum" or "last_hidden_state"
+    num_feature_layers: 49
+
+optimizer:
+    name: "Adam"
+    params:
+        min_learning_rate: 1e-4
+        learning_rate: 1e-3
+        eps: 1e-8
+        weight_decay: 1e-5
+        betas: [0.9, 0.98]
+
+scheduler:
+    name: "CosineWarmupLR"
+    params:
+        warmup_lr: 400 # 0.05 * 160000
+
+tags:
+    - MOS-PREDICTION
+    - BRSpeechMOS
+    - ${train.batch_size}-BS
+    - LR-${optimizer.params.learning_rate}
+    - WD-${optimizer.params.weight_decay}
+    - ${model.hidden_size}-HS
+    - ${model.num_attention_heads}-AH
+    - ${model.num_hidden_layers}-HL
+    - ${model.intermediate_size}-IS
+    - ${model.mlp_output_dims}-MLP
+    - ${model.mlp_dropout}-MLP-DP
+    - ${model.dropout}-DP
+    - ${model.hidden_act}-ACT
+    - ${model.use_bias}-BIAS
+    - ${optimizer.name}
+    - ${scheduler.name}
+    - ${data.aggregation_strategy}-AGG
+
+trainer:
+    accelerator: "gpu"
+    max_steps: 70 # Aprox. 500 epoch
+    # max_epochs: 10
+    num_sanity_val_steps: 2
+    overfit_batches: 0.0
+    log_every_n_steps: 1
+    gradient_clip_val: 0.0 # Disable
+    gradient_clip_algorithm: "norm"
+    val_check_interval: 1.0 # 1.0 = 1 epoch
+    accumulate_grad_batches: 8
+
+model_checkpoint:
+    mode: "max"
+    save_last: true
+    save_weights_only: true
+    monitor: "val_spearman"
+    dirpath: "../checkpoints/mos-prediction"
+    filename: "{epoch:02d}-{step:02d}-{val_spearman:.4f}"
+
+early_stopping:
+    verbose: true
+    monitor: "val_spearman"
+    patience: 8000
