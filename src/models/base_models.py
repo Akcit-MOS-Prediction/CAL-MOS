@@ -7,6 +7,7 @@ from torch import nn
 import torch.nn.init as init
 import torch.nn.functional as F
 from transformers import AutoModel, AutoConfig
+from models.torch_relu_kan import ReLUKAN
 
 
 ACTIVATIONS_FUNCS = {
@@ -157,24 +158,23 @@ class BaseModel(nn.Module, ABC):
         mlp_hidden_dim: int = 1024,
         mlp_num_layers: int = 2,
         mlp_output_size: int = 7,
+        # Remove or keep unused parameters (dropout, activation_func)
         mlp_dropout: float = 0.1,
         mlp_activation_func: str = "relu",
-        layer_weight_strategy: str = "per_layer", # "per_layer" or "weighted_sum"
+        layer_weight_strategy: str = "per_layer",
         num_feature_layers: int = 25,
         specific_layer_idx: int = -1,
-        pooling_strategy: str = "mean", # "mean" or "attpool"
+        pooling_strategy: str = "mean",
+        relukan_grid: int = 5,  # New parameters for ReLUKAN
+        relukan_k: int = 3,
         **kwargs,
     ):
         super().__init__()
-        self.mlp = MLPBase(
-            input_size=mlp_input_dim,
-            hidden_dim=mlp_hidden_dim,
-            num_layers=mlp_num_layers,
-            output_size=mlp_output_size,
-            dropout=mlp_dropout,
-            activation_func=mlp_activation_func,
-        )
-
+        # Construct ReLUKAN width list
+        width = [mlp_input_dim] + [mlp_hidden_dim] * mlp_num_layers + [mlp_output_size]
+        self.mlp = ReLUKAN(width=width, grid=relukan_grid, k=relukan_k)
+        
+        # Existing code for layer weighting strategy, pooling, etc.
         self.layer_weight_strategy = layer_weight_strategy
         self.num_feature_layers = num_feature_layers
         self.specific_layer_idx = specific_layer_idx
