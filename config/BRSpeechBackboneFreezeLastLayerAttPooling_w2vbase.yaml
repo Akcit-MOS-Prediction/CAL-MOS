@@ -16,7 +16,7 @@ datasets:
           base_dir: "/home/pedro-lustosa/mos-finetune-ssl/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
-    
+
     test:
         - name: Test
           metadata_path: "/home/pedro-lustosa/mos-finetune-ssl/data/sets/test_mos_list.txt"

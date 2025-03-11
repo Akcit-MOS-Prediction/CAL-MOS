@@ -12,7 +12,11 @@ from torchmetrics.regression import MeanSquaredError, PearsonCorrCoef, SpearmanC
 from models.factory import create_model
 from utils.utils import build_dataloaders
 from utils.schedulers import CosineWarmupLR, LinearLR
-from utils.dataloader import EmbeddingCollate, DynamicCollate
+from utils.dataloader import (
+    AllLayersEmbeddingCollate,
+    OneLayerEmbeddingCollate,
+    DynamicCollate
+)
 
 
 class CALMOSWrapper(pl.LightningModule):
@@ -49,8 +53,10 @@ class CALMOSWrapper(pl.LightningModule):
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
-        elif self.config.model.model_type.lower() == "embedding":
-            collate_fn = EmbeddingCollate()
+        elif self.config.model.model_type.lower() == "all_layers_embedding":
+            collate_fn = AllLayersEmbeddingCollate()
+        elif self.config.model.model_type.lower() == "one_layer_embedding":
+            collate_fn = OneLayerEmbeddingCollate()
         else:
             raise ValueError(f"Invalid model type: {self.config.model.model_type}")
 
@@ -71,8 +77,10 @@ class CALMOSWrapper(pl.LightningModule):
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
-        elif self.config.model.model_type.lower() == "embedding":
-            collate_fn = EmbeddingCollate()
+        elif self.config.model.model_type.lower() == "all_layers_embedding":
+            collate_fn = AllLayersEmbeddingCollate()
+        elif self.config.model.model_type.lower() == "one_layer_embedding":
+            collate_fn = OneLayerEmbeddingCollate()
         else:
             raise ValueError(f"Invalid model type: {self.config.model.model_type}")
 

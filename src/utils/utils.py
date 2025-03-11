@@ -47,7 +47,8 @@ def build_dataloaders(config):
             class_num=config.data.num_classes,
             target_sr=config.data.target_sr,
         )
-    elif config.model.model_type.lower() == "embedding":
+    elif config.model.model_type.lower() == "all_layers_embedding" \
+        or config.model.model_type.lower() == "one_layer_embedding":
         train_dataset = EmbeddingDataset(
             data=train_data,
             filename_column=config.datasets.train[0].filename_column,

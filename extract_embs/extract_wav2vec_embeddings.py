@@ -30,6 +30,8 @@ def load_model(model_name="wav2vec2-xls-r-300m"):
         model_path = "facebook/wav2vec2-large"
     elif (model_name == "wav2vec2-large-robust"):
         model_path = "facebook/wav2vec2-large-robust"
+    elif (model_name == "mms-300m"):
+        model_path = "facebook/mms-300m"
     model = Wav2Vec2Model.from_pretrained(model_path)
     model = model.to(device)
     model.eval()
@@ -41,7 +43,8 @@ def extract_wav2vec_embeddings(
     filelist: List[str],
     input_dir: str,
     output_dir: str,
-    model_name: str
+    model_name: str,
+    specific_layer: int = None,
 ) -> None:
     model, processor = load_model(model_name)
     for filepath in tqdm(filelist, desc="Extracting embeddings"):
@@ -80,6 +83,8 @@ def extract_wav2vec_embeddings(
         all_layers_embeddings = torch.stack(hidden_states) # [num_layers,B,T,F], B=1
         # transform to [num_layers,T,F]
         all_layers_embeddings = all_layers_embeddings.squeeze(1)
+        if specific_layer is not None:
+            all_layers_embeddings = all_layers_embeddings[specific_layer]
         # Saving embedding with the same subdirectory structure
         output_filename = basename(filepath).split(".")[0] + ".pt"
         output_filepath = join(output_subdir, output_filename)
@@ -117,10 +122,18 @@ def main():
             "wav2vec2-base-960h",
             "wav2vec2-large-xlsr-53",
             "wav2vec2-large",
-            "wav2vec2-large-robust"
+            "wav2vec2-large-robust",
+            "mms-300m",
         ],
         default="wav2vec2-xls-r-300m",
         help="Model name",
+    )
+    parser.add_argument(
+        "-l",
+        "--specific-layer",
+        default=None,
+        type=int,
+        help="Extract embeddings from a specific layer (If None, extract from all layers)",
     )
     parser.add_argument(
         "-c",
@@ -138,6 +151,11 @@ def main():
     input_dir = os.path.join(args.base_dir, args.input_dir_name)
     output_dir = os.path.join(args.base_dir, args.output_dir_name)
 
+    if args.specific_layer is not None:
+        assert args.specific_layer >= 0, "Layer index should be non-negative"
+
+        output_dir += f"_layer-{args.specific_layer}"
+
     filelist = glob.glob(os.path.join(input_dir, "**", "*.wav"), recursive=True)
 
     if args.input_csv:
@@ -146,7 +164,7 @@ def main():
 
     os.makedirs(output_dir, exist_ok=True)
 
-    extract_wav2vec_embeddings(filelist, input_dir, output_dir, args.model_name)
+    extract_wav2vec_embeddings(filelist, input_dir, output_dir, args.model_name, specific_layer=args.specific_layer)
 
 
 if __name__ == "__main__":
