@@ -6,14 +6,16 @@ datasets:
     train:
         - name: Train
           metadata_path: "../data/BRSPEECH_MOS_DATASET_v2/train_mos.csv"
-          base_dir: "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet"
+          base_dir: "../data/BRSPEECH_MOS_DATASET_v2_concat"
+        #   base_dir: "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet"
           filename_column: "filepath"
           target_column: "mos"
 
     val:
         - name: Validation
           metadata_path: "../data/BRSPEECH_MOS_DATASET_v2/val_mos.csv"
-          base_dir: "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet"
+          base_dir: "../data/BRSPEECH_MOS_DATASET_v2_concat"
+        #   base_dir: "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet"
           filename_column: "filepath"
           target_column: "mos"
 
@@ -24,7 +26,7 @@ data:
 train:
     batch_size: 64
     shuffle: True
-    num_workers: 12
+    num_workers: 0 #0
 
 model:
     model_type: "one_layer_embedding"

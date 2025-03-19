@@ -29,8 +29,8 @@ train:
 model:
     model_type: "one_layer_embedding"
 
-    mlp_input_dim: 1024 # Must be adapted to the model
-    mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
+    mlp_input_dim: 1024 
+    mlp_hidden_dim: ${model.mlp_input_dim}
     mlp_num_layers: 1
     mlp_output_size: ${data.num_classes}
     mlp_dropout: 0.1

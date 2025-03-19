@@ -164,3 +164,4 @@ cython_debug/
 data/
 src/run.txt
 extract_embs/run.txt
+extract_embs/titanet/
