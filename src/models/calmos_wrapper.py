@@ -178,9 +178,9 @@ class CALMOSWrapper(pl.LightningModule):
             }
         }
 
-    def forward(self, x, audio_len):
+    def forward(self, x, max_audio_len):
         """Forward pass for the model."""
-        return self.model(x, audio_len)
+        return self.model(x, max_audio_len)
 
     def on_before_optimizer_step(self, optimizer):
         # Compute the 2-norm for each layer
@@ -190,9 +190,9 @@ class CALMOSWrapper(pl.LightningModule):
 
     def training_step(self, train_batch, batch_idx):
         """Training step."""
-        input_features, target , audio_len = train_batch
+        input_features, max_audio_len, target  = train_batch
 
-        logits = self.forward(input_features, audio_len)
+        logits = self(input_features, max_audio_len)
         loss = self.loss(logits, target)
 
         self.train_mse(logits, target)
@@ -208,9 +208,9 @@ class CALMOSWrapper(pl.LightningModule):
 
     def validation_step(self, val_batch, batch_idx):
         """Validation step."""
-        input_features, target, audio_len = val_batch
+        input_features, max_audio_len, target  = val_batch
 
-        logits = self.forward(input_features, audio_len)
+        logits = self(input_features, max_audio_len)
         loss = self.loss(logits, target)
 
         self.val_mse(logits, target)

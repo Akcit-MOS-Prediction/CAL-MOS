@@ -359,11 +359,10 @@ class BaseModel(nn.Module, ABC):
         else:
             raise ValueError(f"Invalid pooling strategy: {self.pooling_strategy}")
 
-    #Adicionado o audio_len no forward
-    def forward(self, x: torch.Tensor , audio_len: torch.Tensor) -> torch.Tensor:
-        # print("x.shape", x.shape)
+    # Adicionado o audio_len no forward
+    def forward(self, x: torch.Tensor, max_audio_len: torch.Tensor) -> torch.Tensor:
         # Get embeddings
-        embeddings = self._get_embeddings(x, audio_len)
+        embeddings = self._get_embeddings(x, max_audio_len)
         # Apply layer weighting
         embeddings = self._apply_layer_weighting(embeddings)
         # Apply pooling
@@ -399,7 +398,7 @@ class CalMOSDynamicModel(BaseModel):
         self.backbone = AutoModel.from_pretrained(model_name, config=config)
 
         self.model_name = model_name
-        
+
         # Whisper is an encoder-decoder model, we only need the encoder part
         if "whisper" in model_name.lower():
             self.backbone = self.backbone.encoder
@@ -422,7 +421,7 @@ class CalMOSDynamicModel(BaseModel):
         for param in self.backbone.parameters():
             param.requires_grad = False
 
-    def _get_embeddings(self, x: torch.Tensor, audio_len: torch.Tensor) -> torch.Tensor:
+    def _get_embeddings(self, x: torch.Tensor, max_audio_len: torch.Tensor) -> torch.Tensor:
         if self.freeze_backbone:
             with torch.no_grad():
                 outputs = self.backbone(**x, output_hidden_states=True)
@@ -433,29 +432,10 @@ class CalMOSDynamicModel(BaseModel):
         all_layers = torch.stack(hidden_states)
         # transform to [B,num_layers,T,F]
         all_layers = all_layers.permute(1, 0, 2, 3)
-
-        #batch_size = all_layers.shape[0]
-        
-        max_len = all_layers.shape[2] 
-        #mask = torch.zeros((batch_size, max_len), device=all_layers.device)
-        slice_embs = []
-        #for i in range(all_layers.shape[0]): 
-        #    real_len = min(audio_len[i] // 320 , max_len) # Whisper usa 320 frames por segundo
-        #    
-        #    slice_embs.append(all_layers[i, :,real_len, :])
-        
         if "whisper" in self.model_name.lower():
+            all_layers = all_layers[:,:, : int(max_audio_len / 320),:]
 
-            all_layers = all_layers[:,:, int(audio_len / 320),:]
-           
-        #mask = mask.unsqueeze(1).unsqueeze(3)  # Shape becomes [B, 1, T, 1]
-        #masked_layers = all_layers * mask  # Broadcasting will handle the dimensions
-
-        #slice_embs = torch.nn.utils.rnn.pad_sequence(slice_embs, batch_first=True)
-        
         return all_layers
-        
-        
 
     def _get_embedding_dim(self) -> int:
         return self.mlp.layers[0].in_features
