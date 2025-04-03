@@ -74,8 +74,9 @@ model:
 
     # PEFT parameters
     use_peft: true
-    lora_keys: ["key", "query", "value", "linear"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
+    # lora_keys: ["key", "query", "value", "linear"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
     # lora_keys: ["key", "query", "value", "whisper_linear"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
+    lora_keys: ["w2vbert_key", "w2vbert_query", "w2vbert_value", "w2vbert_linear"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
     lora_r: 2
     lora_alpha: 2
     lora_dropout: 0.1
