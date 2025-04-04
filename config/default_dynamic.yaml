@@ -102,6 +102,7 @@ tags:
     - ${model.mlp_num_layers}-IS
 
 trainer:
+    precision: "bf16"
     accelerator: "gpu"
     max_epochs: 20
     num_sanity_val_steps: 2
