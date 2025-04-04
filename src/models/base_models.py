@@ -436,7 +436,7 @@ class CalMOSDynamicModel(BaseModel):
         return self.mlp.layers[0].in_features
 
 
-class CalMOSEmbeddingModel(BaseModel):
+class CalMOSAllLayersEmbeddingModel(BaseModel):
     """
     Speech Emotion Recognition model that uses pre-extracted embeddings as input.
     This model expects pre-computed features instead of processing raw audio through a backbone.
@@ -501,3 +501,68 @@ class CalMOSEmbeddingModel(BaseModel):
             int: The feature dimension
         """
         return self.mlp.layers[0].in_features
+
+class CalMOSOneLayerEmbeddingModel(nn.Module):
+    def __init__(
+        self,
+        mlp_input_dim: int = 768,
+        mlp_hidden_dim: int = 1024,
+        mlp_num_layers: int = 2,
+        mlp_output_size: int = 7,
+        mlp_dropout: float = 0.1,
+        mlp_activation_func: str = "relu",
+        pooling_strategy: str = "mean",
+    ):
+        super().__init__()
+
+        self.pooling_strategy = pooling_strategy
+        self.mlp = MLPBase(
+            input_size=mlp_input_dim,
+            hidden_dim=mlp_hidden_dim,
+            num_layers=mlp_num_layers,
+            output_size=mlp_output_size,
+            dropout=mlp_dropout,
+            activation_func=mlp_activation_func,
+        )
+
+    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Simply returns the pre-extracted features.
+
+        Args:
+            x: Input tensor of shape [batch_size, num_feature_layers, sequence_length, feature_dim]
+                These are pre-extracted features, unlike SERDynamicModel which processes raw input
+                through a backbone.
+
+        Returns:
+            The same tensor, as features are already extracted
+        """
+        return x
+
+    def _apply_pooling(self, embeddings: torch.Tensor) -> torch.Tensor:
+        """
+        Apply pooling over the time dimension.
+        embeddings: [B,T,F]
+        mask: [B,T] if attpool selected
+        """
+        if self.pooling_strategy == "mean":
+            # Mean pooling over T
+            return embeddings.mean(dim=1)  # [B,F]
+
+        elif self.pooling_strategy == "attpool":
+            # AttentiveStatisticsPooling requires initialization once we know F
+            input_dim = embeddings.size(-1)
+            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
+            return self.attpool(embeddings)
+
+        else:
+            raise ValueError(f"Invalid pooling strategy: {self.pooling_strategy}")
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Get embeddings
+        embeddings = self._get_embeddings(x)
+        # Apply pooling
+        logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
+        # MLP classification
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits

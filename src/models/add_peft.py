@@ -10,6 +10,10 @@ WEIGHTS_KEYS_DICT = {
     "value": ["v_proj"],
     "linear": ["intermediate_dense", "output_dense"],
     "whisper_linear": ["fc1", "fc2"],
+    "w2vbert_key": ["linear_k"],
+    "w2vbert_query": ["linear_q"],
+    "w2vbert_value": ["linear_v"],
+    "w2vbert_linear": ["intermediate_dense", "output_dense"],
 }
 
 

@@ -68,7 +68,7 @@ pip install -r requirements.txt
 
 - WavLM Base Plus
     - 13 Layers
-    - Input Dim: 1024
+    - Input Dim: 768
     - microsoft/wavlm-base-plus
 
 - WavLM Large

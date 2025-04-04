@@ -29,7 +29,8 @@ def main() -> None:
     parser.add_argument(
         "-g",
         "--gpu",
-        required=True,
+        default=0,
+        help="GPU device",
         type=int
     )
     parser.add_argument(
@@ -44,7 +45,6 @@ def main() -> None:
 
     config = OmegaConf.load(args.config_path)
 
-    print(f"Using {config.model.layer_weight_strategy} for layer weights")
     if config.data.get("use_seqaug", False):
         print(f"Using sequence augmentation!")
 

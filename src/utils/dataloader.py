@@ -105,8 +105,12 @@ class EmbeddingDataset(Dataset):
         filename = self.filenames[index]
 
         # Ensure the filename has the correct extension
-        if not filename.endswith(".pt"):
-            filename = filename.split(".")[0] + ".pt"
+        if filename.endswith(".wav"):
+            filename = filename[:-4] + ".pt"
+
+        # Remove leading "./" if present
+        if filename.startswith("./"):
+            filename = filename[2:]
 
         filepath = os.path.join(self.base_dir, filename)
 
@@ -122,7 +126,40 @@ class EmbeddingDataset(Dataset):
         return features, target
 
 
-class EmbeddingCollate:
+class OneLayerEmbeddingCollate:
+    def __init__(
+        self,
+        padding_value: float = 0.0,
+    ):
+        """
+        Collation function for dynamic batching of audio data.
+
+        Params:
+            padding_value (float): Value to use for padding shorter sequences.
+        """
+        self.padding_value = padding_value
+
+    def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        features, targets = zip(*batch)
+        batch_size = len(features)
+        feature_dim = features[0].shape[-1]
+
+        features = list(features)
+        targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
+
+        lengths = [feature.shape[0] for feature in features]
+        max_length = max(lengths)
+
+        padded_features = torch.full((batch_size, max_length, feature_dim), self.padding_value)
+
+        for i, feature in enumerate(features):
+            length = feature.shape[0]
+            padded_features[i, :length, :] = feature
+
+        return padded_features, targets
+
+
+class AllLayersEmbeddingCollate:
     def __init__(
         self,
         padding_value: float = 0.0,
