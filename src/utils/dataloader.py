@@ -11,8 +11,74 @@ from torch.utils.data import Dataset
 from transformers import WhisperFeatureExtractor
 from transformers import AutoModel, AutoFeatureExtractor
 
-
 class EmbeddingDataset(Dataset):
+    def __init__(
+        self,
+        data: pd.DataFrame,
+        filename_column: str,
+        target_column: str,
+        base_dir: str,
+        use_seqaug: bool = False,
+        data_type: str = "train",
+    ):
+        """Inicialização do dataset."""
+        self.data = data
+        self.filenames = self.data[filename_column].values
+        self.targets = self.data[target_column].values
+        self.filename_column = filename_column
+        self.target_column = target_column
+        self.use_seqaug = use_seqaug
+        self.base_dir = base_dir
+        self.data_type = data_type
+
+    def __len__(self):
+        return len(self.data)
+
+    def _load_file(self, filepath: str) -> dict:
+        """
+        Carrega os dados de áudio salvos (por exemplo, como um dicionário).
+        Certifique-se de que o arquivo salvo contenha a chave "wavs" (ou outra chave esperada).
+        """
+        # Aqui o arquivo foi salvo via torch.save e contém as features necessárias.
+        # Exemplo: {'wavs': <tensor> }
+        features = torch.load(filepath)
+        return features
+
+    def seqaug(self, input_tensor, alpha: float = 0.2):
+        """
+        Aplica a augmentação SeqAug.
+        """
+        sequence_length, feature_size = input_tensor.shape
+        beta_dist = torch.distributions.Beta(alpha, alpha)
+        p = beta_dist.sample()
+        num_features_to_sample = int(p.item() * feature_size)
+        num_features_to_sample = max(num_features_to_sample, 1)
+        selected_features = torch.randperm(feature_size)[:num_features_to_sample]
+        perm = torch.randperm(sequence_length)
+        output_tensor = input_tensor.clone()
+        output_tensor[:, selected_features] = input_tensor[perm][:, selected_features]
+        return output_tensor
+
+    def __getitem__(self, index: int) -> Tuple[dict, int]:
+        """
+        Retorna um item do dataset.
+        Aqui, garante-se que o arquivo de áudio (geralmente .pt) seja carregado e
+        que o dicionário contenha as chaves esperadas (por exemplo, "wavs").
+        """
+        filename = self.filenames[index]
+        if filename.endswith(".wav"):
+            filename = filename[:-4] + ".pt"
+        filepath = os.path.join(self.base_dir, filename)
+        target = self.targets[index]
+        features = self._load_file(filepath)
+        if self.use_seqaug and self.data_type == "train":
+            if "wavs" in features:
+                features["wavs"] = self.seqaug(features["wavs"])
+        if "wavs" in features:
+            features["wavs"] = features["wavs"].float()
+        return features, target
+    
+class EmbeddingDataset2(Dataset):
     def __init__(
         self,
         data: pd.DataFrame,
@@ -380,3 +446,9 @@ class DynamicCollate:
             )
 
         return processed, targets.float()
+ 
+import os
+import torch
+import pandas as pd
+from torch.utils.data import Dataset
+

@@ -10,17 +10,17 @@ def build_dataloaders(config):
     """Builds the dataloader for the CAL-MOS model.
 
     Params:
-
-    config (DictConfig): Configuration
+        config (DictConfig): Configuration
 
     Returns:
-
-    Tuple[DataLoader, DataLoader]: Train and validation dataloaders
+        Tuple[DataLoader, DataLoader]: Train and validation dataloaders
     """
     train_data = pd.read_csv(config.datasets.train[0].metadata_path)
     val_data = pd.read_csv(config.datasets.val[0].metadata_path)
 
-    if config.model.model_type.lower() == "dynamic":
+    model_type = config.model.model_type.lower()
+    print("[build_dataloaders] model_type:", config.model.model_type.lower())
+    if model_type == "dynamic":
         train_dataset = DynamicDataset(
             data=train_data,
             filename_column=config.datasets.train[0].filename_column,
@@ -47,8 +47,7 @@ def build_dataloaders(config):
             class_num=config.data.num_classes,
             target_sr=config.data.target_sr,
         )
-    elif config.model.model_type.lower() == "all_layers_embedding" \
-        or config.model.model_type.lower() == "one_layer_embedding":
+    elif model_type in ["all_layers_embedding", "one_layer_embedding", "melspec"]:
         train_dataset = EmbeddingDataset(
             data=train_data,
             filename_column=config.datasets.train[0].filename_column,
@@ -57,7 +56,6 @@ def build_dataloaders(config):
             use_seqaug=config.data.use_seqaug,
             data_type="train",
         )
-
         val_dataset = EmbeddingDataset(
             data=val_data,
             filename_column=config.datasets.train[0].filename_column,
@@ -65,5 +63,7 @@ def build_dataloaders(config):
             base_dir=config.datasets.train[0].base_dir,
             data_type="val",
         )
+    else:
+        raise ValueError(f"Unknown model_type: {config.model.model_type}")
 
     return train_dataset, val_dataset

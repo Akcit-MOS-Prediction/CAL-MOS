@@ -104,7 +104,6 @@ def main():
         input_csv_path = join(args.base_dir, args.input_csv)
         df = pd.read_csv(input_csv_path)
         filelist = df[args.column_name].tolist()
-        # Se os caminhos no CSV forem relativos, assume-se que são relativos ao base-dir
         if filelist and not os.path.isabs(filelist[0]):
             input_dir = args.base_dir
     else:

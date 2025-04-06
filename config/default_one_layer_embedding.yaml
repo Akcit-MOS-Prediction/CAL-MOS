@@ -6,14 +6,19 @@ datasets:
     train:
         - name: Train
           metadata_path: "../data/BRSPEECH_MOS_DATASET_v2/train_mos.csv"
-          base_dir: "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet"
+          base_dir: "../data/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
-
+    test:
+        - name: Test
+          metadata_path: "../data/BRSPEECH_MOS_DATASET_v2/test_mos.csv"
+          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
     val:
         - name: Validation
           metadata_path: "../data/BRSPEECH_MOS_DATASET_v2/val_mos.csv"
-          base_dir: "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet"
+          base_dir: "../data/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
 

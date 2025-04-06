@@ -566,3 +566,68 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
+
+
+from models.ced.ced_finetuning import FineTuneCED  # Certifique-se de ter essa importação
+
+class CalMOSMelSpecModel(BaseModel):
+    """
+    Modelo para CalMOS que utiliza a extração do espectrograma mel.
+    O módulo mel_spec_encoder (baseado em FineTuneCED) extrai os embeddings do mel
+    a partir do áudio de entrada.
+    
+    Esses embeddings são então passados pelo mecanismo de camada de
+    ponderação (definido na BaseModel) e, após pooling, pela MLP final.
+    """
+    print("Entrou no CalMOSMelSpecModel")
+    def __init__(
+        self,
+        mel_spec_encoder_pretrained: bool = True,
+        mel_spec_encoder_embedding_dim: int = 768,
+        mel_spec_encoder_proj_size: int = 512,
+        mel_spec_encoder_proj_dropout: float = 0.2,
+        mel_spec_encoder_freeze_backbone: bool = False,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+        self.mel_spec_encoder = FineTuneCED(
+            pretrained=mel_spec_encoder_pretrained,
+            embedding_dim=mel_spec_encoder_embedding_dim,
+            proj_size=mel_spec_encoder_proj_size,
+            proj_dropout=mel_spec_encoder_proj_dropout,
+            freeze_backbone_flag=mel_spec_encoder_freeze_backbone,
+        )
+    
+    def _get_mel_spec_embeddings(self, x:  torch.Tensor) -> torch.Tensor:
+        """
+        Extrai os embeddings do espectrograma mel a partir do dicionário de entrada.
+        O dicionário pode conter as chaves "wavs", "input_features" ou "input_values".
+        """
+        print("Chaves recebidas:", list(x.keys()))
+        if "wavs" in x:
+            audio = x["wavs"]
+        elif "input_features" in x:
+            audio = x["input_features"]
+        else:
+            audio = x["input_values"]
+        mel_spec_embeddings = self.mel_spec_encoder(audio)
+        return mel_spec_embeddings
+
+    def _get_embeddings(self, x:  torch.Tensor) -> torch.Tensor:
+        """
+        Retorna os embeddings extraídos pelo mel_spec_encoder.
+        Se os embeddings tiverem dimensão [B, F] (sem dimensão temporal),
+        adiciona-se uma dimensão T=1 para ficar [B, 1, F] conforme o esperado.
+        """
+        mel_spec_embeddings = self._get_mel_spec_embeddings(x)
+        if mel_spec_embeddings.dim() == 2:  # [B, F]
+            mel_spec_embeddings = mel_spec_embeddings.unsqueeze(1)  # [B, 1, F]
+        return mel_spec_embeddings
+
+    def _get_embedding_dim(self) -> int:
+        """
+        Retorna a dimensão dos embeddings de entrada para o MLP.
+        Certifique-se de que o parâmetro mlp_input_dim (passado à BaseModel)
+        corresponda à dimensão de saída do mel_spec_encoder.
+        """
+        return self.mlp.layers[0].in_features

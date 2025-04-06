@@ -1,0 +1,21 @@
+
+
+cd src
+cd eval
+conda activate mos
+$env:KMP_DUPLICATE_LIB_OK = "1"
+
+python inference.py --config_path "../../config/default_one_layer_embedding_mean.yaml" --gpu 0 --checkpoint-path "../../checkpoints/mos-prediction/avenge/49tk4uod/epoch=19-step=620-val/spearman=0.4970.ckpt"
+
+
+
+
+cd src
+cd eval
+conda activate mos
+$env:KMP_DUPLICATE_LIB_OK = "1"
+
+python inference.py --config_path "../../config/default_one_layer_embedding_concat_clova.yaml" --gpu 0 --checkpoint-path "F:\Git\CAL-MOS\checkpoints\mos-prediction\clova\kb4zlsit\epoch=19-step=620-val\spearman=0.5751.ckpt"
+
+
+

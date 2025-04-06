@@ -1,6 +1,7 @@
 import torch
 from torch.nn import MSELoss
 from lion_pytorch import Lion
+from models.base_models import CalMOSMelSpecModel
 import pytorch_lightning as pl
 import torch.nn.functional as F
 from omegaconf import DictConfig
@@ -53,6 +54,8 @@ class CALMOSWrapper(pl.LightningModule):
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
+        elif self.config.model.model_type.lower() == "melspec":
+            collate_fn = CalMOSMelSpecModel()
         elif self.config.model.model_type.lower() == "all_layers_embedding":
             collate_fn = AllLayersEmbeddingCollate()
         elif self.config.model.model_type.lower() == "one_layer_embedding":
@@ -79,6 +82,8 @@ class CALMOSWrapper(pl.LightningModule):
             )
         elif self.config.model.model_type.lower() == "all_layers_embedding":
             collate_fn = AllLayersEmbeddingCollate()
+        elif self.config.model.model_type.lower() == "melspec":
+            collate_fn = CalMOSMelSpecModel()
         elif self.config.model.model_type.lower() == "one_layer_embedding":
             collate_fn = OneLayerEmbeddingCollate()
         else:
