@@ -435,6 +435,39 @@ class CalMOSDynamicModel(BaseModel):
     def _get_embedding_dim(self) -> int:
         return self.mlp.layers[0].in_features
 
+class CalMOSDynamicMelSpec(BaseModel):
+    """ 
+
+    Using the same strategy as the CalMOSDynamicModel() but with the difference of using the mel-spec.
+    As using the mel-spec we can extract during the training and agreggate with the audio features [ audio _features , mel_spec , mos_score]
+    
+    """
+
+    def __init__(
+        self,
+        model_name: str = "facebook/w2v-bert",
+        freeze_backbone: bool = True,
+        #mel_spec : Torch
+        #peft
+        use_peft: bool = False,
+        lora_keys: List[str] = None,
+        lora_r: int = 0,
+        lora_alpha: int = 0,
+        lora_dropout: float = 0.0,
+        bias: str = "none",
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        
+        '''
+        get_embeddings -> Pegamos os embeddings sendo = (features_do_modelo + mel_spec)
+        '''
+        
+        #_get_embeddings
+        #_get_embeddings_mel_spec
+        #_get_embedding_dim
+        #_freeze_backbone
+        #
 
 class CalMOSAllLayersEmbeddingModel(BaseModel):
     """
