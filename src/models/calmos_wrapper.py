@@ -53,6 +53,12 @@ class CALMOSWrapper(pl.LightningModule):
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
+        elif self.config.model.model_type.lower() == "dynamic_mel":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DynamicCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
         elif self.config.model.model_type.lower() == "all_layers_embedding":
             collate_fn = AllLayersEmbeddingCollate()
         elif self.config.model.model_type.lower() == "one_layer_embedding":
@@ -72,6 +78,12 @@ class CALMOSWrapper(pl.LightningModule):
     def val_dataloader(self):
         """Return the validation dataloader."""
         if self.config.model.model_type.lower() == "dynamic":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DynamicCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
+        elif self.config.model.model_type.lower() == "dynamic_mel":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicCollate(
                 target_sr=self.config.data.target_sr,

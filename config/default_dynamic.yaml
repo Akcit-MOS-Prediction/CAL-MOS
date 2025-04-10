@@ -1,26 +1,26 @@
-title: CAL-MOS-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+title: CAL-MOS-MFCCS+Features-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
 
-wandb_entity: proga150-ufrn
+wandb_entity: snaxofc10-utfpr-medianeira
 
 datasets:
     train:
         - name: Train
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/train.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/train_mos.csv"
+          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
 
     val:
         - name: Validation
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/val.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/val_mos.csv"
+          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
 
     test:
         - name: Test
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/test.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/test.csv"
+          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
           filename_column: "filepath"
           target_column: "mos"
 
@@ -44,7 +44,7 @@ train:
     num_workers: 12
 
 model:
-    model_type: "dynamic"
+    model_type: "dynamic_mel"
 
     # model_name: "microsoft/wavlm-large"
     # model_name: "facebook/wav2vec2-base"
@@ -56,7 +56,13 @@ model:
     # model_name: "facebook/hubert-large-ls960-ft"
     # model_name: "openai/whisper-large"
 
-    mlp_input_dim: 2048 # Must be adapted to the model
+    mel_spec_encoder_pretrained: true
+    mel_spec_encoder_embedding_dim: 768
+    mel_spec_encoder_proj_size: 512
+    mel_spec_encoder_proj_dropout: 0.2
+    mel_spec_encoder_freeze_backbone: false
+
+    mlp_input_dim: 1536 # Must be adapted to the model
     mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
     mlp_num_layers: 1
     mlp_output_size: ${data.num_classes}

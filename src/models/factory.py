@@ -2,6 +2,7 @@ from models.base_models import (
     BaseModel,
     CalMOSDynamicModel,
     CalMOSAllLayersEmbeddingModel,
+    CalMOSDynamicModelMel,
     CalMOSOneLayerEmbeddingModel,
 )
 
@@ -17,6 +18,8 @@ def create_model(
     """
     if model_type.lower() == "dynamic":
         return CalMOSDynamicModel(**kwargs)
+    elif model_type.lower() == "dynamic_mel":
+        return CalMOSDynamicModelMel(**kwargs)
     elif model_type.lower() == "all_layers_embedding":
         return CalMOSAllLayersEmbeddingModel(**kwargs)
     elif model_type.lower() == "one_layer_embedding":

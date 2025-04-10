@@ -1,0 +1,56 @@
+conda activate mos
+cd src
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python main.py -c "../config/default_one_layer_embedding.yaml"
+
+
+
+
+conda activate mos
+cd src
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python main.py -c "../config/default_one_layer_embedding_concat_clova.yaml"
+
+
+
+
+
+
+
+
+# run inference.py
+conda activate mos
+cd src
+cd eval
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python inference.py -c "../../config/default_one_layer_embedding_concat_clova.yaml" --gpu 0
+
+
+
+
+
+
+
+# run mean
+conda activate mos
+cd src
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python main.py -c  "../config/default_one_layer_embedding_mean.yaml"
+
+
+# run clova
+cd src
+conda activate mos
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python main.py -c  "../config/default_one_layer_embedding_concat_clova.yaml"
+
+
+
+# run titanet
+cd src
+conda activate mos
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python main.py -c  "../config/default_dynamic.yaml"
+
+
+

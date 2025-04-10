@@ -566,3 +566,321 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
+    
+
+from models.ced.ced_finetuning import FineTuneCED
+
+ACTIVATIONS_FUNCS = {
+    "relu": nn.ReLU(),
+    "gelu": nn.GELU(),
+    "leaky_relu": nn.LeakyReLU(),
+}
+
+
+class SinusoidalPositionalEncoding(nn.Module):
+    def __init__(self, d_model: int, max_len: int = 5000):
+        super().__init__()
+        position = torch.arange(max_len).unsqueeze(1)  # [max_len, 1]
+        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
+        pe = torch.zeros(max_len, d_model)
+        pe[:, 0::2] = torch.sin(position * div_term)  # even indices
+        pe[:, 1::2] = torch.cos(position * div_term)  # odd indices
+        self.register_buffer("pe", pe.unsqueeze(0))  # shape: [1, max_len, d_model]
+
+    def forward(self, x: torch.Tensor, start_pos: int = 0) -> torch.Tensor:
+        seq_len = x.size(1)
+        x = x + self.pe[:, start_pos:start_pos+seq_len, :]
+        return x
+
+
+class MLPBase(nn.Module):
+    def __init__(
+        self,
+        input_size: int = 768,
+        hidden_dim: int = 1024,
+        num_layers: int = 2,
+        output_size: int = 7,
+        dropout: float = 0.1,
+        activation_func: str = "relu",
+    ) -> None:
+        super().__init__()
+        activation_func = activation_func.lower()
+        if activation_func not in ACTIVATIONS_FUNCS:
+            raise ValueError(
+                f"Unsupported activation function: {activation_func}. "
+                f"Supported activations are: {list(ACTIVATIONS_FUNCS.keys())}"
+            )
+        self.activation_func = activation_func
+        activation_layer = ACTIVATIONS_FUNCS[self.activation_func]
+
+        layers: List[nn.Module] = []
+        current_dim = input_size
+
+        for _ in range(num_layers):
+            layers.append(nn.Linear(current_dim, hidden_dim))
+            layers.append(activation_layer)
+            layers.append(nn.Dropout(dropout))
+            current_dim = hidden_dim
+
+        layers.append(nn.Linear(current_dim, output_size))
+        self.layers = nn.Sequential(*layers)
+        self._init_weights()
+
+    def _init_weights(self) -> None:
+        for module in self.layers:
+            if isinstance(module, nn.Linear):
+                if self.activation_func in ["relu", "gelu"]:
+                    init.kaiming_uniform_(module.weight, a=0, nonlinearity="relu")
+                elif self.activation_func == "leaky_relu":
+                    init.kaiming_uniform_(module.weight, a=0.01, nonlinearity="leaky_relu")
+                if module.bias is not None:
+                    init.zeros_(module.bias)
+
+    def forward(self, x):
+        return self.layers(x)
+
+
+class Pooling(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, x):
+        raise NotImplementedError
+
+
+class AttentiveStatisticsPooling(Pooling):
+    def __init__(self, input_size):
+        super().__init__()
+        self.sap_linear = nn.Linear(input_size, input_size)
+        self.attention = nn.Parameter(torch.FloatTensor(input_size, 1))
+        torch.nn.init.normal_(self.attention, mean=0, std=1)
+
+    def forward(self, xs):
+        h = torch.tanh(self.sap_linear(xs))
+        w = torch.matmul(h, self.attention).squeeze(dim=2)
+        w = F.softmax(w, dim=1).unsqueeze(2)
+        mu = torch.sum(xs * w, dim=1)
+        rh = torch.sqrt((torch.sum((xs**2) * w, dim=1) - mu**2).clamp(min=1e-5))
+        pooled = torch.cat((mu, rh), dim=1)
+        return pooled
+
+
+class BaseModel(nn.Module, ABC):
+    """
+    Base model for SER que gerencia:
+      - Inicialização da MLP
+      - Estratégia de ponderação dos layers: 'per_layer', 'weighted_sum' ou 'transformer'
+      - Estratégia de pooling: 'mean' ou 'attpool'
+    """
+    def __init__(
+        self,
+        mlp_input_dim: int = 768,
+        mlp_hidden_dim: int = 1024,
+        mlp_num_layers: int = 2,
+        mlp_output_size: int = 7,
+        mlp_dropout: float = 0.1,
+        mlp_activation_func: str = "relu",
+        layer_weight_strategy: str = "per_layer",
+        num_feature_layers: int = 25,
+        specific_layer_idx: int = -1,
+        pooling_strategy: str = "mean",
+        **kwargs,
+    ):
+        super().__init__()
+        self.mlp = MLPBase(
+            input_size=mlp_input_dim,
+            hidden_dim=mlp_hidden_dim,
+            num_layers=mlp_num_layers,
+            output_size=mlp_output_size,
+            dropout=mlp_dropout,
+            activation_func=mlp_activation_func,
+        )
+        self.layer_weight_strategy = layer_weight_strategy
+        self.num_feature_layers = num_feature_layers
+        self.specific_layer_idx = specific_layer_idx if specific_layer_idx >= 0 else num_feature_layers - 1
+        self.pooling_strategy = pooling_strategy
+
+        if layer_weight_strategy == "transformer":
+            self.aggregation_token = nn.Parameter(torch.randn(kwargs["transformer_hidden_size"]))
+            self.transformer_layers = nn.ModuleList([
+                nn.TransformerEncoderLayer(
+                    d_model=kwargs["transformer_hidden_size"],
+                    nhead=kwargs["transformer_nhead"],
+                    dim_feedforward=kwargs["transformer_dim_feedforward"],
+                    activation=kwargs["transformer_activation"],
+                    dropout=kwargs["transformer_dropout"],
+                    layer_norm_eps=kwargs["transformer_layer_norm_eps"],
+                    bias=kwargs["transformer_bias"],
+                    batch_first=True,
+                )
+                for _ in range(kwargs["transformer_num_hidden_layers"])
+            ])
+            self._transformers_init_weights()
+            self.pos_encoder = SinusoidalPositionalEncoding(
+                d_model=kwargs["transformer_hidden_size"],
+                max_len=num_feature_layers+1
+            )
+        elif layer_weight_strategy == "weighted_sum":
+            self.layer_weights = nn.ParameterList([nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)])
+        # Para 'per_layer' não há camada extra
+
+        if pooling_strategy not in ["mean", "attpool"]:
+            raise ValueError(f"Invalid pooling strategy: {pooling_strategy}. Choose 'mean' or 'attpool'.")
+        self.attpool = None
+
+    def _transformers_init_weights(self):
+        for layer in self.transformer_layers:
+            for name, param in layer.named_parameters():
+                if "weight" in name:
+                    if "self_attn" in name or "linear" in name:
+                        init.xavier_uniform_(param)
+                    elif "norm" in name:
+                        init.ones_(param)
+                elif "bias" in name:
+                    init.zeros_(param)
+
+    def _weighted_sum(self, x: torch.Tensor) -> torch.Tensor:
+        B, NUM_LAYERS, SEQ_LEN, FEAT_DIM = x.shape
+        layer_weights = torch.stack([w for w in self.layer_weights])
+        layer_weights = F.softmax(layer_weights, dim=0).view(NUM_LAYERS, 1, 1)
+        weighted_sum = (x * layer_weights.expand(B, NUM_LAYERS, SEQ_LEN, FEAT_DIM)).sum(dim=1)
+        return weighted_sum
+
+    def _specific_layer(self, x: torch.Tensor, layer_idx: int) -> torch.Tensor:
+        return x[:, layer_idx, :]
+
+    def _transformer_aggregation(self, x: torch.Tensor) -> torch.Tensor:
+        B, NUM_LAYERS, SEQ_LEN, FEAT_DIM = x.shape
+        x = x.permute(0, 2, 1, 3).reshape(B * SEQ_LEN, NUM_LAYERS, FEAT_DIM)
+        agg_token = self.aggregation_token.unsqueeze(0).unsqueeze(0).expand(B * SEQ_LEN, 1, FEAT_DIM)
+        x = torch.cat([agg_token, x], dim=1)
+        x = self.pos_encoder(x)
+        for layer in self.transformer_layers:
+            x = layer(x)
+        x_agg = x[:, 0, :].reshape(B, SEQ_LEN, FEAT_DIM)
+        return x_agg
+
+    @abstractmethod
+    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        pass
+
+    @abstractmethod
+    def _get_embedding_dim(self) -> int:
+        pass
+
+    def _apply_layer_weighting(self, embeddings: torch.Tensor) -> torch.Tensor:
+        if self.layer_weight_strategy == "transformer":
+            embeddings = self._transformer_aggregation(embeddings)
+        elif self.layer_weight_strategy == "per_layer":
+            embeddings = self._specific_layer(embeddings, self.specific_layer_idx)
+        elif self.layer_weight_strategy == "weighted_sum":
+            embeddings = self._weighted_sum(embeddings)
+        else:
+            raise ValueError(f"Invalid layer weight strategy: {self.layer_weight_strategy}")
+        return embeddings
+
+    def _apply_pooling(self, embeddings: torch.Tensor) -> torch.Tensor:
+        if self.pooling_strategy == "mean":
+            return embeddings.mean(dim=1)
+        elif self.pooling_strategy == "attpool":
+            input_dim = embeddings.size(-1)
+            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
+            return self.attpool(embeddings)
+        else:
+            raise ValueError(f"Invalid pooling strategy: {self.pooling_strategy}")
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Caso BaseModel.forward seja suficiente, este método pode ser sobrescrito nas subclasses
+        embeddings = self._get_embeddings(x)
+        embeddings = self._apply_layer_weighting(embeddings)
+        logits_input = self._apply_pooling(embeddings)
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits
+
+
+class CalMOSDynamicModelMel(BaseModel):
+    """
+    Modelo que usa um backbone pré-treinado (ex.: WavLM) e integra os embeddings do
+    mel-espectrograma usando um encoder (ex.: FineTuneCED).
+    """
+    def __init__(
+        self,
+        model_name: str = "microsoft/wavlm-large",
+        freeze_backbone: bool = True,
+        use_peft: bool = False,
+        lora_keys: List[str] = None,
+        lora_r: int = 0,
+        lora_alpha: int = 0,
+        lora_dropout: float = 0.0,
+        bias: str = "none",
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        if freeze_backbone and use_peft:
+            raise ValueError("Parameters 'freeze_backbone' and 'use_peft' cannot be 'True' at the same time.")
+        config = AutoConfig.from_pretrained(model_name, output_hidden_states=True)
+        self.backbone = AutoModel.from_pretrained(model_name, config=config)
+        if "whisper" in model_name.lower():
+            self.backbone = self.backbone.encoder
+        self.freeze_backbone = freeze_backbone
+        if use_peft:
+            self.backbone = build_peft_model(
+                self.backbone,
+                lora_keys=lora_keys,
+                lora_r=lora_r,
+                lora_alpha=lora_alpha,
+                lora_dropout=lora_dropout,
+                bias=bias,
+            )
+        elif freeze_backbone:
+            self._freeze_backbone()
+            self.backbone.eval()
+        # Inicializa o encoder de MelSpec
+        self.mel_spec_encoder = FineTuneCED(
+            pretrained=kwargs.get("mel_spec_encoder_pretrained", True),
+            embedding_dim=kwargs.get("mel_spec_encoder_embedding_dim", 768),
+            proj_size=kwargs.get("mel_spec_encoder_proj_size", 512),
+            proj_dropout=kwargs.get("mel_spec_encoder_proj_dropout", 0.2),
+            freeze_backbone_flag=kwargs.get("mel_spec_encoder_freeze_backbone", False)
+        )
+
+    def _freeze_backbone(self):
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+
+    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        if self.freeze_backbone:
+            with torch.no_grad():
+                outputs = self.backbone(**x, output_hidden_states=True)
+        else:
+            outputs = self.backbone(**x, output_hidden_states=True)
+        hidden_states = outputs.hidden_states
+        all_layers = torch.stack(hidden_states)
+        all_layers = all_layers.permute(1, 0, 2, 3)
+        return all_layers
+
+    def _get_mel_spec_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        # Supondo que 'x' seja um dicionário com a chave correspondente ao áudio
+        if "wavs" in x:
+            audio = x["wavs"]
+        elif "input_features" in x:
+            audio = x["input_features"]
+        else:
+            audio = x["input_values"]
+        mel_spec_embeddings = self.mel_spec_encoder(audio)
+        return mel_spec_embeddings
+
+    def _get_embedding_dim(self) -> int:
+        return self.mlp.layers[0].in_features
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Processa os embeddings do backbone
+        audio_embeds = self._get_embeddings(x)
+        audio_embeds = self._apply_layer_weighting(audio_embeds)
+        audio_embeds = self._apply_pooling(audio_embeds)  # Shape: [B, audio_dim]
+        # Processa os embeddings do MelSpec
+        mel_embeds = self._get_mel_spec_embeddings(x)  # Espera-se [B, mel_dim]
+        # Concatenar os dois embeddings (certifique-se que as dimensões são compatíveis)
+        logits_input = torch.cat((audio_embeds, mel_embeds), dim=-1)
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits

@@ -47,6 +47,34 @@ def build_dataloaders(config):
             class_num=config.data.num_classes,
             target_sr=config.data.target_sr,
         )
+    elif config.model.model_type.lower() == "dynamic_mel":
+        if config.model.model_type.lower() == "dynamic_mel":
+            train_dataset = DynamicDataset(
+                data=train_data,
+                filename_column=config.datasets.train[0].filename_column,
+                target_column=config.datasets.train[0].target_column,
+                base_dir=config.datasets.train[0].base_dir,
+                mixup_alpha=config.data.mixup_alpha,
+                use_rand_truncation=config.data.use_rand_truncation,
+                min_duration=config.data.min_duration,
+                insert_white_noise=config.data.insert_white_noise,
+                min_white_noise_amp=config.data.min_white_noise_amp,
+                max_white_noise_amp=config.data.max_white_noise_amp,
+                data_type="train",
+                class_num=config.data.num_classes,
+                target_sr=config.data.target_sr,
+            )
+
+            val_dataset = DynamicDataset(
+                data=val_data,
+                filename_column=config.datasets.train[0].filename_column,
+                target_column=config.datasets.train[0].target_column,
+                base_dir=config.datasets.train[0].base_dir,
+                mixup_alpha=config.data.mixup_alpha,
+                data_type="val",
+                class_num=config.data.num_classes,
+                target_sr=config.data.target_sr,
+            )
     elif config.model.model_type.lower() == "all_layers_embedding" \
         or config.model.model_type.lower() == "one_layer_embedding":
         train_dataset = EmbeddingDataset(

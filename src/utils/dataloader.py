@@ -260,19 +260,26 @@ class DynamicDataset(Dataset):
         return audio
 
     def _load_wav(self, filepath: str):
-        waveform, source_sr = torchaudio.load(filepath)
+        try:
+            waveform, source_sr = torchaudio.load(filepath)
+        except Exception as e:
+            print(f"Erro ao carregar o arquivo {filepath}: {e}")
+            # Opcionalmente, você pode retornar um tensor padrão ou re-lançar o erro
+            # Para demonstrar o erro, vamos re-levantá-lo:
+            raise e
 
-        # Convert to mono if stereo
+        # Converte para mono se o áudio for estéreo
         if waveform.dim() == 2 and waveform.shape[0] > 1:
             waveform = waveform.mean(dim=0, keepdim=True)
 
-        # Resample if needed
+        # Reamostragem se necessário
         if source_sr != self.target_sr:
             if source_sr not in self.resamplers:
                 self.resamplers[source_sr] = torchaudio.transforms.Resample(orig_freq=source_sr, new_freq=self.target_sr)
             waveform = self.resamplers[source_sr](waveform)
 
         return waveform, self.target_sr
+
 
     def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
         main_target = self.targets[index]
@@ -378,5 +385,6 @@ class DynamicCollate:
                 return_tensors="pt",
                 sampling_rate=self.target_sr,
             )
-
+        key = "input_features" if "input_features" in processed else "input_values"
+        
         return processed, targets.float()

@@ -1,0 +1,98 @@
+# run titanet
+
+conda activate mos
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python extract_titanet_embeddings.py ^
+    --base-dir "../data" ^
+    --input-dir-name "BRSPEECH_MOS_DATASET_v2" ^
+    --output-dir-name "BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet" ^
+    --model-size "m"
+
+
+
+
+# run clova
+
+conda activate tts_env
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python extract_clova_embeddings.py --base-dir "../data" --input-dir-name "BRSPEECH_MOS_DATASET_v2" --output-dir-name "BRSPEECH_MOS_DATASET_v2_mms_embedding_clova"
+
+
+
+
+# run wav2vec mms
+
+conda activate env_compat
+cd .\extract_embs
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python extract_wav2vec_embeddings.py --base-dir "../data" --input-dir-name "BRSPEECH_MOS_DATASET_v2" --output-dir-name "BRSPEECH_MOS_DATASET_v2_mms_embedding_average_" --model-name "mms-300m" --avg-hidden
+
+
+# run combine features
+conda activate env_compat
+cd .\extract_embs
+python concat_mms_titanet_embeddings.py \
+  --titanet-dir "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_titanet" \
+  --mms-dir "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_average_" \
+  --output-dir "../data/BRSPEECH_MOS_DATASET_v2_concat" \
+  --output-dim 1024
+
+
+# Run combine titanet and mms
+conda activate env_compat
+cd .\extract_embs
+python concat_embeddings.py --dir1 "../data/BRSPEECH_MOS_DATASET_v2_TITANETv1" `
+                            --dir2 "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_average_" `
+                            --outputdir "../data/embeddings_concat_mms_titanetv1" `
+                            --output_dim 1024
+
+
+
+# run concat_embeddings
+conda activate env_compat
+cd .\extract_embs
+python concat_embeddings.py --dir1 "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_clova" `
+                            --dir2 "../data/BRSPEECH_MOS_DATASET_v2_mms_embedding_average_" `
+                            --outputdir "../data/embeddings_concat_clova_mmsv1" `
+                            --output_dim 1024
+
+
+
+
+
+
+
+# run titanet2
+
+conda activate emb_nemo
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python extract_titanet_embeddings2.py 
+
+--base-dir "../data" --input-dir-name "BRSPEECH_MOS_DATASET_v2" --output-dir-name "BRSPEECH_MOS_DATASET_v2_mms_embedding_average_" --model-name "mms-300m" --avg-hidden
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--base-dir "../data" --input-dir-name "BRSPEECH_MOS_DATASET_v2" --output-dir-name "BRSPEECH_MOS_DATASET_v2_mms_embedding_average_" --model-name "mms-300m" --avg-hidden
+
+
+
+
+
+# run titanet
+
+conda activate emb_nemo
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python extract_titanet_embeddings2.py 
+
+
+
+# run clova
+
+conda activate tts_env
+$env:KMP_DUPLICATE_LIB_OK = "1"
+python extract_clova_embeddings.py --base-dir "../data" --input-dir-name "BRSPEECH_MOS_DATASET_v2" --output-dir-name "BRSPEECH_MOS_DATASET_v2_embedding_clovav2"
+
+
