@@ -1,29 +1,48 @@
-title: CAL-MOS-MFCCS+Features-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+title: CAL-MOS-MFCCS+Features-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})-BVCC
 
 wandb_entity: snaxofc10-utfpr-medianeira
 
 datasets:
+    # train:
+    #     - name: Train
+    #       metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/train_mos.csv"
+    #       base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+    #       filename_column: "filepath"
+    #       target_column: "mos"
+
+    # val:
+    #     - name: Validation
+    #       metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/val_mos.csv"
+    #       base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+    #       filename_column: "filepath"
+    #       target_column: "mos"
+
+    # test:
+    #     - name: Test
+    #       metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/test.csv"
+    #       base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+    #       filename_column: "filepath"
+    #       target_column: "mos"
     train:
         - name: Train
-          metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/train_mos.csv"
-          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "F:/Git/CAL-MOS/data/BVCC/DATA/sets/train2.csv"
+          base_dir:  "F:/Git/CAL-MOS/data/BVCC/DATA/wav"
           filename_column: "filepath"
           target_column: "mos"
 
     val:
         - name: Validation
-          metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/val_mos.csv"
-          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "F:/Git/CAL-MOS/data/BVCC/DATA/sets/val2.csv"
+          base_dir: "F:/Git/CAL-MOS/data/BVCC/DATA/wav"
           filename_column: "filepath"
           target_column: "mos"
 
     test:
         - name: Test
-          metadata_path: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2/test.csv"
-          base_dir: "F:/Git/CAL-MOS/data/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "F:/Git/CAL-MOS/data/BVCC/DATA/sets/test2.csv"
+          base_dir:  "F:/Git/CAL-MOS/data/BVCC/DATA/wav"
           filename_column: "filepath"
           target_column: "mos"
-
 data:
     use_seqaug: false
 

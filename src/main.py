@@ -86,7 +86,7 @@ def main() -> None:
 
     model = CALMOSWrapper(config)
 
-    print(model)
+    
 
     trainer = pl.Trainer(
         **config["trainer"],
