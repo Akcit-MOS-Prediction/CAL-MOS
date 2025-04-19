@@ -148,7 +148,7 @@ class AttentiveStatisticsPooling(Pooling):
         return pooled
 
 
-class BaseModel(nn.Module, ABC):
+
     """
     Base Model for SER that handles:
     - MLP initialization
@@ -368,6 +368,137 @@ class BaseModel(nn.Module, ABC):
         # Apply pooling
         logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
         # MLP classification
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits
+class BaseModel(nn.Module, ABC):
+    """
+    Base model for SER que gerencia:
+      - Inicialização da MLP
+      - Estratégia de ponderação dos layers: 'per_layer', 'weighted_sum' ou 'transformer'
+      - Estratégia de pooling: 'mean' ou 'attpool'
+    """
+    def __init__(
+        self,
+        mlp_input_dim: int = 768,
+        mlp_hidden_dim: int = 1024,
+        mlp_num_layers: int = 2,
+        mlp_output_size: int = 7,
+        mlp_dropout: float = 0.1,
+        mlp_activation_func: str = "relu",
+        layer_weight_strategy: str = "per_layer",
+        num_feature_layers: int = 25,
+        specific_layer_idx: int = -1,
+        pooling_strategy: str = "mean",
+        **kwargs,
+    ):
+        super().__init__()
+        self.mlp = MLPBase(
+            input_size=mlp_input_dim,
+            hidden_dim=mlp_hidden_dim,
+            num_layers=mlp_num_layers,
+            output_size=mlp_output_size,
+            dropout=mlp_dropout,
+            activation_func=mlp_activation_func,
+        )
+        self.layer_weight_strategy = layer_weight_strategy
+        self.num_feature_layers = num_feature_layers
+        self.specific_layer_idx = specific_layer_idx if specific_layer_idx >= 0 else num_feature_layers - 1
+        self.pooling_strategy = pooling_strategy
+
+        if layer_weight_strategy == "transformer":
+            self.aggregation_token = nn.Parameter(torch.randn(kwargs["transformer_hidden_size"]))
+            self.transformer_layers = nn.ModuleList([
+                nn.TransformerEncoderLayer(
+                    d_model=kwargs["transformer_hidden_size"],
+                    nhead=kwargs["transformer_nhead"],
+                    dim_feedforward=kwargs["transformer_dim_feedforward"],
+                    activation=kwargs["transformer_activation"],
+                    dropout=kwargs["transformer_dropout"],
+                    layer_norm_eps=kwargs["transformer_layer_norm_eps"],
+                    bias=kwargs["transformer_bias"],
+                    batch_first=True,
+                )
+                for _ in range(kwargs["transformer_num_hidden_layers"])
+            ])
+            self._transformers_init_weights()
+            self.pos_encoder = SinusoidalPositionalEncoding(
+                d_model=kwargs["transformer_hidden_size"],
+                max_len=num_feature_layers+1
+            )
+        elif layer_weight_strategy == "weighted_sum":
+            self.layer_weights = nn.ParameterList([nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)])
+        # Para 'per_layer' não há camada extra
+
+        if pooling_strategy not in ["mean", "attpool"]:
+            raise ValueError(f"Invalid pooling strategy: {pooling_strategy}. Choose 'mean' or 'attpool'.")
+        self.attpool = None
+
+    def _transformers_init_weights(self):
+        for layer in self.transformer_layers:
+            for name, param in layer.named_parameters():
+                if "weight" in name:
+                    if "self_attn" in name or "linear" in name:
+                        init.xavier_uniform_(param)
+                    elif "norm" in name:
+                        init.ones_(param)
+                elif "bias" in name:
+                    init.zeros_(param)
+
+    def _weighted_sum(self, x: torch.Tensor) -> torch.Tensor:
+        B, NUM_LAYERS, SEQ_LEN, FEAT_DIM = x.shape
+        layer_weights = torch.stack([w for w in self.layer_weights])
+        layer_weights = F.softmax(layer_weights, dim=0).view(NUM_LAYERS, 1, 1)
+        weighted_sum = (x * layer_weights.expand(B, NUM_LAYERS, SEQ_LEN, FEAT_DIM)).sum(dim=1)
+        return weighted_sum
+
+    def _specific_layer(self, x: torch.Tensor, layer_idx: int) -> torch.Tensor:
+        return x[:, layer_idx, :]
+
+    def _transformer_aggregation(self, x: torch.Tensor) -> torch.Tensor:
+        B, NUM_LAYERS, SEQ_LEN, FEAT_DIM = x.shape
+        x = x.permute(0, 2, 1, 3).reshape(B * SEQ_LEN, NUM_LAYERS, FEAT_DIM)
+        agg_token = self.aggregation_token.unsqueeze(0).unsqueeze(0).expand(B * SEQ_LEN, 1, FEAT_DIM)
+        x = torch.cat([agg_token, x], dim=1)
+        x = self.pos_encoder(x)
+        for layer in self.transformer_layers:
+            x = layer(x)
+        x_agg = x[:, 0, :].reshape(B, SEQ_LEN, FEAT_DIM)
+        return x_agg
+
+    @abstractmethod
+    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        pass
+
+    @abstractmethod
+    def _get_embedding_dim(self) -> int:
+        pass
+
+    def _apply_layer_weighting(self, embeddings: torch.Tensor) -> torch.Tensor:
+        if self.layer_weight_strategy == "transformer":
+            embeddings = self._transformer_aggregation(embeddings)
+        elif self.layer_weight_strategy == "per_layer":
+            embeddings = self._specific_layer(embeddings, self.specific_layer_idx)
+        elif self.layer_weight_strategy == "weighted_sum":
+            embeddings = self._weighted_sum(embeddings)
+        else:
+            raise ValueError(f"Invalid layer weight strategy: {self.layer_weight_strategy}")
+        return embeddings
+
+    def _apply_pooling(self, embeddings: torch.Tensor) -> torch.Tensor:
+        if self.pooling_strategy == "mean":
+            return embeddings.mean(dim=1)
+        elif self.pooling_strategy == "attpool":
+            input_dim = embeddings.size(-1)
+            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
+            return self.attpool(embeddings)
+        else:
+            raise ValueError(f"Invalid pooling strategy: {self.pooling_strategy}")
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Caso BaseModel.forward seja suficiente, este método pode ser sobrescrito nas subclasses
+        embeddings = self._get_embeddings(x)
+        embeddings = self._apply_layer_weighting(embeddings)
+        logits_input = self._apply_pooling(embeddings)
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
 
@@ -664,138 +795,6 @@ class AttentiveStatisticsPooling(Pooling):
         pooled = torch.cat((mu, rh), dim=1)
         return pooled
 
-
-class BaseModel(nn.Module, ABC):
-    """
-    Base model for SER que gerencia:
-      - Inicialização da MLP
-      - Estratégia de ponderação dos layers: 'per_layer', 'weighted_sum' ou 'transformer'
-      - Estratégia de pooling: 'mean' ou 'attpool'
-    """
-    def __init__(
-        self,
-        mlp_input_dim: int = 768,
-        mlp_hidden_dim: int = 1024,
-        mlp_num_layers: int = 2,
-        mlp_output_size: int = 7,
-        mlp_dropout: float = 0.1,
-        mlp_activation_func: str = "relu",
-        layer_weight_strategy: str = "per_layer",
-        num_feature_layers: int = 25,
-        specific_layer_idx: int = -1,
-        pooling_strategy: str = "mean",
-        **kwargs,
-    ):
-        super().__init__()
-        self.mlp = MLPBase(
-            input_size=mlp_input_dim,
-            hidden_dim=mlp_hidden_dim,
-            num_layers=mlp_num_layers,
-            output_size=mlp_output_size,
-            dropout=mlp_dropout,
-            activation_func=mlp_activation_func,
-        )
-        self.layer_weight_strategy = layer_weight_strategy
-        self.num_feature_layers = num_feature_layers
-        self.specific_layer_idx = specific_layer_idx if specific_layer_idx >= 0 else num_feature_layers - 1
-        self.pooling_strategy = pooling_strategy
-
-        if layer_weight_strategy == "transformer":
-            self.aggregation_token = nn.Parameter(torch.randn(kwargs["transformer_hidden_size"]))
-            self.transformer_layers = nn.ModuleList([
-                nn.TransformerEncoderLayer(
-                    d_model=kwargs["transformer_hidden_size"],
-                    nhead=kwargs["transformer_nhead"],
-                    dim_feedforward=kwargs["transformer_dim_feedforward"],
-                    activation=kwargs["transformer_activation"],
-                    dropout=kwargs["transformer_dropout"],
-                    layer_norm_eps=kwargs["transformer_layer_norm_eps"],
-                    bias=kwargs["transformer_bias"],
-                    batch_first=True,
-                )
-                for _ in range(kwargs["transformer_num_hidden_layers"])
-            ])
-            self._transformers_init_weights()
-            self.pos_encoder = SinusoidalPositionalEncoding(
-                d_model=kwargs["transformer_hidden_size"],
-                max_len=num_feature_layers+1
-            )
-        elif layer_weight_strategy == "weighted_sum":
-            self.layer_weights = nn.ParameterList([nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)])
-        # Para 'per_layer' não há camada extra
-
-        if pooling_strategy not in ["mean", "attpool"]:
-            raise ValueError(f"Invalid pooling strategy: {pooling_strategy}. Choose 'mean' or 'attpool'.")
-        self.attpool = None
-
-    def _transformers_init_weights(self):
-        for layer in self.transformer_layers:
-            for name, param in layer.named_parameters():
-                if "weight" in name:
-                    if "self_attn" in name or "linear" in name:
-                        init.xavier_uniform_(param)
-                    elif "norm" in name:
-                        init.ones_(param)
-                elif "bias" in name:
-                    init.zeros_(param)
-
-    def _weighted_sum(self, x: torch.Tensor) -> torch.Tensor:
-        B, NUM_LAYERS, SEQ_LEN, FEAT_DIM = x.shape
-        layer_weights = torch.stack([w for w in self.layer_weights])
-        layer_weights = F.softmax(layer_weights, dim=0).view(NUM_LAYERS, 1, 1)
-        weighted_sum = (x * layer_weights.expand(B, NUM_LAYERS, SEQ_LEN, FEAT_DIM)).sum(dim=1)
-        return weighted_sum
-
-    def _specific_layer(self, x: torch.Tensor, layer_idx: int) -> torch.Tensor:
-        return x[:, layer_idx, :]
-
-    def _transformer_aggregation(self, x: torch.Tensor) -> torch.Tensor:
-        B, NUM_LAYERS, SEQ_LEN, FEAT_DIM = x.shape
-        x = x.permute(0, 2, 1, 3).reshape(B * SEQ_LEN, NUM_LAYERS, FEAT_DIM)
-        agg_token = self.aggregation_token.unsqueeze(0).unsqueeze(0).expand(B * SEQ_LEN, 1, FEAT_DIM)
-        x = torch.cat([agg_token, x], dim=1)
-        x = self.pos_encoder(x)
-        for layer in self.transformer_layers:
-            x = layer(x)
-        x_agg = x[:, 0, :].reshape(B, SEQ_LEN, FEAT_DIM)
-        return x_agg
-
-    @abstractmethod
-    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
-        pass
-
-    @abstractmethod
-    def _get_embedding_dim(self) -> int:
-        pass
-
-    def _apply_layer_weighting(self, embeddings: torch.Tensor) -> torch.Tensor:
-        if self.layer_weight_strategy == "transformer":
-            embeddings = self._transformer_aggregation(embeddings)
-        elif self.layer_weight_strategy == "per_layer":
-            embeddings = self._specific_layer(embeddings, self.specific_layer_idx)
-        elif self.layer_weight_strategy == "weighted_sum":
-            embeddings = self._weighted_sum(embeddings)
-        else:
-            raise ValueError(f"Invalid layer weight strategy: {self.layer_weight_strategy}")
-        return embeddings
-
-    def _apply_pooling(self, embeddings: torch.Tensor) -> torch.Tensor:
-        if self.pooling_strategy == "mean":
-            return embeddings.mean(dim=1)
-        elif self.pooling_strategy == "attpool":
-            input_dim = embeddings.size(-1)
-            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
-            return self.attpool(embeddings)
-        else:
-            raise ValueError(f"Invalid pooling strategy: {self.pooling_strategy}")
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # Caso BaseModel.forward seja suficiente, este método pode ser sobrescrito nas subclasses
-        embeddings = self._get_embeddings(x)
-        embeddings = self._apply_layer_weighting(embeddings)
-        logits_input = self._apply_pooling(embeddings)
-        logits = self.mlp(logits_input).squeeze(-1)
-        return logits
 
 
 class CalMOSDynamicModelMel(BaseModel):
