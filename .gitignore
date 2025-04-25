@@ -167,7 +167,7 @@ extract_embs/run.txt
 extract_embs/titanet/
 
 extract_embs/clova_env_new
-
+extract_embs/nemo_env2
 
 extract_embs/checkpoints/clova/model_se.pth.tar
 extract_embs/checkpoints/clova/config_se.json
