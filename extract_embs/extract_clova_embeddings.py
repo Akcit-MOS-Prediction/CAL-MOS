@@ -8,6 +8,14 @@ from tqdm import tqdm
 import torch
 from TTS.tts.utils.speakers import SpeakerManager
 
+
+
+'''
+Download checkpoints and config:
+wget -c https://github.com/coqui-ai/TTS/releases/download/speaker_encoder_model/model_se.pth.tar
+wget -c https://github.com/coqui-ai/TTS/releases/download/speaker_encoder_model/config_se.json
+'''
+
 # Define o dispositivo
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 use_cuda = torch.cuda.is_available()
@@ -82,6 +90,12 @@ def main():
         default="./checkpoints/clova/config_se.json",
         help="Caminho para o arquivo de configuração do modelo"
     )
+    
+    '''
+    Download checkpoints and config:
+    wget -c https://github.com/coqui-ai/TTS/releases/download/speaker_encoder_model/model_se.pth.tar
+    wget -c https://github.com/coqui-ai/TTS/releases/download/speaker_encoder_model/config_se.json
+    '''
     parser.add_argument(
         "-o", "--output-dir-name",
         default="output_embeddings",

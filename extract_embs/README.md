@@ -32,3 +32,13 @@ python3 extract_wavlm_embeddings.py -b=PATH_TO_BASE_DIR -i=NAME_OF_DIR_INSIDE_BA
 
 - `-col` or `--column-name`:
   Name of the column in the CSV file that contains the filenames. Default is `filename`.
+
+
+
+  Para o clova precisa baixar os checkpoints
+Invoke-WebRequest `
+  -Uri "https://github.com/coqui-ai/TTS/releases/download/speaker_encoder_model/config_se.json" `
+  -OutFile "config_se.json"
+Invoke-WebRequest `
+  -Uri "https://github.com/coqui-ai/TTS/releases/download/speaker_encoder_model/config_se.json" `
+  -OutFile "config_se.json"

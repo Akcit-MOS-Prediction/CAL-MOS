@@ -514,6 +514,7 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
         pooling_strategy: str = "mean",
     ):
         super().__init__()
+        print("Entrou no CalMOSOneLayerEmbeddingModel")
 
         self.pooling_strategy = pooling_strategy
         self.mlp = MLPBase(
@@ -579,7 +580,7 @@ class CalMOSMelSpecModel(BaseModel):
     Esses embeddings são então passados pelo mecanismo de camada de
     ponderação (definido na BaseModel) e, após pooling, pela MLP final.
     """
-    print("Entrou no CalMOSMelSpecModel")
+    # print("Entrou no CalMOSMelSpecModel")
     def __init__(
         self,
         mel_spec_encoder_pretrained: bool = True,

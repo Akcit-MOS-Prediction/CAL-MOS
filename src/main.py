@@ -101,13 +101,9 @@ def main() -> None:
         ModelCheckpoint(**config["model_checkpoint"]),
         LearningRateMonitor("step"),
     ]
-    print("[MAIN] Callbacks configurados.")
 
-    print("[MAIN] Criando o modelo com CALMOSWrapper...")
     model = CALMOSWrapper(config)
-    print("[MAIN] Modelo criado:", model.__class__.__name__)
 
-    print("[MAIN] Criando o trainer...")
     trainer = pl.Trainer(
         **config["trainer"],
         logger=logger,
@@ -115,40 +111,41 @@ def main() -> None:
         devices=[args.gpu],
         default_root_dir=os.path.join(args.checkpoint_dir, config["title"])
     )
-    print("[MAIN] Trainer criado. Iniciando treinamento com trainer.fit(model)...")
+    
     trainer.fit(model)
-    print("[MAIN] Treinamento finalizado.")
 
-    best_checkpoint_path = trainer.checkpoint_callback.best_model_path
-    print("[MAIN] Melhor checkpoint salvo em:", best_checkpoint_path)
+    # 2) Recupera o melhor checkpoint
+    best_ckpt = trainer.checkpoint_callback.best_model_path
+    print("[MAIN] Melhor checkpoint salvo em:", best_ckpt)
 
+    # 3) Carrega o modelo do melhor checkpoint
     print("[MAIN] Carregando o modelo a partir do checkpoint...")
-    model = CALMOSWrapper.load_from_checkpoint(best_checkpoint_path, config=config)
+    model = CALMOSWrapper.load_from_checkpoint(best_ckpt, config=config)
     print("[MAIN] Modelo carregado do checkpoint.")
 
-    for dataset in args.datasets:
-        print(f"\n=== Rodando inferência em: {dataset} ===")
-        mse, lcc, srcc, tau = run_inference(
-            config_path=args.config_path,
-            gpu=args.gpu,
-            checkpoint_path=best_checkpoint_path,
-            dataset=dataset,
-            batch_size=config.train.batch_size
-        )
-        print(f"Resultados de {dataset}:")
-        print(f"  MSE:  {mse:.4f}")
-        print(f"  LCC:  {lcc:.4f}")
-        print(f"  SRCC: {srcc:.4f}")
-        print(f"  KTAU: {tau:.4f}")
+    print("\n=== Avaliação no conjunto de TEST ===")
+    mse, lcc, srcc, tau = run_inference(
+        config_path=args.config_path,
+        gpu=args.gpu,
+        checkpoint_path=best_ckpt,
+        dataset="test",
+        batch_size=config.train.batch_size
+    )
 
-        wandb.log({
-            f"{dataset}_MSE": mse,
-            f"{dataset}_LCC": lcc,
-            f"{dataset}_SRCC": srcc,
-            f"{dataset}_KTAU": tau,
-        })
+    print(f"  MSE:  {mse:.4f}")
+    print(f"  LCC:  {lcc:.4f}")
+    print(f"  SRCC: {srcc:.4f}")
+    print(f"  KTAU: {tau:.4f}")
 
-    print("[MAIN] Processo finalizado com sucesso.")
+    metrics = {
+        "test_MSE":  mse,
+        "test_LCC":  lcc,
+        "test_SRCC": srcc,
+        "test_KTAU": tau,
+    }
+    wandb.log(metrics)                  
+    wandb.run.summary.update(metrics)   
+    wandb.finish()
 
 
 if __name__ == "__main__":

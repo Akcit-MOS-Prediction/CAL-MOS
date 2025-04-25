@@ -71,11 +71,13 @@ class EmbeddingDataset(Dataset):
         filepath = os.path.join(self.base_dir, filename)
         target = self.targets[index]
         features = self._load_file(filepath)
-        if self.use_seqaug and self.data_type == "train":
-            if "wavs" in features:
+        if isinstance(features, dict):
+            if self.use_seqaug and self.data_type == "train" and "wavs" in features:
                 features["wavs"] = self.seqaug(features["wavs"])
-        if "wavs" in features:
-            features["wavs"] = features["wavs"].float()
+            if "wavs" in features:
+                features["wavs"] = features["wavs"].float()
+        # ————————————————————————
+
         return features, target
     
 class EmbeddingDataset2(Dataset):
