@@ -45,6 +45,7 @@ def extract_wav2vec_embeddings(
     output_dir: str,
     model_name: str,
     specific_layer: int = None,
+    use_mean: bool = False,
 ) -> None:
     model, processor = load_model(model_name)
     for filepath in tqdm(filelist, desc="Extracting embeddings"):
@@ -79,13 +80,20 @@ def extract_wav2vec_embeddings(
         ).to(device)
         with torch.no_grad():
             hidden_states = model(**input_features, output_hidden_states=True).hidden_states
-        # Concatenate all layers
-        all_layers_embeddings = torch.stack(hidden_states) # [num_layers,B,T,F], B=1
-        # transform to [num_layers,T,F]
-        all_layers_embeddings = all_layers_embeddings.squeeze(1)
+
+        all_layers_embeddings = torch.stack(hidden_states).squeeze(1)  
+
         if specific_layer is not None:
-            all_layers_embeddings = all_layers_embeddings[specific_layer]
-        # Saving embedding with the same subdirectory structure
+            if specific_layer >= all_layers_embeddings.shape[0]:
+                print(f"Layer {specific_layer} is out of range. Skipping {filepath}")
+                continue
+            layer_embedding = all_layers_embeddings[specific_layer] 
+        else:
+            layer_embedding = torch.mean(all_layers_embeddings, dim=0) 
+
+        if use_mean:
+            layer_embedding = layer_embedding.mean(dim=0)  
+            
         output_filename = basename(filepath).split(".")[0] + ".pt"
         output_filepath = join(output_subdir, output_filename)
         torch.save(all_layers_embeddings.cpu(), output_filepath)
@@ -146,15 +154,20 @@ def main():
         default="filename",
         help="Column name of the csv file",
     )
+    parser.add_argument(
+        "--use-mean",
+        action="store_true",
+        help="Usar média temporal do embedding"
+    )
     args = parser.parse_args()
 
     input_dir = os.path.join(args.base_dir, args.input_dir_name)
     output_dir = os.path.join(args.base_dir, args.output_dir_name)
 
     if args.specific_layer is not None:
-        assert args.specific_layer >= 0, "Layer index should be non-negative"
-
         output_dir += f"_layer-{args.specific_layer}"
+        if args.use_mean:
+            output_dir += "_mean"
 
     filelist = glob.glob(os.path.join(input_dir, "**", "*.wav"), recursive=True)
 
@@ -164,7 +177,7 @@ def main():
 
     os.makedirs(output_dir, exist_ok=True)
 
-    extract_wav2vec_embeddings(filelist, input_dir, output_dir, args.model_name, specific_layer=args.specific_layer)
+    extract_wav2vec_embeddings(filelist, input_dir, output_dir, args.model_name, specific_layer=args.specific_layer,use_mean=args.use_mean)
 
 
 if __name__ == "__main__":
