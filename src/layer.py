@@ -12,7 +12,7 @@ def update_config(layer, template_path, output_path):
     with open(template_path, 'r') as f:
         config = yaml.safe_load(f)
     
-    new_base_dir = f"../data/BVCC/BVCC_mms_embeddings_layer-{layer}_layer-{layer}/wav"
+    new_base_dir = f"../data/BVCC/BVCC_WAV2BERT_embeddings_layer-{layer}_layer-{layer}"
     if 'datasets' in config:
         if 'train' in config['datasets'] and isinstance(config['datasets']['train'], list):
             for dataset in config['datasets']['train']:
@@ -26,7 +26,7 @@ def update_config(layer, template_path, output_path):
                 dataset['base_dir'] = new_base_dir
 
     if 'title' in config:
-        config['title'] = f"BVCC-CAL-MOS-OneLayerEmbedding-MMS300M-layer{layer}-(epochs-${{trainer.max_epochs}})-(bs-${{train.batch_size}})-(LR-${{optimizer.params.learning_rate}})"
+        config['title'] = f"BVCC-WAV2BERT-Embeddings-layer{layer}-(epochs-${{trainer.max_epochs}})-(bs-${{train.batch_size}})-(LR-${{optimizer.params.learning_rate}})"
 
     with open(output_path, 'w') as f:
         yaml.dump(config, f)
@@ -35,7 +35,7 @@ def main():
     base_config = "../config/default_one_layer_embedding.yaml"
     
     
-    for layer in range(21, 25):
+    for layer in range(13, 25):
         print(f"\n=== Executando experimento para a layer {layer} ===")
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.yaml') as temp_file:
             temp_config_path = temp_file.name
@@ -47,7 +47,7 @@ def main():
         print(f"Configuração para a layer {layer}:\n{updated_config}")
         
         # Define o diretório de checkpoint com a layer ao final, formatada com 2 dígitos
-        checkpoint_dir = f"../checkpoints/mos-prediction/bvcc-layer{layer:02d}"
+        checkpoint_dir = f"../checkpoints/mos-prediction/bvcc-WAV2BERT-layer{layer:02d}"
         command = ["python", "main.py", "-c", temp_config_path, "-g", "0", "--checkpoint-dir", checkpoint_dir]
         print(f"Executando comando: {' '.join(command)}")
         env = os.environ.copy()
