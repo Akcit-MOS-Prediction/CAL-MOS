@@ -16,10 +16,11 @@ def create_model(
     model_type: "dynamic" or "embedding"
     kwargs: parameters to be passed to the model constructors
     """
+    kwargs.pop("model_name", None)
     if model_type.lower() == "dynamic":
         return CalMOSDynamicModel(**kwargs)
     elif model_type == "melspec":
-        model = CalMOSMelSpecModel(**kwargs) 
+        return CalMOSMelSpecModel(**kwargs) 
     elif model_type.lower() == "all_layers_embedding":
         return CalMOSAllLayersEmbeddingModel(**kwargs)
     elif model_type.lower() == "one_layer_embedding":

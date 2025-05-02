@@ -30,6 +30,7 @@ def extract_wav2vec_embeddings(
     output_dir: str,
     model_name: str,
     specific_layer: int = None,
+    mean: bool = False,
 ) -> None:
     model, processor = load_model(model_name)
     for filepath in tqdm(filelist, desc="Extracting embeddings"):
@@ -70,10 +71,18 @@ def extract_wav2vec_embeddings(
         all_layers_embeddings = all_layers_embeddings.squeeze(1)
         if specific_layer is not None:
             all_layers_embeddings = all_layers_embeddings[specific_layer]
-        # Saving embedding with the same subdirectory structure
-        output_filename = basename(filepath).split(".")[0] + ".pt"
-        output_filepath = join(output_subdir, output_filename)
-        torch.save(all_layers_embeddings.cpu(), output_filepath)
+            
+            
+            
+    # se --mean, colapsa a dimensão temporal
+    if mean:
+        emb = emb.mean(dim=0) if emb.dim()==2 else emb.mean(dim=1)
+        
+    suffix = f"_layer{specific_layer}" if specific_layer is not None else ""    
+    suffix += "_mean" if mean else ""    
+    output_filename = basename(filepath).split(".")[0] + suffix + ".pt"
+    output_filepath = join(output_subdir, output_filename)
+    torch.save(all_layers_embeddings.cpu(), output_filepath)
 
 
 def main():
@@ -120,6 +129,12 @@ def main():
         default="filename",
         help="Column name of the csv file",
     )
+    parser.add_argument(
+     "--mean",
+     action="store_true",
+     default=False,
+     help="If set, save the temporal mean of the embedding instead of the full sequence",
+    )
     args = parser.parse_args()
 
     input_dir = os.path.join(args.base_dir, args.input_dir_name)
@@ -138,7 +153,7 @@ def main():
 
     os.makedirs(output_dir, exist_ok=True)
 
-    extract_wav2vec_embeddings(filelist, input_dir, output_dir, args.model_name, specific_layer=args.specific_layer)
+    extract_wav2vec_embeddings(filelist, input_dir, output_dir, args.model_name, specific_layer=args.specific_layer,mean=args.mean,)
 
 
 if __name__ == "__main__":

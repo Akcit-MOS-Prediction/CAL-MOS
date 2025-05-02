@@ -19,3 +19,34 @@ python inference.py --config_path "../../config/default_one_layer_embedding_conc
 
 
 
+
+
+
+
+
+
+    parser.add_argument(
+        "-c",
+        "--config_path",
+        required=False,
+        type=str,
+        help="YAML file with configurations",
+        default="F:\Git\CAL-MOS\config\default_one_layer_embedding.yaml",
+    )
+    parser.add_argument(
+        "-g",
+        "--gpu",
+        required=False,
+        default=0,
+        type=int
+    )
+    parser.add_argument(
+        "-ckpt",
+        "--checkpoint-path",
+        required=False,
+        type=str,
+        default="F:/Git/CAL-MOS/src/MOS-Prediction/x1d5irjp/checkpoints/last.ckpt"
+
+    )
+
+
