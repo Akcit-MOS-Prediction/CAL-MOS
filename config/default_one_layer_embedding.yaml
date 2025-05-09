@@ -1,24 +1,24 @@
-title: BVCC-CAL-MOS-OneLayerEmbedding-MMS300M-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+title: MEAN-BVCC_WAV2BERT-CAL-MOS-OneLayerEmbedding-MMS300M-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
 
 wandb_entity: snaxofc10-utfpr-medianeira
 
 datasets:
     train:
         - name: Train
-          metadata_path: "F:/Git/CAL-MOS/data/BVCC/DATA/sets/train2.csv"
-          base_dir: "F:/Git/CAL-MOS/data/BVCC"
+          metadata_path: "F:/Git/CAL-MOS/data_mos/main/DATA/sets/train_mos_list.txt"
+          base_dir: "F:/Git/CAL-MOS/data/BVCC/BVCC_WAV2BERT_embeddings_layer-24_mean_layer-24"
           filename_column: "filepath"
           target_column: "mos"
     test:
         - name: Test
-          metadata_path: "F:/Git/CAL-MOS/data/BVCC/DATA/sets/test2.csv"
-          base_dir: "F:/Git/CAL-MOS/data/BVCC"
+          metadata_path: "F:/Git/CAL-MOS/data_mos/main/DATA/sets/teste_mos_list.txt"
+          base_dir: "F:/Git/CAL-MOS/data/BVCC/BVCC_WAV2BERT_embeddings_layer-24_mean_layer-24"
           filename_column: "filepath"
           target_column: "mos"
     val:
         - name: Validation
-          metadata_path: "F:/Git/CAL-MOS/data/BVCC/DATA/sets/val2.csv"
-          base_dir: "F:/Git/CAL-MOS/data/BVCC"
+          metadata_path: "F:/Git/CAL-MOS/data_mos/main/DATA/sets/val_mos_list.txt"
+          base_dir: "F:/Git/CAL-MOS/data/BVCC/BVCC_WAV2BERT_embeddings_layer-24_mean_layer-24"
           filename_column: "filepath"
           target_column: "mos"
 
@@ -33,7 +33,7 @@ train:
 
 model:
     model_type: "one_layer_embedding"
-
+    model_name: "facebook/w2v-bert-2.0"
     mlp_input_dim: 1024 # Must be adapted to the model
     mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
     mlp_num_layers: 1
