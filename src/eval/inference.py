@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 import argparse
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
@@ -16,9 +17,16 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 from scipy.stats import spearmanr, pearsonr, kendalltau
 
-from utils.dataloader import DynamicDataset, DynamicCollate
+from utils.dataloader import (
+    DynamicDataset,
+    AllLayersEmbeddingCollate,
+    OneLayerEmbeddingCollate,
+    DynamicCollate,
+    DynamicAudioCollate,
+)
 from models.calmos_wrapper import CALMOSWrapper
 from transformers import AutoFeatureExtractor
+
 
 @torch.no_grad
 def inference(model, dataloader, device):
@@ -29,7 +37,24 @@ def inference(model, dataloader, device):
 
     for batch in tqdm(dataloader, desc="Inference"):
         input_features, target = batch
-        input_features, target = input_features.to(device), target.to(device)
+
+        if isinstance(input_features, (list, tuple)):
+            # If inputs is a list or tuple, process each element based on its type
+            processed_inputs = []
+            for i in input_features:
+                if isinstance(i, dict):
+                    # If the element is a dictionary, move each tensor to the device
+                    processed_dict = {k: v.to(device) for k, v in i.items()}
+                    processed_inputs.append(processed_dict)
+                else:
+                    # If the element is a tensor, move it to the device
+                    processed_inputs.append(i.to(device))
+            input_features = tuple(processed_inputs)
+        elif isinstance(input_features, dict):
+            # If inputs is a dictionary, move each tensor to the device
+            input_features = {k: v.to(device) for k, v in input_features.items()}
+        else:
+            input_features = input_features.to(device)
 
         logits = model(input_features)
 
@@ -68,8 +93,15 @@ if __name__ == '__main__':
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
 
-    model = CALMOSWrapper.load_from_checkpoint(args.checkpoint_path, config=config, map_location=device, strict=False)
-    
+    checkpoint_paths = glob.glob(os.path.join(args.checkpoint_path, "**", "*.ckpt"), recursive=True)
+    # remove "last.ckpt" from the list
+    checkpoint_paths = [path for path in checkpoint_paths if "last.ckpt" not in path]
+    assert len(checkpoint_paths) == 1
+    checkpoint_path = checkpoint_paths[0]
+    print(f"Using checkpoint: {checkpoint_path}")
+
+    model = CALMOSWrapper.load_from_checkpoint(checkpoint_path, config=config, map_location=device, strict=False)
+
     model = model.to(device)
 
     # print(model.model.layer_weights[0])
@@ -108,15 +140,34 @@ if __name__ == '__main__':
         data_type="test",
     )
 
-    processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
-     
+    if config.model.model_type.lower() == "dynamic":
+        print("Dynamic model")
+        processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
+        collate_fn = DynamicCollate(
+            target_sr=config.data.target_sr,
+            processor=processor,
+        )
+    elif config.model.model_type.lower() == "dynamic_melspec":
+        print("Dynamic melspec")
+        processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
+        collate_fn = DynamicAudioCollate(
+            target_sr=config.data.target_sr,
+            processor=processor,
+        )
+    elif config.model.model_type.lower() == "all_layers_embedding":
+        collate_fn = AllLayersEmbeddingCollate()
+    elif config.model.model_type.lower() == "one_layer_embedding":
+        collate_fn = OneLayerEmbeddingCollate()
+    else:
+        raise ValueError(f"Invalid model type: {config.model.model_type}")
+
     test_dataloader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=16,
         shuffle=False,
         num_workers=config.train.num_workers,
         pin_memory=True,
-        collate_fn=DynamicCollate(processor=processor)
+        collate_fn=collate_fn,
     )
 
     predictions, targets = inference(model, test_dataloader, device)
@@ -127,7 +178,10 @@ if __name__ == '__main__':
     srcc = spearmanr(targets, predictions)[0]
     tau = kendalltau(targets, predictions)[0]
 
-    print(f"MSE: {mse:.4f}")
-    print(f"LCC: {lcc:.4f}")
-    print(f"SRCC: {srcc:.4f}")
-    print(f"KTAU: {tau:.4f}")
+    # print(f"MSE: {mse:.4f}")
+    # print(f"LCC: {lcc:.4f}")
+    # print(f"SRCC: {srcc:.4f}")
+    # print(f"KTAU: {tau:.4f}")
+
+    print(f"{os.path.basename(args.config_path)}\t{mse:.4f}\t{lcc:.4f}\t"
+                    f"{srcc:.4f}\t{tau:.4f}".replace(".", ","))

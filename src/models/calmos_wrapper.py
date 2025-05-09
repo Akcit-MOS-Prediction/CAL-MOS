@@ -15,7 +15,8 @@ from utils.schedulers import CosineWarmupLR, LinearLR
 from utils.dataloader import (
     AllLayersEmbeddingCollate,
     OneLayerEmbeddingCollate,
-    DynamicCollate
+    DynamicCollate,
+    DynamicAudioCollate,
 )
 
 
@@ -53,6 +54,12 @@ class CALMOSWrapper(pl.LightningModule):
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
+        elif self.config.model.model_type.lower() == "dynamic_melspec":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DynamicAudioCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
         elif self.config.model.model_type.lower() == "all_layers_embedding":
             collate_fn = AllLayersEmbeddingCollate()
         elif self.config.model.model_type.lower() == "one_layer_embedding":
@@ -74,6 +81,12 @@ class CALMOSWrapper(pl.LightningModule):
         if self.config.model.model_type.lower() == "dynamic":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
+        elif self.config.model.model_type.lower() == "dynamic_melspec":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DynamicAudioCollate(
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )

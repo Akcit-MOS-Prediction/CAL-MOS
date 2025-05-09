@@ -1,0 +1,141 @@
+title: CAL-MOS-PEFT-MelSpec-(CED-EMB-DIM-${model.ced_embedding_dim})-BRSpeech-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+
+wandb_entity: proga150-ufrn
+# wandb_entity: alefiury
+
+datasets:
+    train:
+        - name: Train
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/train.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    val:
+        - name: Validation
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/val.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    test:
+        - name: Test
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/test.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          filename_column: "filepath"
+          target_column: "mos"
+
+data:
+    use_seqaug: false
+
+    num_classes: 1
+
+    target_sr: 16000
+
+    mixup_alpha: 0.0 # 0.0 to disable
+    use_rand_truncation: false
+    min_duration: 2.0 # min duration (in seconds), only used if use_rand_truncation is True
+    min_white_noise_amp: 0.01 # min amplitude of white noise to be added, only used if insert_white_noise is True
+    max_white_noise_amp: 0.1 # max amplitude of white noise to be added, only used if insert_white_noise is True
+    insert_white_noise: false
+
+train:
+    batch_size: 4
+    shuffle: True
+    num_workers: 12
+
+model:
+    model_type: "dynamic_melspec"
+
+    # model_name: "microsoft/wavlm-large"
+    # model_name: "facebook/wav2vec2-base"
+    # model_name: "facebook/wav2vec2-large"
+    # model_name: "facebook/wav2vec2-xls-r-300m"
+    # model_name: "facebook/wav2vec2-xls-r-1b"
+
+    # model_name: "facebook/w2v-bert-2.0"
+    model_name: facebook/mms-300m
+    # model_name: facebook/mms-1b
+
+    # model_name: "facebook/hubert-large-ls960-ft"
+    # model_name: "openai/whisper-large-v3"
+
+    # mlp_input_dim: 1024 # Must be adapted to the model
+    mlp_input_dim: 1536 # Must be adapted to the model -> 1024 + 512 (CED)
+    # mlp_input_dim: 1280 # Must be adapted to the model
+    # mlp_input_dim: 1792 # Must be adapted to the model -> 1280 + 512(CED)
+    mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
+    mlp_num_layers: 1
+    mlp_output_size: ${data.num_classes}
+    mlp_dropout: 0.1
+    mlp_activation_func: "relu"
+    layer_weight_strategy: "weighted_sum"
+    num_feature_layers: 25 # Must be adapted to the model
+    # num_feature_layers: 49 # Must be adapted to the model
+    specific_layer_idx: -1 # Take the last layer
+    pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+
+    freeze_backbone: false # Freeze the backbone model
+
+    # PEFT parameters
+    use_peft: true
+    # lora_keys: ["key", "query", "value", "linear"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
+    lora_keys: ["value"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
+    # lora_keys: ["key", "query", "value", "whisper_linear"] # ATENÇÃO!!! "whisper_linear" é utilizado apenas para o modelo Whisper
+    # lora_keys: ["w2vbert_key", "w2vbert_query", "w2vbert_value", "w2vbert_linear"] # ATENÇÃO!!! Essa parte é utilizada apenas para o modelo w2vbert
+    lora_r: 16
+    lora_alpha: 16
+    lora_dropout: 0.1
+    bias: "none"
+
+    # MelSpec encoder
+    # ced_embedding_dim: 192 # tiny
+    # ced_embedding_dim: 256 # mini
+    ced_embedding_dim: 384 # small
+    # ced_embedding_dim: 768 # base
+    ced_proj_size: 512
+    ced_proj_dropout: 0.5
+    ced_pretrained: false
+    ced_freeze: false
+
+optimizer:
+    name: "adamw"
+    params:
+        min_learning_rate: 1e-5 # Same used in https://ecs.utdallas.edu/research/researchlabs/msp-lab/publications/Goncalves_2024.pdf
+        learning_rate: 5e-5 # Same used in https://ecs.utdallas.edu/research/researchlabs/msp-lab/publications/Goncalves_2024.pdf
+        eps: 1e-8
+        weight_decay: 1e-6
+        betas: [0.9, 0.98]
+
+scheduler:
+    name: "CosineWarmupLR"
+    params:
+        warmup_lr: 500
+
+tags:
+    - ${train.batch_size}-BS
+    - LR-${optimizer.params.learning_rate}
+    - WD-${optimizer.params.weight_decay}
+    - ${model.model_name}-HS
+    - ${model.mlp_input_dim}-AH
+    - ${model.mlp_hidden_dim}-HL
+    - ${model.mlp_num_layers}-IS
+
+trainer:
+    accelerator: "gpu"
+    max_epochs: 100
+    num_sanity_val_steps: 2
+    overfit_batches: 0.0
+    log_every_n_steps: 10
+    gradient_clip_val: 10.0
+    gradient_clip_algorithm: "norm"
+    val_check_interval: 1.0 # Every 1 epoch
+    accumulate_grad_batches: 16
+
+model_checkpoint:
+    mode: "max"
+    save_last: true
+    save_weights_only: true
+    monitor: "val/spearman"
+    dirpath: "../checkpoints/mos-prediction"
+    filename: "{epoch:02d}-{step:02d}-{val/spearman:.4f}"

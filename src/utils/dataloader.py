@@ -380,3 +380,53 @@ class DynamicCollate:
             )
 
         return processed, targets.float()
+
+
+class DynamicAudioCollate:
+    def __init__(
+        self,
+        padding_value: float = 0.0,
+        processor = None,
+        target_sr: int = 16000
+    ):
+        """
+        Collation function for dynamic batching of audio data.
+
+        Params:
+            padding_value (float): Value to use for padding shorter sequences.
+            processor: A processor or feature extractor to process raw audio
+                       into features if desired.
+        """
+        self.processor = processor
+        self.target_sr = target_sr
+        self.padding_value = padding_value
+
+    def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
+        audios, targets = zip(*batch)
+
+        audios = list(audios)
+        targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
+
+        processed = self.processor(
+            audios,
+            sampling_rate=self.target_sr,
+            return_tensors="pt",
+            padding=True
+        )
+
+        # Special case for Whisper, that expects a fixed input size of 3000 (30 seconds)
+        if isinstance(self.processor, WhisperFeatureExtractor) and processed.input_features.shape[-1] < 3000:
+            processed = self.processor(
+                audios,
+                return_tensors="pt",
+                sampling_rate=self.target_sr,
+            )
+
+        # pad audios
+        max_length = max([audio.shape[-1] for audio in audios])
+        padded_audios = torch.full((len(audios), max_length), 0.0)
+        for i, audio in enumerate(audios):
+            length = audio.shape[-1]
+            padded_audios[i, :length] = torch.from_numpy(audio)
+
+        return (processed, padded_audios), targets.float()

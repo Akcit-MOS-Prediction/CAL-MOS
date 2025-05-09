@@ -15,6 +15,8 @@ except ImportError:
     print("PEFT not available. Please install the PEFT package (https://huggingface.co/docs/peft/en/install) to use it.")
     build_peft_model = None
 
+from models.ced.ced_finetuning import FineTuneCED
+
 ACTIVATIONS_FUNCS = {
     "relu": nn.ReLU(),
     "gelu": nn.GELU(),
@@ -209,6 +211,7 @@ class BaseModel(nn.Module, ABC):
                 max_len=num_feature_layers+1
             )
         elif layer_weight_strategy == "weighted_sum":
+            print("Using weighted sum for layer weighting")
             self.layer_weights = nn.ParameterList(
                 [nn.Parameter(torch.zeros(1)) for _ in range(num_feature_layers)]
             )
@@ -501,6 +504,59 @@ class CalMOSAllLayersEmbeddingModel(BaseModel):
             int: The feature dimension
         """
         return self.mlp.layers[0].in_features
+
+
+class CalMOSDynamicMelSpecModel(CalMOSDynamicModel):
+    """
+    Using the same strategy as the CalMOSDynamicModel() but with the difference of using the mel-spec.
+    As using the mel-spec we can extract during the training and agreggate with the audio features [ audio _features , mel_spec , mos_score]
+    """
+
+    def __init__(
+        self,
+        # CED params
+        ced_embedding_dim: int = 768,
+        ced_proj_size: int = 512,
+        ced_proj_dropout: float = 0.2,
+        ced_pretrained: bool = True,
+        ced_freeze: bool = False,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        print(ced_embedding_dim)
+        print(ced_proj_size)
+        print(ced_proj_dropout)
+        print(ced_pretrained)
+        print(ced_freeze)
+        # CED Model
+        self.mel_spec_encoder = FineTuneCED(
+            pretrained=ced_pretrained,
+            embedding_dim=ced_embedding_dim,
+            proj_size=ced_proj_size,
+            proj_dropout=ced_proj_dropout,
+            freeze_backbone_flag=ced_freeze
+        )
+
+    def _get_mel_spec_embeddings(self, audios: torch.Tensor) -> torch.Tensor:
+        mel_spec_embeddings = self.mel_spec_encoder(audios)
+        return mel_spec_embeddings
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        input_features, audios = x
+        # Get embeddings
+        embeddings = self._get_embeddings(input_features)
+        # Apply layer weighting
+        embeddings = self._apply_layer_weighting(embeddings)
+        # Apply pooling
+        logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
+        # Get the mel spec embeddings
+        mel_spec_embeddings = self._get_mel_spec_embeddings(audios)
+        # Concatenate the embeddings
+        logits_input = torch.cat((logits_input, mel_spec_embeddings), dim=-1)
+        # MLP classification
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits
+
 
 class CalMOSOneLayerEmbeddingModel(nn.Module):
     def __init__(

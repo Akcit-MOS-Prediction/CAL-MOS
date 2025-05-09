@@ -20,7 +20,8 @@ def build_dataloaders(config):
     train_data = pd.read_csv(config.datasets.train[0].metadata_path)
     val_data = pd.read_csv(config.datasets.val[0].metadata_path)
 
-    if config.model.model_type.lower() == "dynamic":
+    if config.model.model_type.lower() == "dynamic" or \
+        config.model.model_type.lower() == "dynamic_melspec":
         train_dataset = DynamicDataset(
             data=train_data,
             filename_column=config.datasets.train[0].filename_column,
