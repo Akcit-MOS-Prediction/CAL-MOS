@@ -48,13 +48,13 @@ class CALMOSWrapper(pl.LightningModule):
 
     def train_dataloader(self):
         """Return the training dataloader."""
-        if self.config.model.model_type.lower() == "dynamic":
+        if self.config.model.model_type.lower() == "dynamic" or self.config.model.model_type.lower() == "dynamic_kan":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicCollate(
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
-        elif self.config.model.model_type.lower() == "dynamic_melspec":
+        elif self.config.model.model_type.lower() == "dynamic_melspec" or self.config.model.model_type.lower() == "dynamic_kan_melspec":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicAudioCollate(
                 target_sr=self.config.data.target_sr,
@@ -78,13 +78,13 @@ class CALMOSWrapper(pl.LightningModule):
 
     def val_dataloader(self):
         """Return the validation dataloader."""
-        if self.config.model.model_type.lower() == "dynamic":
+        if self.config.model.model_type.lower() == "dynamic" or self.config.model.model_type.lower() == "dynamic_kan":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicCollate(
                 target_sr=self.config.data.target_sr,
                 processor=processor,
             )
-        elif self.config.model.model_type.lower() == "dynamic_melspec":
+        elif self.config.model.model_type.lower() == "dynamic_melspec" or self.config.model.model_type.lower() == "dynamic_kan_melspec":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicAudioCollate(
                 target_sr=self.config.data.target_sr,

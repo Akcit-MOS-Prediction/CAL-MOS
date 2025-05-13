@@ -140,14 +140,14 @@ if __name__ == '__main__':
         data_type="test",
     )
 
-    if config.model.model_type.lower() == "dynamic":
+    if config.model.model_type.lower() == "dynamic" or config.model.model_type.lower() == "dynamic_kan":
         print("Dynamic model")
         processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
         collate_fn = DynamicCollate(
             target_sr=config.data.target_sr,
             processor=processor,
         )
-    elif config.model.model_type.lower() == "dynamic_melspec":
+    elif config.model.model_type.lower() == "dynamic_melspec" or config.model.model_type.lower() == "dynamic_kan_melspec":
         print("Dynamic melspec")
         processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
         collate_fn = DynamicAudioCollate(
