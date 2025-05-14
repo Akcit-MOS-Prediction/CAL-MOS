@@ -1,24 +1,24 @@
-title: CAL-MOS-OneLayerEmbedding-MMS300M-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+title: Voicemos-CAL-MOS-OneLayerEmbedding-MMS300M-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
 
-wandb_entity: alefiury
+wandb_entity: snaxofc10-utfpr-medianeira
 
 datasets:
-    train:
-        - name: Train
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/train.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2_mms_embeddings_layer-0"
-          filename_column: "filepath"
-          target_column: "mos"
+  train:
+    - name: Train
+      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/train_mos.csv"
+      base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
+      filename_column: "uttID"
+      target_column: "rating"
 
-    val:
-        - name: Validation
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/val.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2_mms_embeddings_layer-0"
-          filename_column: "filepath"
-          target_column: "mos"
+  val:
+    - name: Validation
+      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/val_mos.csv"
+      base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
+      filename_column: "uttID"
+      target_column: "rating"
 
 data:
-    use_seqaug: false
+    use_seqaug: true
     num_classes: 1
 
 train:
@@ -28,7 +28,6 @@ train:
 
 model:
     model_type: "one_layer_embedding"
-
     mlp_input_dim: 1024 # Must be adapted to the model
     mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
     mlp_num_layers: 1
@@ -61,7 +60,7 @@ tags:
 
 trainer:
     accelerator: "gpu"
-    max_epochs: 20
+    max_epochs: 100
     num_sanity_val_steps: 2
     overfit_batches: 0.0
     log_every_n_steps: 10

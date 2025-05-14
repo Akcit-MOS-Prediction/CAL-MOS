@@ -99,7 +99,7 @@ def main():
     parser.add_argument(
         "-l",
         "--specific-layer",
-        default=None,
+        default=0,
         type=int,
         help="Extract embeddings from a specific layer (If None, extract from all layers)",
     )

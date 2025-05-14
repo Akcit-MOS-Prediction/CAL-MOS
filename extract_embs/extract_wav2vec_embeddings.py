@@ -125,7 +125,7 @@ def main():
             "wav2vec2-large-robust",
             "mms-300m",
         ],
-        default="wav2vec2-xls-r-300m",
+        default="mms-300m",
         help="Model name",
     )
     parser.add_argument(

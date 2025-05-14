@@ -78,9 +78,9 @@ def main() -> None:
     )
 
     config["model_checkpoint"].pop("dirpath")
-
+    checkpoint_callback = ModelCheckpoint(**config["model_checkpoint"])
     callbacks = [
-        ModelCheckpoint(**config["model_checkpoint"]),
+        checkpoint_callback,  # ← agora usamos a instância correta
         LearningRateMonitor("step"),
     ]
 
@@ -98,6 +98,6 @@ def main() -> None:
 
     trainer.fit(model)
 
-
+    print(f"\n✅ Checkpoint salvo em: {checkpoint_callback.best_model_path}")
 if __name__ == "__main__":
     main()

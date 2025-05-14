@@ -4,7 +4,7 @@ from typing import Any, Callable, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from torch.cuda.amp import autocast
+from torch.amp import autocast
 import torchaudio.transforms as audio_transforms
 from einops import rearrange
 from einops.layers.torch import Rearrange
@@ -45,7 +45,7 @@ class FrontEnd(nn.Sequential):
             audio_transforms.AmplitudeToDB(top_db=120))
 
     # Disable Autocast for FP16 training!
-    @autocast(enabled=False)
+    @autocast(device_type="cuda", enabled=False)
     def forward(self, x):
         return super().forward(x)
 

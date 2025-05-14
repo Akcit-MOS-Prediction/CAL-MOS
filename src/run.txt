@@ -1,0 +1,83 @@
+cd src
+conda activate mos 
+python layer.py
+
+
+
+
+
+
+# seta a variável (sem aspas extras)
+$env:KMP_DUPLICATE_LIB_OK = "TRUE"
+
+# agora rode seu script normalmente
+& python .\main.py `
+  -c F:\Git\CAL-MOS\config\default_one_layer_embedding.yaml ` 
+  -g 0 `
+  --datasets test
+
+
+
+
+
+BVCC-WAV2BERT-Embeddin
+layer 24  x1d5irjp 
+layer 23 24nu67e3
+layer 22 88vl6zz9
+layer 21 l4wls9lo
+layer 20 ckovg9mo
+layer 19 pvmngcme
+layer 18 u8tfpygk
+layer 17 08od624u
+layer 16 3o2jbhmg
+layer 15 19cu0s1u
+layer 14 kzmgtjlx
+layer 13 8td579fy
+layer 12 jhwnuomy
+layer 11 b4lop3r9
+layer 10 ctj54c8f
+layer 9  lhe04y7r
+layer 8  onrbtbko
+layer 7  1pubrrgh
+layer 6  6r5w1u1h
+layer 5  voy3mwaq
+layer 4  uxf7vid3
+layer 3  g7kechsw
+layer 2  rsxgzdbu
+layer 1  fbnjs2zc
+layer 0  3bt7urvj
+
+
+
+
+BVCC-CAL-MOS-OneLayerEm
+layer 24 colfjydt
+layer 23 n9mb8qg2
+layer 22 88vl6zz9
+layer 21 7it35di3
+layer 20 odrtn4mx
+layer 19 2rp12u0b
+layer 18 smt3cnpe
+layer 17 7mpb4cst
+layer 16 ynp38b13
+layer 15 1u0j3bs3
+layer 14 jz25zp7a
+layer 13 p8lja4wx
+layer 12 3pxj3em9
+layer 11 mzlhko22
+layer 10 bawr1swy
+layer 9  r8wud0oy
+layer 8  7qdspjnc
+layer 7  yxp7k7l0
+layer 6  75y3cj7w
+layer 5  lhk44d4b
+layer 4  2193aoj7
+layer 3  ky4tzkkh
+layer 2  taaguu76
+layer 1  djfa1z55
+layer 0  z2jvsw9l
+
+
+
+
+
