@@ -3,13 +3,13 @@ data:
   use_seqaug: true
 datasets:
   train:
-  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/WAV2BERT/mos_WAV2BERT_embeddings_layer-0_layer-0
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/WAV2BERT/mos_WAV2BERT_embeddings_layer-1_layer-1
     filename_column: uttID
     metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/train_mos.csv
     name: Train
     target_column: rating
   val:
-  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/WAV2BERT/mos_WAV2BERT_embeddings_layer-0_layer-0
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/WAV2BERT/mos_WAV2BERT_embeddings_layer-1_layer-1
     filename_column: uttID
     metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/val_mos.csv
     name: Validation
@@ -51,7 +51,7 @@ tags:
 - ${model.mlp_input_dim}-AH
 - ${model.mlp_hidden_dim}-HL
 - ${model.mlp_num_layers}-IS
-title: Voicemos-CAL-MOS-OneLayerEmbedding-layer0-WAV2BERT-geral-SeqAug-True-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})
+title: Voicemos-CAL-MOS-OneLayerEmbedding-layer1-WAV2BERT-geral-SeqAug-True-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})
 train:
   batch_size: 64
   num_workers: 12
