@@ -200,6 +200,8 @@ class DynamicDataset(Dataset):
         base_dir: str,
         filename_column: str,
         target_column: str,
+        sr_column: str = None,
+        sr_dictionary: Optional[Dict[str, int]] = None,
         mixup_alpha: Optional[float] = 0.0,
         use_rand_truncation: bool = False,
         min_duration: Optional[float] = 0.0,
@@ -218,8 +220,19 @@ class DynamicDataset(Dataset):
         self.filenames = self.data[filename_column].values
         self.targets = self.data[target_column].values
 
+        if sr_column is not None:
+            self.sr = self.data[sr_column].values
+        else:
+            self.sr = [16] * len(self.data)
+
+        if sr_dictionary is None:
+            print("Warning: No sr_dictionary provided. Using default values.")
+            sr_dictionary = {"16": 0}
+        self.sr = [sr_dictionary.get(str(sr), 0) for sr in self.sr]
+
         self.filename_column = filename_column
         self.target_column = target_column
+        self.sr_column = sr_column
 
         # Data augmentation parameters
         self.mixup_alpha = mixup_alpha
@@ -277,6 +290,7 @@ class DynamicDataset(Dataset):
     def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
         main_target = self.targets[index]
         main_file = Path(self.filenames[index])
+        source_sr = self.sr[index]
 
         # If using mixup and in training mode
         if self.mixup_alpha > 0.0 and self.data_type == "train":
@@ -336,7 +350,7 @@ class DynamicDataset(Dataset):
             white_noise_amp = torch.rand(1) * (self.max_white_noise_amp - self.min_white_noise_amp) + self.min_white_noise_amp
             audio = audio + white_noise_amp * torch.randn_like(audio)
 
-        return audio.squeeze(0).numpy(), target
+        return audio.squeeze(0).numpy(), source_sr, target
 
 
 class DynamicCollate:
@@ -359,10 +373,11 @@ class DynamicCollate:
         self.padding_value = padding_value
 
     def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-        audios, targets = zip(*batch)
+        audios, source_srs, targets = zip(*batch)
 
         audios = list(audios)
         targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
+        source_srs = torch.stack([torch.tensor(t) for t in source_srs])
 
         processed = self.processor(
             audios,
@@ -379,7 +394,7 @@ class DynamicCollate:
                 sampling_rate=self.target_sr,
             )
 
-        return processed, targets.float()
+        return (processed, source_srs), targets.float()
 
 
 class DynamicAudioCollate:

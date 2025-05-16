@@ -28,6 +28,8 @@ def build_dataloaders(config):
             data=train_data,
             filename_column=config.datasets.train[0].filename_column,
             target_column=config.datasets.train[0].target_column,
+            sr_column=config.datasets.train[0].get("sr_column", None), # Backward compatibility
+            sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
             base_dir=config.datasets.train[0].base_dir,
             mixup_alpha=config.data.mixup_alpha,
             use_rand_truncation=config.data.use_rand_truncation,
@@ -44,6 +46,8 @@ def build_dataloaders(config):
             data=val_data,
             filename_column=config.datasets.train[0].filename_column,
             target_column=config.datasets.train[0].target_column,
+            sr_column=config.datasets.train[0].get("sr_column", None), # Backward compatibility
+            sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
             base_dir=config.datasets.train[0].base_dir,
             mixup_alpha=config.data.mixup_alpha,
             data_type="val",

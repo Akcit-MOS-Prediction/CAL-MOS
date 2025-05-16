@@ -375,6 +375,7 @@ class BaseModel(nn.Module, ABC):
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
 
+
 class ReLuKANBaseModel(nn.Module, ABC):
     """
     Base Model for SER that handles:
@@ -597,6 +598,7 @@ class ReLuKANBaseModel(nn.Module, ABC):
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
 
+
 class CalMOSDynamicModel(BaseModel):
     """
     Uses a pretrained backbone (e.g. WavLM).
@@ -612,6 +614,10 @@ class CalMOSDynamicModel(BaseModel):
         lora_alpha: int = 0,
         lora_dropout: float = 0.0,
         bias: str = "none",
+        # Sampling Rate parameters
+        use_sr_embeddings: bool = False,
+        sr_embedding_dim: int = 16,
+        num_sr_classes: int = 3,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -640,6 +646,10 @@ class CalMOSDynamicModel(BaseModel):
             self._freeze_backbone()
             self.backbone.eval()
 
+        self.use_sr_embeddings = use_sr_embeddings
+        if self.use_sr_embeddings:
+            self.sr_embedding = nn.Embedding(num_sr_classes, sr_embedding_dim)
+
     def _freeze_backbone(self):
         for param in self.backbone.parameters():
             param.requires_grad = False
@@ -659,6 +669,24 @@ class CalMOSDynamicModel(BaseModel):
 
     def _get_embedding_dim(self) -> int:
         return self.mlp.layers[0].in_features
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        input_features, sr_ids = x
+        # Get embeddings
+        embeddings = self._get_embeddings(input_features)
+        # Apply layer weighting
+        embeddings = self._apply_layer_weighting(embeddings)
+        # Apply pooling
+        logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
+        # Get the sr embeddings
+        if self.use_sr_embeddings:
+            sr_embeddings = self.sr_embedding(sr_ids)
+            # Concatenate the embeddings
+            logits_input = torch.cat((sr_embeddings, logits_input), dim=-1)
+        # MLP classification
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits
+
 
 class CalMOSDynamicKANModel(ReLuKANBaseModel):
     """
@@ -822,6 +850,7 @@ class CalMOSDynamicMelSpecModel(CalMOSDynamicModel):
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
 
+
 class CalMOSDynamicMelSpecKANModel(CalMOSDynamicKANModel):
     """
     Using the same strategy as the CalMOSDynamicModel() but with the difference of using the mel-spec.
@@ -872,6 +901,7 @@ class CalMOSDynamicMelSpecKANModel(CalMOSDynamicKANModel):
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
+
 
 class CalMOSOneLayerEmbeddingModel(nn.Module):
     def __init__(

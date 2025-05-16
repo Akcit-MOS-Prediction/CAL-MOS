@@ -1,30 +1,39 @@
-title: CAL-MOS-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+title: CAL-MOS-Challenge-SRID-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
 
 wandb_entity: proga150-ufrn
 
 datasets:
     train:
         - name: Train
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/train.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
-          filename_column: "filepath"
-          target_column: "mos"
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA/combined_train.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA/wav"
+          filename_column: "uttID"
+          target_column: "rating"
+          sr_column: "sr_khz"
 
     val:
         - name: Validation
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/val.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
-          filename_column: "filepath"
-          target_column: "mos"
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA/combined_val.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA/wav"
+          filename_column: "uttID"
+          target_column: "rating"
+          sr_column: "sr_khz"
 
     test:
         - name: Test
-          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/test.csv"
-          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
-          filename_column: "filepath"
-          target_column: "mos"
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA/combined_test.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA/wav"
+          filename_column: "uttID"
+          target_column: "rating"
+          sr_column: "sr_khz"
 
 data:
+    sr_dictionary: {
+        "16": 0,
+        "24": 1,
+        "48": 2,
+    }
+
     use_seqaug: false
 
     num_classes: 1
@@ -56,7 +65,7 @@ model:
     # model_name: "facebook/hubert-large-ls960-ft"
     # model_name: "openai/whisper-large"
 
-    mlp_input_dim: 1024 # Must be adapted to the model
+    mlp_input_dim: 1040 # 1024 (speech encoder) + 16 (sr embeddings) = 1040
     mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
     mlp_num_layers: 1
     mlp_output_size: ${data.num_classes}
@@ -68,6 +77,11 @@ model:
     pooling_strategy: "mean" # Take the mean of the sequence in the last layer
 
     freeze_backbone: true # Freeze the backbone model
+
+    # SR embeddings params
+    use_sr_embeddings: true
+    sr_embedding_dim: 16
+    num_sr_classes: 3
 
     transformer_hidden_size: ${model.mlp_input_dim} # Must be adapted to the model
     transformer_nhead: 4

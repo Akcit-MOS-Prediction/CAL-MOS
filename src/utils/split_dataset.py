@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 import os
 import re
 
-base_path = '../../data/voice_mos/track3_obf/DATA'
+base_path = '/hadatasets/alef.ferreira/MOS-Prediction/track3_obf/DATA'
 
 input_files = [
     os.path.join(base_path, 'utt_48k.csv'),
@@ -18,12 +18,18 @@ dataframes_with_sr = []
 for file in input_files:
     sr_match = re.search(r'utt_(\d+)k\.csv', file)
     if sr_match:
-        sr_khz = int(sr_match.group(1)) 
+        sr_khz = int(sr_match.group(1))
     else:
         raise ValueError(f"Não foi possível extrair o SR do nome do arquivo: {file}")
 
     df = pd.read_csv(file)
-    df['sr_khz'] = sr_khz 
+    # get the mean of "rating" considering the "uttID"
+    df = df.groupby('uttID').agg({
+        'rating': 'mean',
+    }).reset_index()
+
+    df["sr_khz"] = sr_khz
+
     dataframes_with_sr.append(df)
 
     utts = df['uttID'].unique()
@@ -49,4 +55,3 @@ for split in splits:
     out_file = f'combined_{split}.csv'
     combined_df[combined_df['uttID'].isin(common_utts)].to_csv(
         os.path.join(base_path, out_file), index=False)
-    
