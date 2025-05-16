@@ -2,10 +2,12 @@ import os
 import sys
 import glob
 import argparse
-
+import numpy as np
+import scipy.stats
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-
+import numpy as np
+import scipy.stats
 import torch
 import seaborn as sns
 import numpy as np
@@ -14,8 +16,8 @@ from tqdm import tqdm
 from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
-from scipy.stats import spearmanr, pearsonr, kendalltau
+# from sklearn.metrics import mean_squared_error
+# from scipy.stats import spearmanr, pearsonr, kendalltau
 
 from utils.dataloader import (
     DynamicDataset,
@@ -173,15 +175,22 @@ if __name__ == '__main__':
     predictions, targets = inference(model, test_dataloader, device)
 
     # mse = mean_squared_error(targets, predictions)
-    mse = np.mean((targets-predictions)**2)
-    lcc = np.corrcoef(targets, predictions)[0, 1]
-    srcc = spearmanr(targets, predictions)[0]
-    tau = kendalltau(targets, predictions)[0]
+    # mse = np.mean((targets - predictions) ** 2)
+    # lcc = np.corrcoef(targets, predictions)[0][1]
+    # srcc = scipy.stats.spearmanr(targets, predictions)[0]
+    # tau = scipy.stats.kendalltau(targets, predictions)[0]
 
     # print(f"MSE: {mse:.4f}")
     # print(f"LCC: {lcc:.4f}")
     # print(f"SRCC: {srcc:.4f}")
     # print(f"KTAU: {tau:.4f}")
-
-    print(f"{os.path.basename(args.config_path)}\t{mse:.4f}\t{lcc:.4f}\t"
-                    f"{srcc:.4f}\t{tau:.4f}".replace(".", ","))
+    
+    
+    true_mean_scores = targets
+    predict_mean_scores = predictions
+    MSE = np.mean((true_mean_scores - predict_mean_scores) ** 2)
+    LCC = np.corrcoef(true_mean_scores, predict_mean_scores)[0][1]
+    SRCC = scipy.stats.spearmanr(true_mean_scores, predict_mean_scores)[0]
+    KTAU = scipy.stats.kendalltau(true_mean_scores, predict_mean_scores)[0]
+    
+    print(f"{os.path.basename(args.config_path)}\t{MSE:.4f}\t{LCC:.4f}\t{SRCC:.4f}\t{KTAU:.4f}".replace(".", ","))
