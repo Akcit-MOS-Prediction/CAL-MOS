@@ -138,6 +138,8 @@ if __name__ == '__main__':
         data=test_data,
         filename_column=config.datasets.test[0].filename_column,
         target_column=config.datasets.test[0].target_column,
+        sr_column=config.datasets.test[0].get("sr_column", None), # Backward compatibility
+        sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
         base_dir=config.datasets.test[0].base_dir,
         data_type="test",
     )
