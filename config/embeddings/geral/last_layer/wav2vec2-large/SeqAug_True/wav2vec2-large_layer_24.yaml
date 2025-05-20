@@ -14,6 +14,12 @@ datasets:
     metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_val.csv
     name: Validation
     target_column: rating
+  test:
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/wav2vec2-large/wav2vec2-large_embeddings_layer-24_layer-24
+    filename_column: uttID
+    metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_test.csv
+    name: Test
+    target_column: rating
 model:
   mlp_activation_func: relu
   mlp_dropout: 0.1
