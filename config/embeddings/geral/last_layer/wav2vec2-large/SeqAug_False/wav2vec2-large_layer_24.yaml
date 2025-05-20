@@ -1,0 +1,69 @@
+data:
+  num_classes: 1
+  use_seqaug: false
+datasets:
+  train:
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/wav2vec2-large/wav2vec2-large_embeddings_layer-24_layer-24
+    filename_column: uttID
+    metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_train.csv
+    name: Train
+    target_column: rating
+  val:
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/wav2vec2-large/wav2vec2-large_embeddings_layer-24_layer-24
+    filename_column: uttID
+    metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_val.csv
+    name: Validation
+    target_column: rating
+model:
+  mlp_activation_func: relu
+  mlp_dropout: 0.1
+  mlp_hidden_dim: 1024
+  mlp_input_dim: 1024
+  mlp_num_layers: 1
+  mlp_output_size: ${data.num_classes}
+  model_type: one_layer_embedding
+  pooling_strategy: mean
+model_checkpoint:
+  dirpath: ../checkpoints/mos-prediction
+  filename: '{epoch:02d}-{step:02d}-{val/spearman:.4f}'
+  mode: max
+  monitor: val/spearman
+  save_last: true
+  save_weights_only: true
+optimizer:
+  name: adamw
+  params:
+    betas:
+    - 0.9
+    - 0.98
+    eps: 1e-8
+    learning_rate: 5e-5
+    min_learning_rate: 1e-5
+    weight_decay: 1e-6
+scheduler:
+  name: CosineWarmupLR
+  params:
+    warmup_lr: 500
+tags:
+- ${train.batch_size}-BS
+- LR-${optimizer.params.learning_rate}
+- WD-${optimizer.params.weight_decay}
+- ${model.mlp_input_dim}-AH
+- ${model.mlp_hidden_dim}-HL
+- ${model.mlp_num_layers}-IS
+title: Voicemos-CAL-MOS-OneLayerEmbedding-layer24-wav2vec2-large-geral-SeqAug-False-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})
+train:
+  batch_size: 64
+  num_workers: 12
+  shuffle: true
+trainer:
+  accelerator: gpu
+  accumulate_grad_batches: 1
+  gradient_clip_algorithm: norm
+  gradient_clip_val: 10.0
+  log_every_n_steps: 10
+  max_epochs: 100
+  num_sanity_val_steps: 2
+  overfit_batches: 0.0
+  val_check_interval: 1.0
+wandb_entity: snaxofc10-utfpr-medianeira

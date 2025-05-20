@@ -5,14 +5,14 @@ wandb_entity: snaxofc10-utfpr-medianeira
 datasets:
   train:
     - name: Train
-      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/train_mos.csv"
+      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_train.csv"
       base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
       filename_column: "uttID"
       target_column: "rating"
 
   val:
     - name: Validation
-      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/val_mos.csv"
+      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_val.csv"
       base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
       filename_column: "uttID"
       target_column: "rating"

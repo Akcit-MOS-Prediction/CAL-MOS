@@ -81,3 +81,4 @@ layer 0  z2jvsw9l
 
 
 
+python .\extract_all_mms1b_embeddings.py

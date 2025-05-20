@@ -32,6 +32,8 @@ def load_model(model_name="wav2vec2-xls-r-300m"):
         model_path = "facebook/wav2vec2-large-robust"
     elif (model_name == "mms-300m"):
         model_path = "facebook/mms-300m"
+    elif (model_name == "facebook/mms-1b"):
+        model_path = "facebook/mms-1b"
     model = Wav2Vec2Model.from_pretrained(model_path)
     model = model.to(device)
     model.eval()
@@ -124,6 +126,7 @@ def main():
             "wav2vec2-large",
             "wav2vec2-large-robust",
             "mms-300m",
+            "facebook/mms-1b",
         ],
         default="mms-300m",
         help="Model name",
@@ -150,7 +153,6 @@ def main():
 
     input_dir = os.path.join(args.base_dir, args.input_dir_name)
     output_dir = os.path.join(args.base_dir, args.output_dir_name)
-
     if args.specific_layer is not None:
         assert args.specific_layer >= 0, "Layer index should be non-negative"
 

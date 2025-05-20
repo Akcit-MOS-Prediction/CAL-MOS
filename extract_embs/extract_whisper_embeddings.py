@@ -40,7 +40,8 @@ def extract_whisper_embeddings(
     filelist: List[str],
     input_dir: str,
     output_dir: str,
-    model_name: str
+    model_name: str,
+    specific_layer: int = None
 ) -> None:
     model, processor = load_model(model_name)
     for filepath in tqdm(filelist, desc="Extracting embeddings"):
@@ -82,7 +83,18 @@ def extract_whisper_embeddings(
         # Saving embedding with the same subdirectory structure
         output_filename = basename(filepath).split(".")[0] + ".pt"
         output_filepath = join(output_subdir, output_filename)
-        torch.save(all_layers_embeddings.cpu(), output_filepath)
+        
+        
+        if specific_layer is not None:
+            if specific_layer >= all_layers_embeddings.shape[0]:
+                print(f"Camada {specific_layer} não existe! Total de camadas: {all_layers_embeddings.shape[0]}")
+                continue
+            output_tensor = all_layers_embeddings[specific_layer]
+        else:
+            output_tensor = all_layers_embeddings
+
+        torch.save(output_tensor.cpu(), output_filepath)
+
 
 
 def main():
@@ -131,6 +143,12 @@ def main():
         default="filename",
         help="Column name of the csv file",
     )
+    parser.add_argument(
+    "--specific-layer",
+    type=int,
+    default=None,
+    help="If set, only this specific layer will be saved"
+    )
     args = parser.parse_args()
 
     input_dir = os.path.join(args.base_dir, args.input_dir_name)
@@ -144,7 +162,7 @@ def main():
 
     os.makedirs(output_dir, exist_ok=True)
 
-    extract_whisper_embeddings(filelist, input_dir, output_dir, args.model_name)
+    extract_whisper_embeddings(filelist, input_dir, output_dir, args.model_name, specific_layer=args.specific_layer)
 
 
 if __name__ == "__main__":
