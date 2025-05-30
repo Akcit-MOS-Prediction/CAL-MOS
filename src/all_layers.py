@@ -11,7 +11,7 @@ def update_config(layer, template_path, output_path):
     with open(template_path, 'r') as f:
         config = yaml.safe_load(f)
 
-    new_base_dir = f"F:/Git/CAL-MOS/data/voice_mos/track3_obf/WAV2BERT/mos_WAV2BERT_embeddings_layer-{layer}_layer-{layer}"
+    new_base_dir = f"F:/Git/CAL-MOS/data/voice_mos/track3_obf/w2v-bert/w2v-bert_layer-{layer}"
     if 'datasets' in config:
         if 'train' in config['datasets'] and isinstance(config['datasets']['train'], list):
             for dataset in config['datasets']['train']:
@@ -24,7 +24,7 @@ def update_config(layer, template_path, output_path):
         use_seqaug = config.get('data', {}).get('use_seqaug', False)
         config['title'] = (
         f"Voicemos-CAL-MOS-OneLayerEmbedding-layer{layer}"
-        f"-WAV2BERT-geral-SeqAug-{use_seqaug}"
+        f"-WAV2BERT"
         f"-(epochs-${{trainer.max_epochs}})"
         f"-(bs-${{train.batch_size}})"
 )
@@ -35,14 +35,14 @@ def update_config(layer, template_path, output_path):
 def main():
     print("Executando")
     base_config = "../config/default_one_layer_embedding.yaml"
-    output_dir = "../config/wav2bert_embeddings-geral-SeqAug"
+    output_dir = "../config/embeddings/geral/all_layers/w2v-bert"
     os.makedirs(output_dir, exist_ok=True)
 
-    for layer in range(0, 25):
+    for layer in range(10, 25):
         print(f"\n=== Executando experimento para a layer {layer} ===")
         
         # Caminho fixo para salvar o yaml da layer atual
-        yaml_filename = f"wav2bert_layer_{layer:02d}.yaml"
+        yaml_filename = f"wav2bert_layer_{layer}.yaml"
         temp_config_path = os.path.join(output_dir, yaml_filename)
 
         # Se o arquivo não existir, criar e salvar
@@ -57,7 +57,7 @@ def main():
             updated_config = f.read()
         print(f"Configuração para a layer {layer}:\n{updated_config}")
 
-        checkpoint_dir = f"../checkpoints/mos-prediction/voicemos-WAV2BERT-geral-SeqAug-layer{layer:02d}"
+        checkpoint_dir = f"../checkpoints/mos-prediction/voicemos-w2v-bert-layer{layer:02d}"
         command = ["python", "main.py", "-c", temp_config_path, "-g", "0", "--checkpoint-dir", checkpoint_dir]
         print(f"Executando comando: {' '.join(command)}")
 

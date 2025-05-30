@@ -16,9 +16,14 @@ datasets:
       base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
       filename_column: "uttID"
       target_column: "rating"
-
+  test:
+    - name: Test
+      metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_test.csv"
+      base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
+      filename_column: "uttID"
+      target_column: "rating"
 data:
-    use_seqaug: true
+    use_seqaug: false
     num_classes: 1
 
 train:

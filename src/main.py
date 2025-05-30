@@ -59,18 +59,18 @@ def main() -> None:
 
     exp_title = config.title
 
-    tags = ["MOS-Prediction"]
+    tags = ["mosEmbeddings"]
     tags += [dataset["name"] for dataset in config.datasets.train]  # add training datasets as tags
     tags += config.tags  # add tags defined for experiments
     wandb.init(
-        project="MOS-Prediction",
+        project="mosEmbeddings",
         name=exp_title,
         tags=tags,
         entity=config.wandb_entity,
         config=OmegaConf.to_container(config, resolve=True)
     )
     logger = WandbLogger(
-        project="MOS-Prediction",
+        project="mosEmbeddings",
         name=exp_title,
         tags=tags,
         entity=config.wandb_entity,

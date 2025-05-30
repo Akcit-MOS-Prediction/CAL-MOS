@@ -167,3 +167,7 @@ data_rafael
 extract_embs
 src/run.txt
 src/eval_all.py
+src/all_eval_metrics.csv
+src/mosEmbeddings
+src/multiple_runs_wav2vec_layers2 copy.ps1
+src/multiple_runs_wav2vec_layers2.ps1
