@@ -122,7 +122,7 @@ if __name__ == '__main__':
         args.gpu,
         args.checkpoint_path,
         dataset=args.dataset,
-        batch_size=args.batch_size
+        batch_size=64
     )
     
     print(f"MSE: {mse:.4f}")

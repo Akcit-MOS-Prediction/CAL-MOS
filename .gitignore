@@ -173,3 +173,6 @@ extract_embs/checkpoints/clova/model_se.pth.tar
 extract_embs/checkpoints/clova/config_se.json
 data_rafael
 data_mos
+src/mosEmbeddings
+src/MOS-Prediction
+config
