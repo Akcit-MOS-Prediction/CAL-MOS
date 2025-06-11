@@ -9,6 +9,7 @@ datasets:
       base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
       filename_column: "uttID"
       target_column: "rating"
+      sr_column: "sr_khz"
 
   val:
     - name: Validation
@@ -16,13 +17,21 @@ datasets:
       base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
       filename_column: "uttID"
       target_column: "rating"
+      sr_column: "sr_khz"
   test:
     - name: Test
       metadata_path: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_test.csv"
       base_dir: "F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings"
       filename_column: "uttID"
       target_column: "rating"
+      sr_column: "sr_khz"
 data:
+    sr_dictionary: {
+        "16": 0,
+        "24": 1,
+        "48": 2,
+    }
+
     use_seqaug: true
     num_classes: 1
 
@@ -40,6 +49,10 @@ model:
     mlp_dropout: 0.1
     mlp_activation_func: "relu"
     pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+    # SR embeddings params
+    use_sr_embeddings: true
+    sr_embedding_dim: 16
+    num_sr_classes: 3
 
 optimizer:
     name: "adamw"

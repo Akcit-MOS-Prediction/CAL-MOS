@@ -124,6 +124,8 @@ def main():
 
     input_dir = os.path.join(args.base_dir, args.input_dir_name)
     output_dir = os.path.join(args.base_dir, args.output_dir_name)
+    print(f"Input directory: {input_dir}")
+    print(f"Output directory: {output_dir}")
 
     if args.specific_layer is not None:
         assert args.specific_layer >= 0, "Layer index should be non-negative"

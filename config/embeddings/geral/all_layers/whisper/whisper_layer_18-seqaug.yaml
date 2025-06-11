@@ -1,21 +1,21 @@
 data:
   num_classes: 1
-  use_seqaug: false
+  use_seqaug: true
 datasets:
   test:
-  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/generalista_embeddings
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/whisper/whisper_embeddings_layer-18
     filename_column: uttID
     metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_test.csv
     name: Test
     target_column: rating
   train:
-  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/w2v-bert/w2v-bert_layer-12
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/whisper/whisper_embeddings_layer-18
     filename_column: uttID
     metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_train.csv
     name: Train
     target_column: rating
   val:
-  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/w2v-bert/w2v-bert_layer-12
+  - base_dir: F:/Git/CAL-MOS/data/voice_mos/track3_obf/whisper/whisper_embeddings_layer-18
     filename_column: uttID
     metadata_path: F:/Git/CAL-MOS/data/voice_mos/track3_obf/DATA/combined_val.csv
     name: Validation
@@ -24,7 +24,7 @@ model:
   mlp_activation_func: relu
   mlp_dropout: 0.1
   mlp_hidden_dim: ${model.mlp_input_dim}
-  mlp_input_dim: 1024
+  mlp_input_dim: 1280
   mlp_num_layers: 1
   mlp_output_size: ${data.num_classes}
   model_type: one_layer_embedding
@@ -57,7 +57,7 @@ tags:
 - ${model.mlp_input_dim}-AH
 - ${model.mlp_hidden_dim}-HL
 - ${model.mlp_num_layers}-IS
-title: Voicemos-CAL-MOS-OneLayerEmbedding-layer12-WAV2BERT-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})
+title: Voicemos-CAL-MOS-OneLayerEmbedding-seqaug-layer18-whisper-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})
 train:
   batch_size: 64
   num_workers: 12

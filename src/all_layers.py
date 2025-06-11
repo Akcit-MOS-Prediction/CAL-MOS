@@ -6,12 +6,13 @@ import sys
 def update_config(layer, template_path, output_path):
     """
     Lê o arquivo de configuração template e atualiza o campo base_dir para as layers,
-    além do título para incluir o número da layer.
+    além do título para incluir o número da layer e a tag '-seqaug' quando necessário.
     """
     with open(template_path, 'r') as f:
         config = yaml.safe_load(f)
 
-    new_base_dir = f"F:/Git/CAL-MOS/data/voice_mos/track3_obf/w2v-bert/w2v-bert_layer-{layer}"
+    # Atualiza os diretórios de treinamento e validação
+    new_base_dir = f"F:/Git/CAL-MOS/data/voice_mos/track3_obf/whisper/whisper_embeddings_layer-{layer}"
     if 'datasets' in config:
         if 'train' in config['datasets'] and isinstance(config['datasets']['train'], list):
             for dataset in config['datasets']['train']:
@@ -19,30 +20,38 @@ def update_config(layer, template_path, output_path):
         if 'val' in config['datasets'] and isinstance(config['datasets']['val'], list):
             for dataset in config['datasets']['val']:
                 dataset['base_dir'] = new_base_dir
+        if 'test' in config['datasets'] and isinstance(config['datasets']['test'], list):
+            for dataset in config['datasets']['test']:
+                dataset['base_dir'] = new_base_dir
 
-    if 'title' in config:
-        use_seqaug = config.get('data', {}).get('use_seqaug', False)
-        config['title'] = (
-        f"Voicemos-CAL-MOS-OneLayerEmbedding-layer{layer}"
-        f"-WAV2BERT"
+    # Atualiza o título com ou sem a tag -seqaug
+    use_seqaug = config.get('data', {}).get('use_seqaug', False)
+    seqaug_tag = "-seqaug" if use_seqaug else ""
+
+    config['title'] = (
+        f"Voicemos-CAL-MOS-OneLayerEmbedding{seqaug_tag}"
+        f"-layer{layer}"
+        f"-whisper"
         f"-(epochs-${{trainer.max_epochs}})"
         f"-(bs-${{train.batch_size}})"
-)
+    )
 
+    # Salva o novo YAML
     with open(output_path, 'w') as f:
         yaml.dump(config, f)
 
 def main():
     print("Executando")
     base_config = "../config/default_one_layer_embedding.yaml"
-    output_dir = "../config/embeddings/geral/all_layers/w2v-bert"
+    output_dir = "../config/embeddings/geral/all_layers/whisper"
     os.makedirs(output_dir, exist_ok=True)
 
-    for layer in range(10, 25):
+    for layer in range(20, 32):
         print(f"\n=== Executando experimento para a layer {layer} ===")
         
+        
         # Caminho fixo para salvar o yaml da layer atual
-        yaml_filename = f"wav2bert_layer_{layer}.yaml"
+        yaml_filename = f"whisper_layer_{layer}-seqaug.yaml"
         temp_config_path = os.path.join(output_dir, yaml_filename)
 
         # Se o arquivo não existir, criar e salvar
@@ -57,7 +66,7 @@ def main():
             updated_config = f.read()
         print(f"Configuração para a layer {layer}:\n{updated_config}")
 
-        checkpoint_dir = f"../checkpoints/mos-prediction/voicemos-w2v-bert-layer{layer:02d}"
+        checkpoint_dir = f"../checkpoints/mos-prediction/voicemos-whisper-layer{layer:02d}"
         command = ["python", "main.py", "-c", temp_config_path, "-g", "0", "--checkpoint-dir", checkpoint_dir]
         print(f"Executando comando: {' '.join(command)}")
 
