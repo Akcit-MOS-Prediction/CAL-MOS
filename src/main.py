@@ -1,12 +1,11 @@
 import os
 import argparse
 
-
 import wandb
-import pytorch_lightning as pl
 from omegaconf import OmegaConf
-from pytorch_lightning.loggers import WandbLogger
-from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
+from lightning.pytorch import Trainer
+from lightning.pytorch.loggers import WandbLogger
+from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor
 
 from models.calmos_wrapper import CALMOSWrapper
 
@@ -88,7 +87,7 @@ def main() -> None:
 
     print(model)
 
-    trainer = pl.Trainer(
+    trainer = Trainer(
         **config["trainer"],
         logger=logger,
         callbacks=callbacks,

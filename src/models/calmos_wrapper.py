@@ -1,7 +1,7 @@
 import torch
 from torch.nn import MSELoss
 from lion_pytorch import Lion
-import pytorch_lightning as pl
+import lightning as L
 import torch.nn.functional as F
 from omegaconf import DictConfig
 from torch.optim import Adam, AdamW
@@ -20,7 +20,7 @@ from utils.dataloader import (
 )
 
 
-class CALMOSWrapper(pl.LightningModule):
+class CALMOSWrapper(L.LightningModule):
     def __init__(self, config: DictConfig):
         super().__init__()
         self.save_hyperparameters(config)
