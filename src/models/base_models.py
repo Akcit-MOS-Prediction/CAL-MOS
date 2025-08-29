@@ -642,9 +642,14 @@ class CalMOSDynamicModel(BaseModel):
                 lora_dropout=lora_dropout,
                 bias=bias,
             )
-        elif freeze_backbone:
+        else:
+            print("\n\t Not using PEFT...\n")
+        if freeze_backbone:
+            print("\n\t Freezing backbone...\n")
             self._freeze_backbone()
             self.backbone.eval()
+        else:
+            print("\n\t Fine-tuning backbone...\n")
 
         self.use_sr_embeddings = use_sr_embeddings
         if self.use_sr_embeddings:

@@ -417,10 +417,11 @@ class DynamicAudioCollate:
         self.padding_value = padding_value
 
     def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-        audios, targets = zip(*batch)
+        audios, _, targets = zip(*batch)
 
         audios = list(audios)
         targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
+        # source_srs = torch.stack([torch.tensor(t) for t in source_srs])
 
         processed = self.processor(
             audios,
