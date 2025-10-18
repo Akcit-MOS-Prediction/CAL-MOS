@@ -7,6 +7,7 @@ from models.base_models import (
     CalMOSDynamicMelSpecKANModel,
     CalMOSAllLayersEmbeddingModel,
     CalMOSOneLayerEmbeddingModel,
+    AddAugmentation
 )
 
 from typing import Union
@@ -35,5 +36,7 @@ def create_model(
         return CalMOSAllLayersEmbeddingModel(**kwargs)
     elif model_type.lower() == "one_layer_embedding":
         return CalMOSOneLayerEmbeddingModel(**kwargs)
+    elif model_type.lower() == "augmentation":
+        return AddAugmentation(**kwargs)
     else:
         raise ValueError(f"Unknown model_type: {model_type}. Must be 'dynamic' or 'all_layers_embedding' or 'one_layer_embedding'.")

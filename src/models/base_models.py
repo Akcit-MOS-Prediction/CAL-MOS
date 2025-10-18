@@ -972,3 +972,64 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
+    
+    
+    # basic calmos just the bones of the calmos with no frills
+class AddAugmentation(BaseModel):
+    
+    def __init__(
+        self,
+        model_name: str = "microsoft/wavlm-large",
+        freeze_backbone: bool = True,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.model_name = model_name
+        self.freeze_backbone = freeze_backbone
+        
+        
+        config = AutoConfig.from_pretrained(model_name, output_hidden_states=True)
+        self.backbone = AutoModel.from_pretrained(model_name, config=config)
+
+        # whisper if 
+        if "whisper" in model_name.lower():
+            self.backbone = self.backbone.encoder
+            
+        self.freeze_backbone = freeze_backbone
+        
+        if freeze_backbone:
+            print("\n\t Freezing backbone...\n")
+            self._freeze_backbone()
+            self.backbone.eval()
+        else:
+            print("\n\t Fine-tuning backbone...\n")
+            
+        self.use_sr_embeddings = False
+        
+    def _freeze_backbone(self):
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+            
+    def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        if self.freeze_backbone:
+            with torch.no_grad():
+                outputs = self.backbone(**x, output_hidden_states=True)
+        else:
+            outputs = self.backbone(**x, output_hidden_states=True)
+        hidden_states = outputs.hidden_states  # tuple of (layer_0,...,layer_n)
+        # [num_layers,B,T,F]
+        all_layers = torch.stack(hidden_states)
+        # transform to [B,num_layers,T,F]
+        all_layers = all_layers.permute(1, 0, 2, 3)
+        return all_layers
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Get embeddings
+        embeddings = self._get_embeddings(x)
+        # Apply layer weighting
+        embeddings = self._apply_layer_weighting(embeddings)
+        # Apply pooling
+        logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
+        # MLP classification
+        logits = self.mlp(logits_input).squeeze(-1)
+        return logits

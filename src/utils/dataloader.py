@@ -446,3 +446,9 @@ class DynamicAudioCollate:
             padded_audios[i, :length] = torch.from_numpy(audio)
 
         return (processed, padded_audios), targets.float()
+    
+class AugmentationDataset(Dataset):
+    def __init__(
+        self,
+        data:
+    )
