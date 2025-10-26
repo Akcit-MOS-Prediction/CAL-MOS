@@ -6,16 +6,15 @@ def ClipAugmentation(waveform: np.ndarray, threshold: float) -> np.ndarray:
 
 # Continua aqui 
 
-class AugmentationFactory:
-    @staticmethod
-    def get_augmentation(augmentation_type: str):
-        if augmentation_type == "clip":
-            return ClipAugmentation()
-        elif augmentation_type == "passa_alta":
-            return PassaAltaAugmentation()
-        elif augmentation_type == "passa_banda":
-            return PassaBandaAugmentation()
-        elif augmentation_type == "passa_baixar":
-            return PassaBaixarAugmentation()
-        else:
-            raise ValueError(f"Unknown augmentation type: {augmentation_type}")
+def criar_factory_augmentation(augmentation_type: str):
+
+    if augmentation_type == "clip":
+        return ClipAugmentation()
+    elif augmentation_type == "passa_alta":
+        return PassaAltaAugmentation()
+    elif augmentation_type == "passa_banda":
+        return PassaBandaAugmentation()
+    elif augmentation_type == "passa_baixar":
+        return PassaBaixarAugmentation()
+    else:
+        raise ValueError(f"Unknown augmentation type: {augmentation_type}")
