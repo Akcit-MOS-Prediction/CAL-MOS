@@ -447,8 +447,71 @@ class DynamicAudioCollate:
 
         return (processed, padded_audios), targets.float()
     
+class data_augmentation:
+    #Custom data augmentation class placeholder
+    # i'm need a agnostic dataset and dataloader, so i'm building this class as a placeholder
+    # and i'm gonna pass this class as a parameter to the AugmentationDataset class
+    pass
+    
 class AugmentationDataset(Dataset):
     def __init__(
         self,
-        data:
-    )
+        data,
+        base_dir: str,
+        filename_column: str,
+        target_column: str,
+        sr_column: str = None,
+        mixup_alpha: Optional[float] = 0.0,
+        use_rand_truncation: bool = False,
+        min_duration: Optional[float] = 0.0,
+        data_augmentation: data_augmentation = None,
+        data_type: str = "train",
+        class_num: int = 15,
+        target_sr: int = 16000,
+    ):
+        
+        self.data = data 
+        self.base_dir = base_dir
+        
+        self.filenames = self.data[filename_column].values
+        self.targets = self.data[target_column].values
+        
+        if sr_column is not None:
+            self.sr = self.data[sr_column].values
+        else:
+            self.sr = [16] * len(self.data)
+            
+        if sr_dictionary is None:
+            print("Warning: No sr_dictionary provided. Using default values.")
+            sr_dictionary = {"16": 0}
+        self.sr = [sr_dictionary.get(str(sr), 0) for sr in self.sr]
+        
+        self.filename_column = filename_column
+        self.target_column = target_column
+        self.sr_column = sr_column
+        
+        # data augmentation parameters
+        self.mixup_alpha = mixup_alpha
+        self.min_duration = min_duration
+        self.use_rand_truncation = use_rand_truncation
+        
+        # custom data augmentation
+        self.data_augmentation = data_augmentation
+        
+        self.data_type = data_type
+        self.class_num = class_num
+        self.target_sr = target_sr
+        # Cache for sampling rate resamplers
+        self.resamplers = {}
+        
+    def __len__(self):
+        return len(self.data)
+    
+    def _random_truncation(self, audio: torch.Tensor) -> torch.Tensor:
+        pass 
+    
+    def _load_wav(self, filepath: str):
+        pass
+    
+    def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
+        pass
