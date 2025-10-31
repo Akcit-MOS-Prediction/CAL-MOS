@@ -2,7 +2,7 @@ import os
 import random
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional
-
+from augmentation_factory import criar_factory_augmentation
 import torch
 import numpy as np
 import torchaudio
@@ -447,11 +447,7 @@ class DynamicAudioCollate:
 
         return (processed, padded_audios), targets.float()
     
-class data_augmentation:
-    #Custom data augmentation class placeholder
-    # i'm need a agnostic dataset and dataloader, so i'm building this class as a placeholder
-    # and i'm gonna pass this class as a parameter to the AugmentationDataset class
-    pass
+
     
 class AugmentationDataset(Dataset):
     def __init__(
@@ -464,7 +460,7 @@ class AugmentationDataset(Dataset):
         mixup_alpha: Optional[float] = 0.0,
         use_rand_truncation: bool = False,
         min_duration: Optional[float] = 0.0,
-        data_augmentation: data_augmentation = None,
+        data_augmentation: str = None,
         data_type: str = "train",
         class_num: int = 15,
         target_sr: int = 16000,
@@ -494,6 +490,8 @@ class AugmentationDataset(Dataset):
         self.mixup_alpha = mixup_alpha
         self.min_duration = min_duration
         self.use_rand_truncation = use_rand_truncation
+        # data augmentation factory
+        self.data_augmentation = criar_factory_augmentation(data_augmentation)
         
         # custom data augmentation
         self.data_augmentation = data_augmentation
@@ -504,14 +502,56 @@ class AugmentationDataset(Dataset):
         # Cache for sampling rate resamplers
         self.resamplers = {}
         
+    # gonna use this collate DynamicCollate
+        
     def __len__(self):
         return len(self.data)
+    
     
     def _random_truncation(self, audio: torch.Tensor) -> torch.Tensor:
         pass 
     
     def _load_wav(self, filepath: str):
-        pass
+        waveform , source_sr = torchaudio.load(filepath)
+        
+        # convert to mono if stereo
+        
+        if waveform.dim() == 2 and waveform.shape[0] > 1:
+            waveform = waveform.mean(dim=0, keepdim=True)
+        # resample if needed
+        
+        if source_sr != self.target_sr:
+            if source_sr not in self.resamplers:
+                self.resamplers[source_sr] = torchaudio.transforms.Resample(orig_freq=source_sr, new_freq=self.target_sr)
+            waveform = self.resamplers[source_sr](waveform)
+            
+        return waveform , self.target_sr
     
+    def _apply_augmentation(self , audio: torch.Tensor ) -> torch.Tensor:
+        waveform , source_sr = audio 
+        #test in this way verify with big alef
+        copy_waveform = waveform.numpy()
+        augmented_waveform = self.data_augmentation(copy_waveform)
+
+        return torch.from_numpy(augmented_waveform), source_sr
+
     def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
-        pass
+        main_target = self.targets[index]
+        main_file = Path(self.filenames[index])
+        source_sr = self.sr[index]
+        
+        filepath = self.base_dir / main_file
+        filepath = filepath.resolve()
+        audio, _ = self._load_wav(filepath)
+        target = main_target
+        
+        if self.data_type == "train":
+            audio = self._apply_augmentation((audio, source_sr))
+        
+        return audio.squeeze(0).numpy(), source_sr, target
+
+        # really need to use mixup alpha
+
+        # really need to use rand_truncation
+        
+        
