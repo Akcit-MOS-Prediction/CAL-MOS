@@ -17,6 +17,7 @@ from utils.dataloader import (
     OneLayerEmbeddingCollate,
     DynamicCollate,
     DynamicAudioCollate,
+    DiynamicAugmentationCollate
 )
 
 
@@ -44,6 +45,7 @@ class CALMOSWrapper(L.LightningModule):
     def setup(self, stage: str):
         # Assign train/val datasets for use in dataloaders
         if stage == "fit":
+            # the datasets enters HERE 
             self.train_dataset, self.val_dataset = build_dataloaders(self.config)
 
     def train_dataloader(self):
@@ -64,6 +66,13 @@ class CALMOSWrapper(L.LightningModule):
             collate_fn = AllLayersEmbeddingCollate()
         elif self.config.model.model_type.lower() == "one_layer_embedding":
             collate_fn = OneLayerEmbeddingCollate()
+            
+        elif self.config.model.model_type.lower() == "augmentation":
+            processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
+            collate_fn = DiynamicAugmentationCollate(
+                target_sr=self.config.data.target_sr,
+                processor=processor,
+            )
         else:
             raise ValueError(f"Invalid model type: {self.config.model.model_type}")
 

@@ -447,7 +447,42 @@ class DynamicAudioCollate:
 
         return (processed, padded_audios), targets.float()
     
+ # tirar esse padded_audio 
+ 
+class DiynamicAugmentationCollate:
+    def __init__(
+        self,
+        padding_value: float = 0.0,
+        processor = None,
+        target_sr: int = 16000
+    ):
+        
+        self.processor = processor
+        self.target_sr = target_sr
+        self.padding_value = padding_value
+        
+    def __call__(self , batch: List[Tuple[torch.Tensor , torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
+        audios , _ , targets = zip(*batch)
 
+        audios = list(audios)
+        targets = torch.stack([torch.tensor (t , dtype=torch.float32 ) for t in targets ])
+        
+        processed = self.processor(
+            audios,
+            return_tensors="pt",
+            sampling_rate=self.target_sr,
+        )
+        
+        max_len = max([audios.shape[-1] for audio in audios])
+        
+        padded_audios = torch.full((len(audios) , max_len) , 0.0)
+        for i , audio in enumerate(audios):
+            length = audio.shape[-1]
+            padded_audios[i , :length] = torch.from_numpy(audio)
+            
+        
+        return (processed , padded_audios) , targets.float()
+        # return processed
     
 class AugmentationDataset(Dataset):
     def __init__(
@@ -456,8 +491,6 @@ class AugmentationDataset(Dataset):
         base_dir: str,
         filename_column: str,
         target_column: str,
-        sr_column: str = None,
-        mixup_alpha: Optional[float] = 0.0,
         use_rand_truncation: bool = False,
         min_duration: Optional[float] = 0.0,
         data_augmentation: str = None,
@@ -472,10 +505,10 @@ class AugmentationDataset(Dataset):
         self.filenames = self.data[filename_column].values
         self.targets = self.data[target_column].values
         
-        if sr_column is not None:
-            self.sr = self.data[sr_column].values
-        else:
-            self.sr = [16] * len(self.data)
+        #if sr_column is not None:
+        #    self.sr = self.data[sr_column].values
+        
+        self.sr = [16] * len(self.data)
             
         if sr_dictionary is None:
             print("Warning: No sr_dictionary provided. Using default values.")
@@ -484,7 +517,7 @@ class AugmentationDataset(Dataset):
         
         self.filename_column = filename_column
         self.target_column = target_column
-        self.sr_column = sr_column
+        self.sr_audio = sr_audio 
         
         # data augmentation parameters
         self.mixup_alpha = mixup_alpha
@@ -502,17 +535,26 @@ class AugmentationDataset(Dataset):
         # Cache for sampling rate resamplers
         self.resamplers = {}
         
-    # gonna use this collate DynamicCollate
         
     def __len__(self):
         return len(self.data)
     
     
     def _random_truncation(self, audio: torch.Tensor) -> torch.Tensor:
-        pass 
+        min_len = int(self.min_duration * self.target_sr)
+        len_audio = audio.shape[-1]
+        
+        if self.use_rand_truncation and len_audio > min_len:
+            segment_length = random.randint(min_len, len_audio)
+            max_start = len_audio - segment_length
+            start = random.randint(0, max_start)
+            end = start + segment_length
+            audio = audio[... , start:end]
+        return audio
+    
     
     def _load_wav(self, filepath: str):
-        waveform , source_sr = torchaudio.load(filepath)
+        waveform , audio_sr = torchaudio.load(filepath)
         
         # convert to mono if stereo
         
@@ -520,38 +562,41 @@ class AugmentationDataset(Dataset):
             waveform = waveform.mean(dim=0, keepdim=True)
         # resample if needed
         
-        if source_sr != self.target_sr:
-            if source_sr not in self.resamplers:
-                self.resamplers[source_sr] = torchaudio.transforms.Resample(orig_freq=source_sr, new_freq=self.target_sr)
-            waveform = self.resamplers[source_sr](waveform)
+        if audio_sr != self.target_sr:
+            if audio_sr not in self.resamplers:
+                self.resamplers[audio_sr] = torchaudio.transforms.Resample(orig_freq=audio_sr, new_freq=self.target_sr)
+            waveform = self.resamplers[audio_sr](waveform)
             
-        return waveform , self.target_sr
+        return waveform , audio_sr
     
-    def _apply_augmentation(self , audio: torch.Tensor ) -> torch.Tensor:
-        waveform , source_sr = audio 
+    def _apply_augmentation(self , audio: torch.Tensor , source_sr: float ) -> torch.Tensor:
+        waveform = audio 
         #test in this way verify with big alef
         copy_waveform = waveform.numpy()
         augmented_waveform = self.data_augmentation(copy_waveform)
-
+        # suppose that we need a numpy 
         return torch.from_numpy(augmented_waveform), source_sr
 
     def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
         main_target = self.targets[index]
         main_file = Path(self.filenames[index])
-        source_sr = self.sr[index]
+        #source_sr = self.sr[index]
         
         filepath = self.base_dir / main_file
         filepath = filepath.resolve()
-        audio, _ = self._load_wav(filepath)
+        audio, audio_sr = self._load_wav(filepath)
         target = main_target
         
-        if self.data_type == "train":
-            audio = self._apply_augmentation((audio, source_sr))
+        if self.data_type == "train" and self.use_rand_truncation:
+            audio = self._random_truncation(audio)
+            
+            audio_augmented = self._apply_augmentation(audio , audio_sr)
+            
+            print(f"Original audio shape: {audio.shape}, Augmented audio shape: {audio_augmented.shape}")
+            
+        #return audio.squeeze(0).numpy(), _ , target
+        return audio_augmented.squeeze(0).numpy , target
         
-        return audio.squeeze(0).numpy(), source_sr, target
-
-        # really need to use mixup alpha
-
-        # really need to use rand_truncation
+        
         
         

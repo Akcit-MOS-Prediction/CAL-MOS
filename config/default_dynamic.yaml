@@ -2,25 +2,26 @@ title: CAL-MOS-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.ba
 
 wandb_entity: proga150-ufrn
 
+
 datasets:
     train:
         - name: Train
-          metadata_path: "/raid/aluno_alef/DATASETS/BRSPEECH_MOS_DATASET_v2/train.csv"
-          base_dir: "/raid/aluno_alef/DATASETS/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "/root/DATA/wav/train2.csv"
+          base_dir: "/root/DATA/wav"
           filename_column: "filepath"
           target_column: "mos"
 
     val:
         - name: Validation
-          metadata_path: "/raid/aluno_alef/DATASETS/BRSPEECH_MOS_DATASET_v2/val.csv"
-          base_dir: "/raid/aluno_alef/DATASETS/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "/root/DATA/wav/val2.csv"
+          base_dir: "/root/DATA/wav"
           filename_column: "filepath"
           target_column: "mos"
 
     test:
         - name: Test
-          metadata_path: "/raid/aluno_alef/DATASETS/BRSPEECH_MOS_DATASET_v2/test.csv"
-          base_dir: "/raid/aluno_alef/DATASETS/BRSPEECH_MOS_DATASET_v2"
+          metadata_path: "/root/DATA/wav/test2.csv"
+          base_dir: "/root/DATA/wav"
           filename_column: "filepath"
           target_column: "mos"
 

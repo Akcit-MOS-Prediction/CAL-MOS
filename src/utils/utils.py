@@ -3,7 +3,7 @@ import pandas as pd
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoFeatureExtractor
 
-from utils.dataloader import EmbeddingDataset, DynamicDataset
+from utils.dataloader import EmbeddingDataset, DynamicDataset , AugmentationDataset
 
 
 def build_dataloaders(config):
@@ -70,6 +70,27 @@ def build_dataloaders(config):
             filename_column=config.datasets.train[0].filename_column,
             target_column=config.datasets.train[0].target_column,
             base_dir=config.datasets.train[0].base_dir,
+            data_type="val",
+        )
+        
+    elif config.model.model_type.lower() == "augmentation":
+        train_dataset = AugmentationDataset(
+            data = train_data,
+            filename_column=config.dataset.train[0].filename_column,
+            target_column=config.datasets.train[0].target_column,
+            base_dir=config.datasets.train[0].base_dir,
+            use_rand_truncation=config.data.use_rand_truncation,
+            min_duration=config.min_duration,
+            data_augmentation=config.augmentation.name,
+            class_num=config.data.num_classes,
+            data_type="train",
+        )
+        
+        val_dataset = AugmentationDataset(
+            data = val_data,
+            filename_column=config.datasets.train[0].filename_column,
+            target_column = config.datasets.train[0].target_column,
+            base_dir = config.datasets.train[0].base_dir,
             data_type="val",
         )
 

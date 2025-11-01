@@ -975,6 +975,7 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
     
     
     # basic calmos just the bones of the calmos with no frills
+    # just need to review this method here 
 class AddAugmentation(BaseModel):
     
     def __init__(
