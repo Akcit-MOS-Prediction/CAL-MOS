@@ -974,8 +974,7 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
         return logits
     
     
-    # basic calmos just the bones of the calmos with no frills
-    # just need to review this method here 
+
 class AddAugmentation(BaseModel):
     
     def __init__(
@@ -1004,8 +1003,6 @@ class AddAugmentation(BaseModel):
             self.backbone.eval()
         else:
             print("\n\t Fine-tuning backbone...\n")
-            
-        self.use_sr_embeddings = False
         
     def _freeze_backbone(self):
         for param in self.backbone.parameters():
@@ -1024,6 +1021,9 @@ class AddAugmentation(BaseModel):
         all_layers = all_layers.permute(1, 0, 2, 3)
         return all_layers
     
+    def _get_embedding_dim(self):
+        return self.mlp.layers[0].in_features
+    
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # Get embeddings
         embeddings = self._get_embeddings(x)
@@ -1033,4 +1033,5 @@ class AddAugmentation(BaseModel):
         logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
+        
         return logits

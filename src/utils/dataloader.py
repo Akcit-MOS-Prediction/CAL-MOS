@@ -517,10 +517,8 @@ class AugmentationDataset(Dataset):
         
         self.filename_column = filename_column
         self.target_column = target_column
-        self.sr_audio = sr_audio 
         
         # data augmentation parameters
-        self.mixup_alpha = mixup_alpha
         self.min_duration = min_duration
         self.use_rand_truncation = use_rand_truncation
         # data augmentation factory
