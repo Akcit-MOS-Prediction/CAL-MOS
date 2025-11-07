@@ -43,6 +43,12 @@ train:
     shuffle: True
     num_workers: 12
 
+
+dat_augmentation:
+    factory: ""
+    params: 
+        
+
 model:
     model_type: "dynamic_melspec"
 

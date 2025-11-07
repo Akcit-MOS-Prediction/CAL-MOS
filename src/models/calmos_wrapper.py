@@ -103,6 +103,8 @@ class CALMOSWrapper(L.LightningModule):
             collate_fn = AllLayersEmbeddingCollate()
         elif self.config.model.model_type.lower() == "one_layer_embedding":
             collate_fn = OneLayerEmbeddingCollate()
+        elif self.config.model.model_type.lower() == "augmentation":
+            collate_fn= DiynamicAugmentationCollate()
         else:
             raise ValueError(f"Invalid model type: {self.config.model.model_type}")
 

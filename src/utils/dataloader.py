@@ -479,7 +479,8 @@ class DiynamicAugmentationCollate:
         for i , audio in enumerate(audios):
             length = audio.shape[-1]
             padded_audios[i , :length] = torch.from_numpy(audio)
-            
+        
+        print(f'\n\n\n Passou aqui no collate augmentation \n\n')
         
         return (processed , padded_audios) , targets.float()
         # return processed
@@ -556,6 +557,8 @@ class AugmentationDataset(Dataset):
         
         # convert to mono if stereo
         
+        print(f" \n\n\n Pring the audio format {waveform.shape}")
+        
         if waveform.dim() == 2 and waveform.shape[0] > 1:
             waveform = waveform.mean(dim=0, keepdim=True)
         # resample if needed
@@ -593,8 +596,6 @@ class AugmentationDataset(Dataset):
             print(f"Original audio shape: {audio.shape}, Augmented audio shape: {audio_augmented.shape}")
             
         #return audio.squeeze(0).numpy(), _ , target
+        print(f'\n\n\n Passou aqui no fim do getItem dataloder \n\n\n')
         return audio_augmented.squeeze(0).numpy , target
-        
-        
-        
         
