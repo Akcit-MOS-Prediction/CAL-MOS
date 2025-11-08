@@ -27,15 +27,15 @@ def PassaBandaAugmentation(waveform: np.ndarray, lowcut: float, highcut: float, 
     return lfilter(b, a, waveform)
 
 
-def criar_factory_augmentation(augmentation_type: str):
+def criar_factory_augmentation(augmentation_type: str , audio , **args):
 
     if augmentation_type == "clip":
-        return ClipAugmentation()
+        return ClipAugmentation(audio , **args)
     elif augmentation_type == "passa_alta":
-        return PassaAltaAugmentation()
+        return PassaAltaAugmentation(audio , **args)
     elif augmentation_type == "passa_banda":
-        return PassaBandaAugmentation()
+        return PassaBandaAugmentation(audio , **args)
     elif augmentation_type == "passa_baixa":
-        return PassaBaixaAugmentation()
+        return PassaBaixaAugmentation(audio , **args)
     else:
         raise ValueError(f"Unknown augmentation type: {augmentation_type}")

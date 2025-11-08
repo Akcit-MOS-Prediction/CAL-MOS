@@ -6,23 +6,23 @@ wandb_entity: proga150-ufrn
 datasets:
     train:
         - name: Train
-          metadata_path: "/root/DATA/wav/train2.csv"
-          base_dir: "/root/DATA/wav"
-          filename_column: "filepath"
+          metadata_path: "/home/rafael/Datasets/somos/audios/train_mos_list.csv"
+          base_dir: "/home/rafael/Datasets/somos/audios"
+          filename_column: "file_path"
           target_column: "mos"
 
     val:
         - name: Validation
-          metadata_path: "/root/DATA/wav/val2.csv"
-          base_dir: "/root/DATA/wav"
-          filename_column: "filepath"
+          metadata_path: "/home/rafael/Datasets/somos/audios/valid_mos_list.csv"
+          base_dir: "/home/rafael/Datasets/somos/audios"
+          filename_column: "file_path"
           target_column: "mos"
 
     test:
         - name: Test
-          metadata_path: "/root/DATA/wav/test2.csv"
-          base_dir: "/root/DATA/wav"
-          filename_column: "filepath"
+          metadata_path: "/home/rafael/Datasets/somos/audios/test_mos_list.csv"
+          base_dir: "/home/rafael/Datasets/somos/audios"
+          filename_column: "file_path"
           target_column: "mos"
 
 data:
@@ -41,9 +41,14 @@ data:
 
 augmentation:
     name: "passa_alta"
+    params:
+        cutoff_freq: 300.0
+        threshold: 0.9
+        lowcut: 300
+        highcut: 3000
 
 train:
-    batch_size: 8
+    batch_size: 2
     shuffle: True
     num_workers: 12
 

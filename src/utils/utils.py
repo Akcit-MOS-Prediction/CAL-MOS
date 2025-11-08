@@ -76,12 +76,14 @@ def build_dataloaders(config):
     elif config.model.model_type.lower() == "augmentation":
         train_dataset = AugmentationDataset(
             data = train_data,
-            filename_column=config.dataset.train[0].filename_column,
+            filename_column=config.datasets.train[0].filename_column,
             target_column=config.datasets.train[0].target_column,
             base_dir=config.datasets.train[0].base_dir,
             use_rand_truncation=config.data.use_rand_truncation,
-            min_duration=config.min_duration,
-            data_augmentation=config.augmentation.name,
+            min_duration=config.data.min_duration,
+            
+            data_augmentation=config.augmentation.get("name", None),
+            augmentation_params=config.augmentation.get("params", {}),
             class_num=config.data.num_classes,
             data_type="train",
         )

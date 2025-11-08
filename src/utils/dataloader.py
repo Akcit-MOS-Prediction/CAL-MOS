@@ -2,7 +2,7 @@ import os
 import random
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional
-from augmentation_factory import criar_factory_augmentation
+from utils.augmentation_factory import criar_factory_augmentation
 import torch
 import numpy as np
 import torchaudio
@@ -495,6 +495,7 @@ class AugmentationDataset(Dataset):
         use_rand_truncation: bool = False,
         min_duration: Optional[float] = 0.0,
         data_augmentation: str = None,
+        augmentation_params: dict = None,
         data_type: str = "train",
         class_num: int = 15,
         target_sr: int = 16000,
@@ -511,10 +512,10 @@ class AugmentationDataset(Dataset):
         
         self.sr = [16] * len(self.data)
             
-        if sr_dictionary is None:
-            print("Warning: No sr_dictionary provided. Using default values.")
-            sr_dictionary = {"16": 0}
-        self.sr = [sr_dictionary.get(str(sr), 0) for sr in self.sr]
+        #if sr_dictionary is None:
+        #    print("Warning: No sr_dictionary provided. Using default values.")
+        #    sr_dictionary = {"16": 0}
+        #self.sr = [sr_dictionary.get(str(sr), 0) for sr in self.sr]
         
         self.filename_column = filename_column
         self.target_column = target_column
@@ -522,11 +523,11 @@ class AugmentationDataset(Dataset):
         # data augmentation parameters
         self.min_duration = min_duration
         self.use_rand_truncation = use_rand_truncation
-        # data augmentation factory
-        self.data_augmentation = criar_factory_augmentation(data_augmentation)
         
-        # custom data augmentation
+        
         self.data_augmentation = data_augmentation
+        # custom data augmentation
+        self.augmentation_params = augmentation_params if augmentation_params is not None else {}
         
         self.data_type = data_type
         self.class_num = class_num
@@ -570,15 +571,30 @@ class AugmentationDataset(Dataset):
             
         return waveform , audio_sr
     
-    def _apply_augmentation(self , audio: torch.Tensor , source_sr: float ) -> torch.Tensor:
-        waveform = audio 
-        #test in this way verify with big alef
-        copy_waveform = waveform.numpy()
-        augmented_waveform = self.data_augmentation(copy_waveform)
-        # suppose that we need a numpy 
-        return torch.from_numpy(augmented_waveform), source_sr
-
-    def __getitem__(self, index: int) -> Dict[torch.Tensor, torch.Tensor]:
+    def _apply_augmentation(self , audio: torch.Tensor , audio_sr: int ) -> torch.Tensor:
+        waveform = audio.numpy() 
+        
+        args_factory = {
+            'sample_rate': audio_sr
+        }
+        
+        args_factory.update(self.augmentation_params)
+        
+        try:
+            augmented_waveform_np = criar_factory_augmentation(
+                self.data_augmentation, 
+                waveform, 
+                **args_factory
+            )
+            
+            return torch.from_numpy(augmented_waveform_np.copy())
+        
+        except Exception as e:
+            print(f"ATENÇÃO: FALHA AO APLICAR O AUGMENTATION {e} \n\n")
+            
+            return audio
+        
+    def __getitem__(self, index: int):
         main_target = self.targets[index]
         main_file = Path(self.filenames[index])
         #source_sr = self.sr[index]
@@ -588,14 +604,24 @@ class AugmentationDataset(Dataset):
         audio, audio_sr = self._load_wav(filepath)
         target = main_target
         
+        audio_augmented = audio
+        
         if self.data_type == "train" and self.use_rand_truncation:
-            audio = self._random_truncation(audio)
+            #audio = self._random_truncation(audio)
+            #audio_augmented = self._apply_augmentation(audio , audio_sr)
+            #
+            #print(f"Original audio shape: {audio.shape}, Augmented audio shape: {audio_augmented.shape}")
+
+            if self.use_rand_truncation:
+                audio = self._random_truncation(audio) 
             
-            audio_augmented = self._apply_augmentation(audio , audio_sr)
-            
-            print(f"Original audio shape: {audio.shape}, Augmented audio shape: {audio_augmented.shape}")
+            if self.data_augmentation is not None:
+                    audio_augmented = self._apply_augmentation(audio , audio_sr)
+                
+            else:
+                audio_augmented = audio
             
         #return audio.squeeze(0).numpy(), _ , target
         print(f'\n\n\n Passou aqui no fim do getItem dataloder \n\n\n')
-        return audio_augmented.squeeze(0).numpy , target
+        return audio_augmented.squeeze(0).numpy() , target
         
