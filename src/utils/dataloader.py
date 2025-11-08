@@ -462,7 +462,8 @@ class DiynamicAugmentationCollate:
         self.padding_value = padding_value
         
     def __call__(self , batch: List[Tuple[torch.Tensor , torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-        audios , _ , targets = zip(*batch)
+        # aqui antes tinha 3 argumentos, provavelmente 
+        audios , targets = zip(*batch)
 
         audios = list(audios)
         targets = torch.stack([torch.tensor (t , dtype=torch.float32 ) for t in targets ])
@@ -471,16 +472,17 @@ class DiynamicAugmentationCollate:
             audios,
             return_tensors="pt",
             sampling_rate=self.target_sr,
+            padding=True
         )
-        
-        max_len = max([audios.shape[-1] for audio in audios])
+        #print(audio)
+        max_len = max([audio.shape[-1] for audio in audios])
         
         padded_audios = torch.full((len(audios) , max_len) , 0.0)
         for i , audio in enumerate(audios):
             length = audio.shape[-1]
             padded_audios[i , :length] = torch.from_numpy(audio)
         
-        print(f'\n\n\n Passou aqui no collate augmentation \n\n')
+        #print(f'\n\n\n Passou aqui no collate augmentation \n\n')
         
         return (processed , padded_audios) , targets.float()
         # return processed
@@ -557,9 +559,6 @@ class AugmentationDataset(Dataset):
         waveform , audio_sr = torchaudio.load(filepath)
         
         # convert to mono if stereo
-        
-        print(f" \n\n\n Pring the audio format {waveform.shape}")
-        
         if waveform.dim() == 2 and waveform.shape[0] > 1:
             waveform = waveform.mean(dim=0, keepdim=True)
         # resample if needed
@@ -622,6 +621,6 @@ class AugmentationDataset(Dataset):
                 audio_augmented = audio
             
         #return audio.squeeze(0).numpy(), _ , target
-        print(f'\n\n\n Passou aqui no fim do getItem dataloder \n\n\n')
+        #print(f'\n\n\n Passou aqui no fim do getItem dataloder \n\n\n')
         return audio_augmented.squeeze(0).numpy() , target
         
