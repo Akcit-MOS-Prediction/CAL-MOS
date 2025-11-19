@@ -25,6 +25,8 @@ from utils.dataloader import (
     OneLayerEmbeddingCollate,
     DynamicCollate,
     DynamicAudioCollate,
+    DiynamicAugmentationCollate,
+    AugmentationDataset,
 )
 from models.calmos_wrapper import CALMOSWrapper
 from transformers import AutoFeatureExtractor
@@ -106,31 +108,7 @@ if __name__ == '__main__':
 
     model = model.to(device)
 
-    # print(model.model.layer_weights[0])
 
-    # layer_weights = []
-
-    # for layer_weight in model.model.layer_weights:
-    #     item = layer_weight.cpu().detach().item()
-    #     layer_weights.append(item)
-
-    # # pass through a softmax layer
-    # layer_weights = np.exp(layer_weights) / np.sum(np.exp(layer_weights))
-
-    # layer_numbers = range(1, len(layer_weights) + 1)
-
-    # # Plot the layer weights as a line plot
-    # plt.figure(figsize=(12, 6))
-    # sns.barplot(x=list(layer_numbers), y=layer_weights, palette="viridis")
-    # plt.xlabel("Layer")
-    # plt.ylabel("Weight")
-    # plt.title("Layer Weights Bar Chart")
-    # plt.xticks(layer_numbers)
-    # plt.tight_layout()
-    # plt.savefig("layer_weights_bar.png")
-    # plt.show()
-
-    # exit()
 
     test_data = pd.read_csv(config.datasets.test[0].metadata_path)
 
@@ -142,6 +120,14 @@ if __name__ == '__main__':
         sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
         base_dir=config.datasets.test[0].base_dir,
         data_type="test",
+    )
+    
+    test_dataset = AugmentationDataset(
+        data=test_data,
+        filename_column=config.datasets.test[0].filename_column,
+        target_column=config.datasets.test[0].target_column,
+        base_dir=config.datasets.test[0].base_dir,
+        data_type="test"
     )
 
     if config.model.model_type.lower() == "dynamic" or config.model.model_type.lower() == "dynamic_kan":
@@ -162,6 +148,12 @@ if __name__ == '__main__':
         collate_fn = AllLayersEmbeddingCollate()
     elif config.model.model_type.lower() == "one_layer_embedding":
         collate_fn = OneLayerEmbeddingCollate()
+    elif config.model.model_type.lower() == "augmentation":
+        processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
+        collate_fn = DiynamicAugmentationCollate(
+            target_sr=config.data.target_sr,
+            processor=processor,
+        )
     else:
         raise ValueError(f"Invalid model type: {config.model.model_type}")
 

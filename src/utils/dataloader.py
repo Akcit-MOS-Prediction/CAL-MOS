@@ -2,7 +2,7 @@ import os
 import random
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional
-from utils.augmentation_factory import criar_factory_augmentation
+from utils.augmentation_factory import criar_factory_augmentation, apply_50pct, apply_randn_prct
 import torch
 import numpy as np
 import torchaudio
@@ -577,20 +577,37 @@ class AugmentationDataset(Dataset):
             'sample_rate': audio_sr
         }
         
-        args_factory.update(self.augmentation_params)
+        filter_type = self.data_augmentation
+        current_params = self.augmentation_params.copy()
+        apply_mode = current_params.pop('apply_mode', '100pct')
+        
+        args_factory.update(current_params)
+        augmented_waveform_np = None
         
         try:
-            augmented_waveform_np = criar_factory_augmentation(
-                self.data_augmentation, 
-                waveform, 
-                **args_factory
-            )
+            if apply_mode == "apply_50pct":
+                augmented_waveform_np = apply_50pct(
+                    waveform,
+                    filter_type,
+                    **args_factory
+                )
+            elif apply_mode == "apply_rand":
+                augmented_waveform_np = apply_randn_prct(
+                    waveform,
+                    filter_type,
+                    **args_factory
+                )
+            else:
+                augmented_waveform_np = criar_factory_augmentation(
+                    self.data_augmentation, 
+                    waveform, 
+                    **args_factory
+                )
             
             return torch.from_numpy(augmented_waveform_np.copy())
         
         except Exception as e:
             print(f"ATENÇÃO: FALHA AO APLICAR O AUGMENTATION {e} \n\n")
-            
             return audio
         
     def __getitem__(self, index: int):
