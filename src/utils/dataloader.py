@@ -2,7 +2,7 @@ import os
 import random
 from pathlib import Path
 from typing import List, Tuple, Dict, Optional
-from utils.augmentation_factory import criar_factory_augmentation
+from utils.augmentation_factory import apply_augmentation
 import torch
 import numpy as np
 import torchaudio
@@ -452,8 +452,8 @@ class DynamicAudioCollate:
 class DiynamicAugmentationCollate:
     def __init__(
         self,
-        padding_value: float = 0.0,
         processor = None,
+        padding_value: float = 0.0,
         target_sr: int = 16000
     ):
         
@@ -463,29 +463,33 @@ class DiynamicAugmentationCollate:
         
     def __call__(self , batch: List[Tuple[torch.Tensor , torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
         # aqui antes tinha 3 argumentos, provavelmente 
-        audios , targets = zip(*batch)
+        audios, targets = zip(*batch)
 
         audios = list(audios)
         targets = torch.stack([torch.tensor (t , dtype=torch.float32 ) for t in targets ])
         
+        print('Audios no collate:' , audios)
+        print('Targets no collate:' , targets)
+
         processed = self.processor(
             audios,
             return_tensors="pt",
             sampling_rate=self.target_sr,
             padding=True
         )
-        #print(audio)
-        max_len = max([audio.shape[-1] for audio in audios])
+
+        if isinstance(self.processor, WhisperFeatureExtractor) and processed.input_features.shape[-1] < 3000:
+            processed = self.processor(
+                audios,
+                return_tensors="pt",
+                sampling_rate=self.target_sr,
+            )
         
-        padded_audios = torch.full((len(audios) , max_len) , 0.0)
-        for i , audio in enumerate(audios):
-            length = audio.shape[-1]
-            padded_audios[i , :length] = torch.from_numpy(audio)
+        print(f'\n\n\n Passou aqui no collate augmentation \n\n')
         
-        #print(f'\n\n\n Passou aqui no collate augmentation \n\n')
-        
-        return (processed , padded_audios) , targets.float()
+        return processed , targets.float()
         # return processed
+        #return processed, targets
     
 class AugmentationDataset(Dataset):
     def __init__(
@@ -494,53 +498,70 @@ class AugmentationDataset(Dataset):
         base_dir: str,
         filename_column: str,
         target_column: str,
+        target_sr: int = 16000,
+        data_type: str = "train",
+
+        augmentation_config: Dict = None,
+        
         use_rand_truncation: bool = False,
         min_duration: Optional[float] = 0.0,
         data_augmentation: str = None,
         augmentation_params: dict = None,
-        data_type: str = "train",
         class_num: int = 15,
-        target_sr: int = 16000,
     ):
+        
+        '''
+        augmentation_config: Lista de técnicas de DA
+            Exemplo: 
+                {
+                    "name": "noise_injection",
+                    "probability": 0.7,
+                    "params": {"noise_level": 0.01}
+                }
+        '''
         
         self.data = data 
         self.base_dir = base_dir
         
         self.filenames = self.data[filename_column].values
         self.targets = self.data[target_column].values
-        
-        #if sr_column is not None:
-        #    self.sr = self.data[sr_column].values
-        
-        self.sr = [16] * len(self.data)
-            
-        #if sr_dictionary is None:
-        #    print("Warning: No sr_dictionary provided. Using default values.")
-        #    sr_dictionary = {"16": 0}
-        #self.sr = [sr_dictionary.get(str(sr), 0) for sr in self.sr]
-        
         self.filename_column = filename_column
         self.target_column = target_column
+        
+        self.data_type = data_type
+        self.target_sr = target_sr
+
+        self.augmentation_config = augmentation_config or []
+
+        #self.sr = [16] * len(self.data)
         
         # data augmentation parameters
         self.min_duration = min_duration
         self.use_rand_truncation = use_rand_truncation
         
-        
         self.data_augmentation = data_augmentation
         # custom data augmentation
         self.augmentation_params = augmentation_params if augmentation_params is not None else {}
         
-        self.data_type = data_type
         self.class_num = class_num
-        self.target_sr = target_sr
         # Cache for sampling rate resamplers
         self.resamplers = {}
+
+        self._validate_configs()
         
+    def _validate_configs(self):
+        if self.data_type != "train":
+            print("Warning: Augmentations are only applied during training")
+        else:
+            if "name" not in self.augmentation_config:
+                raise ValueError("Each augmentation config must have a 'name'")
+            if "probability" not in self.augmentation_config:
+                self.augmentation_config["probability"] = 1.0
+            if "params" not in self.augmentation_config:
+                self.augmentation_config["params"] = {}
         
     def __len__(self):
         return len(self.data)
-    
     
     def _random_truncation(self, audio: torch.Tensor) -> torch.Tensor:
         min_len = int(self.min_duration * self.target_sr)
@@ -570,7 +591,45 @@ class AugmentationDataset(Dataset):
             
         return waveform , audio_sr
     
-    def _apply_augmentation(self , audio: torch.Tensor , audio_sr: int ) -> torch.Tensor:
+    def _apply_augmentation(self , audio: torch.Tensor , audio_sr: int, index: int) -> torch.Tensor:
+        # apply data augmentation only on training data
+        if self.data_type != "train" or not self.augmentation_config:
+            return audio
+        
+        #augmented_audio = audio.clone()
+
+        prob = self.augmentation_config.get("probability", 1.0)
+        
+        if prob == 0.0:
+            return audio  # 0% - nunca aplica
+        elif prob == 1.0:
+            pass  # 100% - sempre aplica
+        elif prob == 0.5:
+            # 50% exato: aplica em índices pares
+            if index % 2 != 0:
+                return audio
+        else:
+            if random.random() > prob:
+                return audio
+
+        try:
+            args = self.augmentation_config.get("params", {}).copy()
+            args['sample_rate'] = audio_sr
+            
+            augmented_waveform_np = apply_augmentation(
+                self.augmentation_config["name"],
+                audio.numpy(),
+                audio_sr,
+                **args
+            )
+            
+            return torch.from_numpy(augmented_waveform_np.copy())
+            
+        except Exception as e:
+            print(f"Warning: Failed to apply augmentation '{self.augmentation_config['name']}': {e}")
+            return audio
+
+        '''
         waveform = audio.numpy() 
         
         args_factory = {
@@ -580,7 +639,7 @@ class AugmentationDataset(Dataset):
         args_factory.update(self.augmentation_params)
         
         try:
-            augmented_waveform_np = criar_factory_augmentation(
+            augmented_waveform_np = apply_augmentation(
                 self.data_augmentation, 
                 waveform, 
                 **args_factory
@@ -588,12 +647,29 @@ class AugmentationDataset(Dataset):
             
             return torch.from_numpy(augmented_waveform_np.copy())
         
-        except Exception as e:
+            except Exception as e:
             print(f"ATENÇÃO: FALHA AO APLICAR O AUGMENTATION {e} \n\n")
             
             return audio
+        '''
         
     def __getitem__(self, index: int):
+        filepath = self.base_dir / Path(self.filenames[index])
+        if not filepath.exists():
+            raise FileNotFoundError(f"Audio file not found: {filepath}")
+            
+        audio, audio_sr = self._load_wav(str(filepath))
+        target = self.targets[index]
+        
+        if self.data_type == "train":
+            if self.truncation_config.get("enabled", False):
+                audio = self._apply_truncation(audio)
+            
+            audio = self._apply_augmentation(audio, audio_sr, index)
+        
+        return audio.squeeze(0).numpy(), float(target)
+
+        '''
         main_target = self.targets[index]
         main_file = Path(self.filenames[index])
         #source_sr = self.sr[index]
@@ -623,4 +699,6 @@ class AugmentationDataset(Dataset):
         #return audio.squeeze(0).numpy(), _ , target
         #print(f'\n\n\n Passou aqui no fim do getItem dataloder \n\n\n')
         return audio_augmented.squeeze(0).numpy() , target
+        '''
+        
         

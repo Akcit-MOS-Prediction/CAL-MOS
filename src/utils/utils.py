@@ -74,6 +74,7 @@ def build_dataloaders(config):
         )
         
     elif config.model.model_type.lower() == "augmentation":
+        print("Creating Train Aug Dataset")
         train_dataset = AugmentationDataset(
             data = train_data,
             filename_column=config.datasets.train[0].filename_column,
@@ -81,13 +82,15 @@ def build_dataloaders(config):
             base_dir=config.datasets.train[0].base_dir,
             use_rand_truncation=config.data.use_rand_truncation,
             min_duration=config.data.min_duration,
-            
-            data_augmentation=config.augmentation.get("name", None),
-            augmentation_params=config.augmentation.get("params", {}),
+            augmentation_config=config.augmentation,
             class_num=config.data.num_classes,
             data_type="train",
+
+            data_augmentation=config.augmentation.get("name", None),
+            augmentation_params=config.augmentation.get("params", {}),
         )
         
+        print("Creating Val Aug Dataset")
         val_dataset = AugmentationDataset(
             data = val_data,
             filename_column=config.datasets.train[0].filename_column,

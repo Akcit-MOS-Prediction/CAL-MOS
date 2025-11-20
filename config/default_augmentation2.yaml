@@ -2,25 +2,26 @@ title: CAL-MOS-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.ba
 
 wandb_entity: proga150-ufrn
 
+
 datasets:
     train:
         - name: Train
-          metadata_path: "/home/lustosa/SingMOS/sets/train_mos_list.csv"
-          base_dir: "/home/lustosa/SingMOS/wav"
+          metadata_path: "/home/rafael/Datasets/somos/audios/train_mos_list.csv"
+          base_dir: "/home/rafael/Datasets/somos/audios"
           filename_column: "file_path"
           target_column: "mos"
 
     val:
         - name: Validation
-          metadata_path: "/home/lustosa/SingMOS/sets/val_mos_list.csv"
-          base_dir: "/home/lustosa/SingMOS/wav"
+          metadata_path: "/home/rafael/Datasets/somos/audios/valid_mos_list.csv"
+          base_dir: "/home/rafael/Datasets/somos/audios"
           filename_column: "file_path"
           target_column: "mos"
 
     test:
         - name: Test
-          metadata_path: "/home/lustosa/SingMOS/sets/eval_mos_list.csv"
-          base_dir: "/home/lustosa/SingMOS/wav"
+          metadata_path: "/home/rafael/Datasets/somos/audios/test_mos_list.csv"
+          base_dir: "/home/rafael/Datasets/somos/audios"
           filename_column: "file_path"
           target_column: "mos"
 
@@ -39,12 +40,12 @@ data:
     insert_white_noise: false
 
 augmentation:
-    # background_noise, gaussian_snr, limiter, gain_transition, high_pass_filter, low_pass_filter, time_stretch, shift, trim, time_mask, pitch_shift, tanh_distortion
-    name: "gaussian_snr"
-    probability: 1.0
+    name: "passa_alta"
     params:
-        min_snr_in_db: 5.0
-        max_snr_in_db: 20.0
+        cutoff_freq: 300.0
+        threshold: 0.9
+        lowcut: 300
+        highcut: 3000
 
 train:
     batch_size: 2
@@ -65,19 +66,19 @@ model:
     # model_name: "openai/whisper-large"
 
     mlp_input_dim: 1024 # Must be adapted to the model
-    mlp_hidden_dim: ${model.mlp_input_dim}
+    mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
     mlp_num_layers: 1
     mlp_output_size: ${data.num_classes}
     mlp_dropout: 0.1
     mlp_activation_func: "relu"
     layer_weight_strategy: "per_layer"
     num_feature_layers: 25 # Must be adapted to the model
-    specific_layer_idx: -1 
+    specific_layer_idx: -1 # Take the last layer
     pooling_strategy: "mean" # Take the mean of the sequence in the last layer
 
-    freeze_backbone: false # Freeze the backbone model
+    freeze_backbone: true # Freeze the backbone model
 
-    transformer_hidden_size: ${model.mlp_input_dim} 
+    transformer_hidden_size: ${model.mlp_input_dim} # Must be adapted to the model
     transformer_nhead: 4
     transformer_dim_feedforward: 2048
     transformer_activation: "gelu"

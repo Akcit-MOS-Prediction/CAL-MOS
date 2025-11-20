@@ -976,7 +976,6 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
     
 
 class AddAugmentation(BaseModel):
-    
     def __init__(
         self,
         model_name: str = "microsoft/wavlm-large",
@@ -986,7 +985,6 @@ class AddAugmentation(BaseModel):
         super().__init__(**kwargs)
         self.model_name = model_name
         self.freeze_backbone = freeze_backbone
-        
         
         config = AutoConfig.from_pretrained(model_name, output_hidden_states=True)
         self.backbone = AutoModel.from_pretrained(model_name, config=config)
@@ -1009,7 +1007,6 @@ class AddAugmentation(BaseModel):
             param.requires_grad = False
             
     def _get_embeddings(self, x) -> torch.Tensor:
-        
         model_input = x[0]
         
         if self.freeze_backbone:
@@ -1017,12 +1014,19 @@ class AddAugmentation(BaseModel):
                 outputs = self.backbone(**model_input, output_hidden_states=True)
         else:
             outputs = self.backbone(**model_input, output_hidden_states=True)
+        
         hidden_states = outputs.hidden_states  # tuple of (layer_0,...,layer_n)
+
+        last_layer = hidden_states[-1]
+        return last_layer.unsqueeze(1)
+        
+        '''
         # [num_layers,B,T,F]
         all_layers = torch.stack(hidden_states)
         # transform to [B,num_layers,T,F]
         all_layers = all_layers.permute(1, 0, 2, 3)
         return all_layers
+        '''
     
     def _get_embedding_dim(self):
         return self.mlp.layers[0].in_features
@@ -1031,7 +1035,7 @@ class AddAugmentation(BaseModel):
         # Get embeddings
         embeddings = self._get_embeddings(x)
         # Apply layer weighting
-        embeddings = self._apply_layer_weighting(embeddings)
+        #embeddings = self._apply_layer_weighting(embeddings)
         # Apply pooling
         logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
         # MLP classification

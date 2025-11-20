@@ -94,9 +94,8 @@ def main() -> None:
         devices=[args.gpu],
         default_root_dir=os.path.join(args.checkpoint_dir, config["title"])
     )
-
+    
     trainer.fit(model)
-
 
 if __name__ == "__main__":
     main()
