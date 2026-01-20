@@ -592,34 +592,19 @@ class AugmentationDataset(Dataset):
         return waveform , audio_sr
     
     def _apply_augmentation(self , audio: torch.Tensor , audio_sr: int, index: int) -> torch.Tensor:
-        # apply data augmentation only on training data
         if self.data_type != "train" or not self.augmentation_config:
             return audio
         
-        #augmented_audio = audio.clone()
-
-        prob = self.augmentation_config.get("probability", 1.0)
-        
-        if prob == 0.0:
-            return audio  # 0% - nunca aplica
-        elif prob == 1.0:
-            pass  # 100% - sempre aplica
-        elif prob == 0.5:
-            # 50% exato: aplica em índices pares
-            if index % 2 != 0:
-                return audio
-        else:
-            if random.random() > prob:
-                return audio
-
         try:
             args = self.augmentation_config.get("params", {}).copy()
             args['sample_rate'] = audio_sr
+            prob = self.augmentation_config.get("probability", 1.0)
             
             augmented_waveform_np = apply_augmentation(
                 self.augmentation_config["name"],
                 audio.numpy(),
                 audio_sr,
+                prob,
                 **args
             )
             
@@ -629,30 +614,6 @@ class AugmentationDataset(Dataset):
             print(f"Warning: Failed to apply augmentation '{self.augmentation_config['name']}': {e}")
             return audio
 
-        '''
-        waveform = audio.numpy() 
-        
-        args_factory = {
-            'sample_rate': audio_sr
-        }
-        
-        args_factory.update(self.augmentation_params)
-        
-        try:
-            augmented_waveform_np = apply_augmentation(
-                self.data_augmentation, 
-                waveform, 
-                **args_factory
-            )
-            
-            return torch.from_numpy(augmented_waveform_np.copy())
-        
-            except Exception as e:
-            print(f"ATENÇÃO: FALHA AO APLICAR O AUGMENTATION {e} \n\n")
-            
-            return audio
-        '''
-        
     def __getitem__(self, index: int):
         filepath = self.base_dir / Path(self.filenames[index])
         if not filepath.exists():
@@ -668,37 +629,3 @@ class AugmentationDataset(Dataset):
             audio = self._apply_augmentation(audio, audio_sr, index)
         
         return audio.squeeze(0).numpy(), float(target)
-
-        '''
-        main_target = self.targets[index]
-        main_file = Path(self.filenames[index])
-        #source_sr = self.sr[index]
-        
-        filepath = self.base_dir / main_file
-        filepath = filepath.resolve()
-        audio, audio_sr = self._load_wav(filepath)
-        target = main_target
-        
-        audio_augmented = audio
-        
-        if self.data_type == "train" and self.use_rand_truncation:
-            #audio = self._random_truncation(audio)
-            #audio_augmented = self._apply_augmentation(audio , audio_sr)
-            #
-            #print(f"Original audio shape: {audio.shape}, Augmented audio shape: {audio_augmented.shape}")
-
-            if self.use_rand_truncation:
-                audio = self._random_truncation(audio) 
-            
-            if self.data_augmentation is not None:
-                    audio_augmented = self._apply_augmentation(audio , audio_sr)
-                
-            else:
-                audio_augmented = audio
-            
-        #return audio.squeeze(0).numpy(), _ , target
-        #print(f'\n\n\n Passou aqui no fim do getItem dataloder \n\n\n')
-        return audio_augmented.squeeze(0).numpy() , target
-        '''
-        
-        
