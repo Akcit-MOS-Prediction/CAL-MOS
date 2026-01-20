@@ -26,8 +26,7 @@ datasets:
 
 augmentation:
     # gaussian_snr, limiter, gain_transition, high_pass_filter, low_pass_filter, time_stretch, shift, trim, time_mask, pitch_shift, tanh_distortion
-    # gaussian, limiter, gain_t, highp_ft, lowp_ft, time_st, shift, trim, time_m, pitch_s, tanh_d 
-    name: "gain_t"
+    name: "gain_transition"
     probability: 0.0
     params:
       min_gain_db: -24.0

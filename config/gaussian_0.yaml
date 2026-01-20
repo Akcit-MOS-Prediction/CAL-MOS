@@ -30,8 +30,8 @@ augmentation:
     name: "gaussian_snr"
     probability: 0.0
     params:
-        min_snr_in_db: 5.0
-        max_snr_in_db: 20.0
+        min_snr_db: 5.0
+        max_snr_db: 20.0
 
 data:
     use_seqaug: false
