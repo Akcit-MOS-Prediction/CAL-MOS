@@ -109,29 +109,29 @@ def TanhDistortionAugmentation(waveform: np.ndarray, audio_sr: int, min_distorti
     return augmenter(waveform, sample_rate=audio_sr)
 
 ## ======= Augmentation Factory ======= ##
-def apply_augmentation(augmentation_type: str, audio: np.ndarray, audio_sr: int, prob: float, **args):
-
+def apply_augmentation(augmentation_type: str, audio: np.ndarray, audio_sr: int, prob: float):
     if augmentation_type == "gaussian_snr": 
-        return GaussianSNRAugmentation(audio, audio_sr, prob, **args)
+        return GaussianSNRAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "gain_transition": 
-        return GainTransitionAugmentation(audio, audio_sr, prob, **args)
+        return GainTransitionAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "limiter": 
-        return LimiterAugmentation(audio, audio_sr, prob, **args)
+        return LimiterAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "high_pass_filter": 
-        return HighPassFilterAugmentation(audio, audio_sr, prob, **args)
+        return HighPassFilterAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "low_pass_filter":
-        return LowPassFilterAugmentation(audio, audio_sr, prob, **args)
+        return LowPassFilterAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "time_stretch": 
-        return TimeStretchAugmentation(audio, audio_sr, prob, **args)
+        return TimeStretchAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "shift": 
-        return ShiftAugmentation(audio, audio_sr, prob, **args)
+        return ShiftAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "trim": 
-        return TrimAugmentation(audio, audio_sr, prob, **args)
+        return TrimAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "time_mask": 
-        return TimeMaskAugmentation(audio, audio_sr, prob, **args)
+        return TimeMaskAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "pitch_shift": 
-        return PitchShiftAugmentation(audio, audio_sr, prob, **args)
+        return PitchShiftAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "tanh_distortion": 
-        return TanhDistortionAugmentation(audio, audio_sr, prob, **args)
+        return TanhDistortionAugmentation(audio, audio_sr, p=prob)
     else:
         raise ValueError(f"Unknown augmentation type: {augmentation_type}")
+

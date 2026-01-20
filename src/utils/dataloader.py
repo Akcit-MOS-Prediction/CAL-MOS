@@ -468,9 +468,6 @@ class DiynamicAugmentationCollate:
         audios = list(audios)
         targets = torch.stack([torch.tensor (t , dtype=torch.float32 ) for t in targets ])
         
-        print('Audios no collate:' , audios)
-        print('Targets no collate:' , targets)
-
         processed = self.processor(
             audios,
             return_tensors="pt",
@@ -484,12 +481,9 @@ class DiynamicAugmentationCollate:
                 return_tensors="pt",
                 sampling_rate=self.target_sr,
             )
-        
-        print(f'\n\n\n Passou aqui no collate augmentation \n\n')
-        
-        return processed , targets.float()
-        # return processed
-        #return processed, targets
+       
+        return (processed, None), targets.float()
+        #return processed , targets.float()
     
 class AugmentationDataset(Dataset):
     def __init__(
@@ -596,16 +590,13 @@ class AugmentationDataset(Dataset):
             return audio
         
         try:
-            args = self.augmentation_config.get("params", {}).copy()
-            args['sample_rate'] = audio_sr
             prob = self.augmentation_config.get("probability", 1.0)
             
             augmented_waveform_np = apply_augmentation(
                 self.augmentation_config["name"],
                 audio.numpy(),
                 audio_sr,
-                prob,
-                **args
+                prob
             )
             
             return torch.from_numpy(augmented_waveform_np.copy())
@@ -623,9 +614,6 @@ class AugmentationDataset(Dataset):
         target = self.targets[index]
         
         if self.data_type == "train":
-            if self.truncation_config.get("enabled", False):
-                audio = self._apply_truncation(audio)
-            
             audio = self._apply_augmentation(audio, audio_sr, index)
         
         return audio.squeeze(0).numpy(), float(target)
