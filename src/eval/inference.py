@@ -21,10 +21,12 @@ import matplotlib.pyplot as plt
 
 from utils.dataloader import (
     DynamicDataset,
+    AugmentationDataset,
     AllLayersEmbeddingCollate,
     OneLayerEmbeddingCollate,
     DynamicCollate,
     DynamicAudioCollate,
+    DiynamicAugmentationCollate
 )
 from models.calmos_wrapper import CALMOSWrapper
 from transformers import AutoFeatureExtractor
@@ -44,7 +46,9 @@ def inference(model, dataloader, device):
             # If inputs is a list or tuple, process each element based on its type
             processed_inputs = []
             for i in input_features:
-                if isinstance(i, dict):
+                if i is None:
+                    processed_inputs.append(None)
+                elif isinstance(i, dict):
                     # If the element is a dictionary, move each tensor to the device
                     processed_dict = {k: v.to(device) for k, v in i.items()}
                     processed_inputs.append(processed_dict)
@@ -106,43 +110,28 @@ if __name__ == '__main__':
 
     model = model.to(device)
 
-    # print(model.model.layer_weights[0])
-
-    # layer_weights = []
-
-    # for layer_weight in model.model.layer_weights:
-    #     item = layer_weight.cpu().detach().item()
-    #     layer_weights.append(item)
-
-    # # pass through a softmax layer
-    # layer_weights = np.exp(layer_weights) / np.sum(np.exp(layer_weights))
-
-    # layer_numbers = range(1, len(layer_weights) + 1)
-
-    # # Plot the layer weights as a line plot
-    # plt.figure(figsize=(12, 6))
-    # sns.barplot(x=list(layer_numbers), y=layer_weights, palette="viridis")
-    # plt.xlabel("Layer")
-    # plt.ylabel("Weight")
-    # plt.title("Layer Weights Bar Chart")
-    # plt.xticks(layer_numbers)
-    # plt.tight_layout()
-    # plt.savefig("layer_weights_bar.png")
-    # plt.show()
-
-    # exit()
-
     test_data = pd.read_csv(config.datasets.test[0].metadata_path)
 
-    test_dataset = DynamicDataset(
-        data=test_data,
-        filename_column=config.datasets.test[0].filename_column,
-        target_column=config.datasets.test[0].target_column,
-        sr_column=config.datasets.test[0].get("sr_column", None), # Backward compatibility
-        sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
-        base_dir=config.datasets.test[0].base_dir,
-        data_type="test",
-    )
+    if config.model.model_type.lower() == "augmentation":
+        test_dataset = AugmentationDataset(
+            data=test_data,
+            base_dir=config.datasets.test[0].base_dir,
+            filename_column=config.datasets.test[0].filename_column,
+            target_column=config.datasets.test[0].target_column,
+            target_sr=config.data.target_sr,
+            data_type="test",
+            augmentation_config=None,  
+        )
+    else:
+        test_dataset = DynamicDataset(
+            data=test_data,
+            filename_column=config.datasets.test[0].filename_column,
+            target_column=config.datasets.test[0].target_column,
+            sr_column=config.datasets.test[0].get("sr_column", None), # Backward compatibility
+            sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
+            base_dir=config.datasets.test[0].base_dir,
+            data_type="test",
+        )
 
     if config.model.model_type.lower() == "dynamic" or config.model.model_type.lower() == "dynamic_kan":
         print("Dynamic model")
@@ -162,6 +151,13 @@ if __name__ == '__main__':
         collate_fn = AllLayersEmbeddingCollate()
     elif config.model.model_type.lower() == "one_layer_embedding":
         collate_fn = OneLayerEmbeddingCollate()
+    elif config.model.model_type.lower() == "augmentation":
+        print("Dynamic Augmentation Model")
+        processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
+        collate_fn = DiynamicAugmentationCollate(
+            target_sr=config.data.target_sr,
+            processor=processor,
+        )
     else:
         raise ValueError(f"Invalid model type: {config.model.model_type}")
 
@@ -176,18 +172,6 @@ if __name__ == '__main__':
 
     predictions, targets = inference(model, test_dataloader, device)
 
-    # mse = mean_squared_error(targets, predictions)
-    # mse = np.mean((targets - predictions) ** 2)
-    # lcc = np.corrcoef(targets, predictions)[0][1]
-    # srcc = scipy.stats.spearmanr(targets, predictions)[0]
-    # tau = scipy.stats.kendalltau(targets, predictions)[0]
-
-    # print(f"MSE: {mse:.4f}")
-    # print(f"LCC: {lcc:.4f}")
-    # print(f"SRCC: {srcc:.4f}")
-    # print(f"KTAU: {tau:.4f}")
-    
-    
     true_mean_scores = targets
     predict_mean_scores = predictions
     MSE = np.mean((true_mean_scores - predict_mean_scores) ** 2)
