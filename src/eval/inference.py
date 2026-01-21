@@ -31,7 +31,6 @@ from utils.dataloader import (
 from models.calmos_wrapper import CALMOSWrapper
 from transformers import AutoFeatureExtractor
 
-
 @torch.no_grad
 def inference(model, dataloader, device):
     model.eval()
@@ -106,7 +105,7 @@ if __name__ == '__main__':
     checkpoint_path = checkpoint_paths[0]
     print(f"Using checkpoint: {checkpoint_path}")
 
-    model = CALMOSWrapper.load_from_checkpoint(checkpoint_path, config=config, map_location=device, strict=False)
+    model = CALMOSWrapper.load_from_checkpoint(checkpoint_path, config=config, map_location=device, strict=False, weights_only=False)
 
     model = model.to(device)
 
