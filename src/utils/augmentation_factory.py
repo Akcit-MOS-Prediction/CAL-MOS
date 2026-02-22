@@ -1,5 +1,5 @@
 import numpy as np 
-from audiomentations import AddGaussianSNR, GainTransition, Limiter, HighPassFilter, LowPassFilter, TimeStretch, Shift, Trim, TimeMask, PitchShift, TanhDistortion
+from audiomentations import Compose, AddGaussianSNR, GainTransition, Limiter, HighPassFilter, LowPassFilter, TimeStretch, Shift, Trim, TimeMask, PitchShift, TanhDistortion
 
 ## ======= 1. Acoustic Variations Augmentations ======= ##
 
@@ -108,6 +108,24 @@ def TanhDistortionAugmentation(waveform: np.ndarray, audio_sr: int, min_distorti
     )
     return augmenter(waveform, sample_rate=audio_sr)
 
+
+def Compose1(waveform: np.ndarray, audio_sr: int, p: float = 0.0) -> np.ndarray:
+    augment = Compose([
+        Limiter(min_threshold_db=-24.0, max_threshold_db=-2.0, threshold_mode="relative_to_signal_peak", p=p),
+        Trim(top_db=30.0, p=p)    
+    ])
+
+    return augment(waveform, sample_rate=audio_sr)
+
+def Compose2(waveform: np.ndarray, audio_sr: int, p: float = 0.0) -> np.ndarray:
+    augment = Compose([
+        Limiter(min_threshold_db=-24.0, max_threshold_db=-2.0, threshold_mode="relative_to_signal_peak", p=p),
+        GainTransition(min_gain_db=-24.0, max_gain_db=6.0, min_duration=0.2, max_duration=6.0, p=p)
+    ])
+
+    return augment(waveform, sample_rate=audio_sr)
+
+
 ## ======= Augmentation Factory ======= ##
 def apply_augmentation(augmentation_type: str, audio: np.ndarray, audio_sr: int, prob: float):
     if augmentation_type == "gaussian_snr": 
@@ -132,6 +150,10 @@ def apply_augmentation(augmentation_type: str, audio: np.ndarray, audio_sr: int,
         return PitchShiftAugmentation(audio, audio_sr, p=prob)
     elif augmentation_type == "tanh_distortion": 
         return TanhDistortionAugmentation(audio, audio_sr, p=prob)
+    elif augmentation_type == "compose1":
+        return Compose1(audio, audio_sr, p=prob)
+    elif augmentation_type == "compose2":
+        return Compose2(audio, audio_sr, p=prob)
     else:
         raise ValueError(f"Unknown augmentation type: {augmentation_type}")
 
