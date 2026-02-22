@@ -19,7 +19,7 @@ datasets:
 
     test:
         - name: Test
-          metadata_path: "/root/time_mos/Datatsets/BVCC/sets/test_mos_list.txt"
+          metadata_path: "/root/time_mos/Datasets/BVCC/sets/test_mos_list.txt"
           base_dir: "/root/time_mos/Datasets/BVCC/wav"
           filename_column: "filepath"
           target_column: "mos"

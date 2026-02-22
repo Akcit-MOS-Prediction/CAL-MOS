@@ -1,0 +1,15 @@
+#!/bin/bash
+GPU_ID=0
+CONFIG_PATH=(\
+    "config/gain_t_5_3_s.yaml" \
+    "config/gain_t_5_3_s.yaml" \
+    "config/gain_t_1_3_s.yaml" \
+    "config/gain_t_1_3_s.yaml" \
+    "config/gain_t_1_3_s.yaml" 
+)
+
+for i in "${CONFIG_PATH[@]}"
+do
+    echo "Running $i"
+    python src/main.py -c=$i -g=$GPU_ID
+done

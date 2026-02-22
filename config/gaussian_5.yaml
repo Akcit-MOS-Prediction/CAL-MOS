@@ -19,14 +19,13 @@ datasets:
 
     test:
         - name: Test
-          metadata_path: "/root/time_mos/Datatsets/BVCC/sets/test_mos_list.txt"
+          metadata_path: "/root/time_mos/Datasets/BVCC/sets/test_mos_list.txt"
           base_dir: "/root/time_mos/Datasets/BVCC/wav"
           filename_column: "filepath"
           target_column: "mos"
 
 augmentation:
     # gaussian_snr, limiter, gain_transition, high_pass_filter, low_pass_filter, time_stretch, shift, trim, time_mask, pitch_shift, tanh_distortion
-    # gaussian, limiter, gain_t, highp_ft, lowp_ft, time_st, shift, trim, time_m, pitch_s, tanh_d 
     name: "gaussian_snr"
     probability: 0.5
     params:
@@ -60,10 +59,11 @@ model:
     # model_name: "facebook/wav2vec2-large"
     # model_name: "facebook/wav2vec2-xls-r-300m"
     # model_name: "facebook/wav2vec2-xls-r-1b"
-    model_name: "facebook/mms-300m"
+    # model_name: "facebook/mms-300m"
     # model_name: facebook/mms-1b
     # model_name: "facebook/hubert-large-ls960-ft"
     # model_name: "openai/whisper-large"
+    model_name: "openai/whisper-medium"
 
     mlp_input_dim: 1024 # Must be adapted to the model
     mlp_hidden_dim: ${model.mlp_input_dim}
