@@ -125,6 +125,15 @@ def Compose2(waveform: np.ndarray, audio_sr: int, p: float = 0.0) -> np.ndarray:
 
     return augment(waveform, sample_rate=audio_sr)
 
+def Compose3(waveform: np.ndarray, audio_sr: int, p: float = 0.0) -> np.ndarray:
+    augment = Compose([
+        Limiter(min_threshold_db=-24.0, max_threshold_db=-2.0, threshold_mode="relative_to_signal_peak", p=p),
+        Trim(top_db=30.0, p=p),
+        GainTransition(min_gain_db=-24.0, max_gain_db=6.0, min_duration=0.2, max_duration=6.0, p=p)
+    ])
+
+    return augment(waveform, sample_rate=audio_sr)
+
 
 ## ======= Augmentation Factory ======= ##
 def apply_augmentation(augmentation_type: str, audio: np.ndarray, audio_sr: int, prob: float):
@@ -154,6 +163,8 @@ def apply_augmentation(augmentation_type: str, audio: np.ndarray, audio_sr: int,
         return Compose1(audio, audio_sr, p=prob)
     elif augmentation_type == "compose2":
         return Compose2(audio, audio_sr, p=prob)
+    elif augmentation_type == "compose3":
+        return Compose3(audio, audio_sr, p=prob)
     else:
         raise ValueError(f"Unknown augmentation type: {augmentation_type}")
 
