@@ -16,12 +16,85 @@ def warn(*args, **kwargs):
 import warnings
 warnings.warn = warn
 
+def run_train(config, args) -> dict:
+    if config.data.get("use_seqaug", False):
+        print(f"Using sequence augmentation!")
+
+    if "tags" not in config or config.tags is None:
+        raise Exception(
+            f"You must add a list of tags in attribute ``tags`` in your experiment setup.\n \
+                E.g.\n\
+                tags:\n\
+                - <your tag>"
+        )
+
+    exp_title = config.title
+
+    tags = ["MOS-Prediction"]
+    tags += [dataset["name"] for dataset in config.datasets.train]  # add training datasets as tags
+    tags += config.tags  # add tags defined for experiments
+
+    OmegaConf.resolve(config)
+
+    checkpoint_dir = args.checkpoint_dir if getattr(args, 'checkpoint_dir', None) else config.model_checkpoint.get("dirpath", "../checkpoints/mos-prediction")
+    checkpoint_dir = os.path.join(checkpoint_dir, exp_title)
+    os.makedirs(checkpoint_dir, exist_ok=True)
+
+    config_save_path = os.path.join(checkpoint_dir, "resolved_config.yaml")
+    OmegaConf.save(config=config, f=config_save_path)
+    print(f"Resolved config saved at: {config_save_path}")
+
+    wandb.init(
+        project="MOS-Prediction",
+        name=exp_title,
+        tags=tags,
+        entity=config.wandb_entity,
+        config=OmegaConf.to_container(config, resolve=True),
+        reinit=True
+    )
+    logger = WandbLogger(
+        project="MOS-Prediction",
+        name=exp_title,
+        tags=tags,
+        entity=config.wandb_entity,
+        config=OmegaConf.to_container(config, resolve=True)
+    )
+
+    model_checkpoint_config = dict(config["model_checkpoint"])
+    model_checkpoint_config["dirpath"] = checkpoint_dir
+
+    callbacks = [
+        ModelCheckpoint(**model_checkpoint_config),
+        LearningRateMonitor("step"),
+    ]
+
+    model = CALMOSWrapper(config)
+
+    print(model)
+
+    trainer = Trainer(
+        **config["trainer"],
+        logger=logger,
+        callbacks=callbacks,
+        devices=[args.gpu],
+        default_root_dir=checkpoint_dir
+    )
+
+    trainer.fit(model)
+
+    # Close wandb run
+    wandb.finish()
+
+    # Return best metrics
+    return trainer.callback_metrics, checkpoint_dir
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-c",
         "--config_path",
         required=True,
+        action="append",
         type=str,
         help="YAML file with configurations"
     )
@@ -37,66 +110,15 @@ def main() -> None:
         "--checkpoint-dir",
         required=False,
         type=str,
-        default="../checkpoints/mos-prediction",
+        default=None,
     )
 
     args = parser.parse_args()
 
-    config = OmegaConf.load(args.config_path)
-
-    if config.data.get("use_seqaug", False):
-        print(f"Using sequence augmentation!")
-
-    if "tags" not in config or config.tags is None:
-        raise Exception(
-            f"You must add a list of tags in attribute ``tags`` in your experiment \
-                setup file {args.config_path}.\n \
-                E.g.\n\
-                tags:\n\
-                - <your tag>"
-        )
-
-    exp_title = config.title
-
-    tags = ["MOS-Prediction"]
-    tags += [dataset["name"] for dataset in config.datasets.train]  # add training datasets as tags
-    tags += config.tags  # add tags defined for experiments
-    wandb.init(
-        project="MOS-Prediction",
-        name=exp_title,
-        tags=tags,
-        entity=config.wandb_entity,
-        config=OmegaConf.to_container(config, resolve=True)
-    )
-    logger = WandbLogger(
-        project="MOS-Prediction",
-        name=exp_title,
-        tags=tags,
-        entity=config.wandb_entity,
-        config=OmegaConf.to_container(config, resolve=True)
-    )
-
-    config["model_checkpoint"].pop("dirpath")
-
-    callbacks = [
-        ModelCheckpoint(**config["model_checkpoint"]),
-        LearningRateMonitor("step"),
-    ]
-
-    model = CALMOSWrapper(config)
-
-    print(model)
-
-    trainer = Trainer(
-        **config["trainer"],
-        logger=logger,
-        callbacks=callbacks,
-        devices=[args.gpu],
-        default_root_dir=os.path.join(args.checkpoint_dir, config["title"])
-    )
-
-    trainer.fit(model)
-
+    configs = [OmegaConf.load(path) for path in args.config_path]
+    config = OmegaConf.merge(*configs)
+    
+    run_train(config, args)
 
 if __name__ == "__main__":
     main()
