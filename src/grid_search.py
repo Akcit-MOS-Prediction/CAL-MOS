@@ -25,11 +25,10 @@ def update_config_at_path(config, path, value):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--gpu", default=0, type=int, help="GPU device")
-    parser.add_argument("-s", "--seed", default=42, type=int, help="Seed para reprodutibilidade")
+    parser.add_argument("-s", "--seed", default=42, type=int, help="Seed base para reprodutibilidade")
+    parser.add_argument("-r", "--runs", default=3, type=int, help="Quantidade de vezes para rodar a mesma configuração")
     
     args = parser.parse_args()
-    
-    L.seed_everything(args.seed)
     
     # DEFINIÇÃO DAS LISTAS DE CONFIGURAÇÕES
     BASE_CONFIG = "config/default.yaml"
@@ -54,19 +53,28 @@ def main():
     keys, values = zip(*grid.items())
     hp_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
     
-    # Combina todos os datasets, modelos e hiperparâmetros
-    all_experiments = list(itertools.product(DATASET_CONFIGS, MODEL_CONFIGS, hp_combinations))
+    # Lista de runs (1 até N)
+    runs_list = list(range(1, args.runs + 1))
+    
+    # Combina datasets, modelos, hiperparâmetros e número da run
+    all_experiments = list(itertools.product(DATASET_CONFIGS, MODEL_CONFIGS, hp_combinations, runs_list))
     
     print(f"Total de experimentos a serem rodados: {len(all_experiments)}")
     
     treino_results = []
     inferencia_results = []
     
-    for i, (ds_path, mod_path, combo) in enumerate(all_experiments):
-        exp_id = get_experiment_id(i+1)
+    for i, (ds_path, mod_path, combo, run_idx) in enumerate(all_experiments):
+        # Cada configuração única ganha um ID, ex: config_001
+        config_id = (i // args.runs) + 1
+        exp_id = f"config_{config_id:03d}_run_{run_idx:02d}"
+        
         print(f"\n--- Iniciando Experimento: {exp_id} ---")
         print(f"Dataset: {ds_path} | Modelo: {mod_path}")
-        print(f"Hiperparâmetros: {combo}")
+        print(f"Run: {run_idx}/{args.runs} | Hiperparâmetros: {combo}")
+        
+        # Mudamos a seed sutilmente a cada run para variações estatísticas, caso desejado
+        L.seed_everything(args.seed + run_idx - 1)
         
         # Merge do config final combinando base + dataset + modelo
         config = OmegaConf.merge(
@@ -79,14 +87,13 @@ def main():
         for path, value in combo.items():
             update_config_at_path(config, path, value)
             
-        # Atualiza o título para ser único
+        # Atualiza o título para ser único no wandb
         config.title = f"{exp_id}_{config.title}"
         
         start_time_train = datetime.now()
         try:
-            metrics, checkpoint_dir = run_train(config, args)
+            metrics, checkpoint_dir, wandb_run_id = run_train(config, args)
             end_time_train = datetime.now()
-            duration_train = (end_time_train - start_time_train).total_seconds()
             
             # Encontrar o melhor checkpoint (não o last.ckpt)
             checkpoint_paths = glob.glob(os.path.join(checkpoint_dir, "*.ckpt"))
@@ -96,19 +103,25 @@ def main():
             # Registrar treino
             treino_entry = {
                 "experiment_id": exp_id,
+                "config_id": f"config_{config_id:03d}",
+                "run_idx": run_idx,
+                "wandb_run_id": wandb_run_id,
                 "dataset_config": ds_path,
                 "model_config": mod_path,
                 "data_inicio": start_time_train.strftime("%Y-%m-%d %H:%M:%S"),
                 "data_fim": end_time_train.strftime("%Y-%m-%d %H:%M:%S"),
-                "duracao_segundos": duration_train,
                 "checkpoint_path": best_ckpt,
                 "resolved_config": os.path.join(checkpoint_dir, "resolved_config.yaml")
             }
-            # Adiciona métricas do treino
-            for k, v in metrics.items():
-                treino_entry[f"train_{k}"] = float(v)
-            # Adiciona os hiperparâmetros testados
-            treino_entry.update(combo)
+            
+            # Adiciona apenas as métricas de validação desejadas
+            if "val/mse" in metrics:
+                treino_entry["val_mse"] = float(metrics["val/mse"])
+            if "val/pearson" in metrics:
+                treino_entry["val_pearson"] = float(metrics["val/pearson"])
+            if "val/spearman" in metrics:
+                treino_entry["val_spearman"] = float(metrics["val/spearman"])
+                
             treino_results.append(treino_entry)
             
             # --- INFERÊNCIA ---
@@ -117,19 +130,22 @@ def main():
                 start_time_inf = datetime.now()
                 inf_metrics = run_inference(config, best_ckpt, args.gpu)
                 end_time_inf = datetime.now()
-                duration_inf = (end_time_inf - start_time_inf).total_seconds()
                 
                 inf_entry = {
                     "experiment_id": exp_id,
+                    "config_id": f"config_{config_id:03d}",
+                    "run_idx": run_idx,
+                    "wandb_run_id": wandb_run_id,
                     "dataset_config": ds_path,
                     "model_config": mod_path,
                     "data_inicio_inferencia": start_time_inf.strftime("%Y-%m-%d %H:%M:%S"),
                     "data_fim_inferencia": end_time_inf.strftime("%Y-%m-%d %H:%M:%S"),
-                    "duracao_inferencia": duration_inf,
                     "modelo_path": best_ckpt,
-                    "dataset_teste": config.datasets.test[0].metadata_path
+                    "dataset_teste": config.datasets.test[0].metadata_path,
+                    "test_mse": inf_metrics.get("MSE"),
+                    "test_pearson": inf_metrics.get("LCC"),
+                    "test_spearman": inf_metrics.get("SRCC")
                 }
-                inf_entry.update(inf_metrics)
                 inferencia_results.append(inf_entry)
             
         except Exception as e:

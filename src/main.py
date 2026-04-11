@@ -82,11 +82,14 @@ def run_train(config, args) -> dict:
 
     trainer.fit(model)
 
+    # Capture wandb run ID before closing
+    wandb_run_id = wandb.run.id if wandb.run is not None else "N/A"
+
     # Close wandb run
     wandb.finish()
 
-    # Return best metrics
-    return trainer.callback_metrics, checkpoint_dir
+    # Return best metrics, checkpoint dir, and wandb run id
+    return trainer.callback_metrics, checkpoint_dir, wandb_run_id
 
 def main() -> None:
     parser = argparse.ArgumentParser()
