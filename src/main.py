@@ -82,11 +82,21 @@ def run_train(config, args) -> dict:
 
     trainer.fit(model)
 
+    # Get the best checkpoint path from the ModelCheckpoint callback
+    best_model_path = "N/A"
+    for callback in trainer.callbacks:
+        if isinstance(callback, ModelCheckpoint):
+            best_model_path = callback.best_model_path
+            break
+
+    # Capture wandb run ID before closing
+    wandb_run_id = wandb.run.id if wandb.run is not None else "N/A"
+
     # Close wandb run
     wandb.finish()
 
-    # Return best metrics
-    return trainer.callback_metrics, checkpoint_dir
+    # Return best metrics, best checkpoint path, and wandb run id
+    return trainer.callback_metrics, best_model_path, wandb_run_id
 
 def main() -> None:
     parser = argparse.ArgumentParser()
