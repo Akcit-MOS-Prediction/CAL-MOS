@@ -218,7 +218,7 @@ class BaseModel(nn.Module, ABC):
             )
         elif layer_weight_strategy == "per_layer":
             if specific_layer_idx < 0:
-                specific_layer_idx = num_feature_layers - 1
+                specific_layer_idx = num_feature_layers - 1 if num_feature_layers > 0 else -1
             self.specific_layer_idx = specific_layer_idx
         else:
             raise ValueError(f"Invalid layer weight strategy: {layer_weight_strategy}")
@@ -336,6 +336,17 @@ class BaseModel(nn.Module, ABC):
         if self.layer_weight_strategy == "transformer":
             embeddings = self._transformer_aggregation(embeddings)
         elif self.layer_weight_strategy == "per_layer":
+            if self.specific_layer_idx == -1:
+                # In Python/PyTorch, -1 already points to the last index, 
+                # but we'll calculate the positive index for the print.
+                actual_idx = embeddings.shape[1] - 1
+            else:
+                actual_idx = self.specific_layer_idx
+            
+            if not hasattr(self, "_logged_layer_info"):
+                print(f"\n[DEBUG] Using layer index: {actual_idx} (from total of {embeddings.shape[1]} layers)")
+                self._logged_layer_info = True
+
             embeddings = self._specific_layer(embeddings, self.specific_layer_idx) # [B,T,F]
         elif self.layer_weight_strategy == "weighted_sum":
             embeddings = self._weighted_sum(embeddings) # [B,T,F]
@@ -441,7 +452,7 @@ class ReLuKANBaseModel(nn.Module, ABC):
             )
         elif layer_weight_strategy == "per_layer":
             if specific_layer_idx < 0:
-                specific_layer_idx = num_feature_layers - 1
+                specific_layer_idx = num_feature_layers - 1 if num_feature_layers > 0 else -1
             self.specific_layer_idx = specific_layer_idx
         else:
             raise ValueError(f"Invalid layer weight strategy: {layer_weight_strategy}")
@@ -559,6 +570,17 @@ class ReLuKANBaseModel(nn.Module, ABC):
         if self.layer_weight_strategy == "transformer":
             embeddings = self._transformer_aggregation(embeddings)
         elif self.layer_weight_strategy == "per_layer":
+            if self.specific_layer_idx == -1:
+                # In Python/PyTorch, -1 already points to the last index, 
+                # but we'll calculate the positive index for the print.
+                actual_idx = embeddings.shape[1] - 1
+            else:
+                actual_idx = self.specific_layer_idx
+            
+            if not hasattr(self, "_logged_layer_info"):
+                print(f"\n[DEBUG] Using layer index: {actual_idx} (from total of {embeddings.shape[1]} layers)")
+                self._logged_layer_info = True
+
             embeddings = self._specific_layer(embeddings, self.specific_layer_idx) # [B,T,F]
         elif self.layer_weight_strategy == "weighted_sum":
             embeddings = self._weighted_sum(embeddings) # [B,T,F]

@@ -26,21 +26,26 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--gpu", default=0, type=int, help="GPU device")
     parser.add_argument("-s", "--seed", default=42, type=int, help="Seed base para reprodutibilidade")
-    parser.add_argument("-r", "--runs", default=3, type=int, help="Quantidade de vezes para rodar a mesma configuração")
+    parser.add_argument("-r", "--runs", default=1, type=int, help="Quantidade de vezes para rodar a mesma configuração")
     
     args = parser.parse_args()
     
     
     DATASET_CONFIGS = [
         "config/datasets/brspeech.yaml",
+        "config/datasets/bvcc.yaml",
+        "config/datasets/singmos.yaml",
+        "config/datasets/tmhint.yaml",
     ]
     
     MODEL_CONFIGS = [
-        "config/models/wav2vec2_base.yaml",
+        "config/models/wav2vec2_300m.yaml",
+        # "config/models/wav2vec2_1b.yaml",
     ]
 
     grid = {
-        "optimizer.params.learning_rate": [1e-5]
+        "optimizer.params.learning_rate": [1e-5, 5e-5],
+        # "optimizer.params.weight_decay": [0.0, 1e-4, 1e-3, 1e-2],
     }
     # ==========================================
     
@@ -87,7 +92,7 @@ def main():
             update_config_at_path(config, path, value)
             
         # Atualiza o título para ser único no wandb
-        config.title = f"{exp_id}_{config.title}"
+        config.title = f"{config.title}-(run-{run_idx:02d})"
         
         start_time_train = datetime.now()
         try:

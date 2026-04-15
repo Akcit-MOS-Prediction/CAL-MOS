@@ -165,3 +165,4 @@ cython_debug/
 *.md
 Dockerfile
 *.csv
+*.txt

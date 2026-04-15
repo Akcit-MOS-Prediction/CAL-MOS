@@ -5,8 +5,7 @@ import wandb
 from omegaconf import OmegaConf
 from lightning.pytorch import Trainer
 from lightning.pytorch.loggers import WandbLogger
-from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor
-
+from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor, EarlyStopping
 from models.calmos_wrapper import CALMOSWrapper
 
 # Disable warnings
@@ -66,6 +65,7 @@ def run_train(config, args) -> dict:
     callbacks = [
         ModelCheckpoint(**model_checkpoint_config),
         LearningRateMonitor("step"),
+        EarlyStopping(**config["early_stopping"]),
     ]
 
     model = CALMOSWrapper(config)

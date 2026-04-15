@@ -59,3 +59,11 @@ model_checkpoint:
     monitor: "val/spearman"
     dirpath: "../checkpoints/mos-prediction"
     filename: "{epoch:02d}-{step:02d}-{val/spearman:.4f}"
+
+
+early_stopping:
+    monitor: "val/spearman"
+    patience: 20
+    mode: "max"
+    min_delta: 0.001
+    verbose: true
