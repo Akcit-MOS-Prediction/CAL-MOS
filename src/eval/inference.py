@@ -66,71 +66,12 @@ def inference(model, dataloader, device):
     return np.concatenate(predictions), np.concatenate(targets)
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-c",
-        "--config_path",
-        required=True,
-        type=str,
-        help="YAML file with configurations"
-    )
-    parser.add_argument(
-        "-g",
-        "--gpu",
-        required=True,
-        type=int
-    )
-    parser.add_argument(
-        "-ckpt",
-        "--checkpoint-path",
-        required=False,
-        type=str,
-        default="../checkpoints/mos-prediction",
-    )
-
-    args = parser.parse_args()
-
-    config = OmegaConf.load(args.config_path)
-
-    device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
-
-    checkpoint_paths = glob.glob(os.path.join(args.checkpoint_path, "**", "*.ckpt"), recursive=True)
-    # remove "last.ckpt" from the list
-    checkpoint_paths = [path for path in checkpoint_paths if "last.ckpt" not in path]
-    assert len(checkpoint_paths) == 1
-    checkpoint_path = checkpoint_paths[0]
+def run_inference(config, checkpoint_path, gpu):
+    device = torch.device(f"cuda:{gpu}" if torch.cuda.is_available() else "cpu")
     print(f"Using checkpoint: {checkpoint_path}")
 
     model = CALMOSWrapper.load_from_checkpoint(checkpoint_path, config=config, map_location=device, strict=False)
-
     model = model.to(device)
-
-    # print(model.model.layer_weights[0])
-
-    # layer_weights = []
-
-    # for layer_weight in model.model.layer_weights:
-    #     item = layer_weight.cpu().detach().item()
-    #     layer_weights.append(item)
-
-    # # pass through a softmax layer
-    # layer_weights = np.exp(layer_weights) / np.sum(np.exp(layer_weights))
-
-    # layer_numbers = range(1, len(layer_weights) + 1)
-
-    # # Plot the layer weights as a line plot
-    # plt.figure(figsize=(12, 6))
-    # sns.barplot(x=list(layer_numbers), y=layer_weights, palette="viridis")
-    # plt.xlabel("Layer")
-    # plt.ylabel("Weight")
-    # plt.title("Layer Weights Bar Chart")
-    # plt.xticks(layer_numbers)
-    # plt.tight_layout()
-    # plt.savefig("layer_weights_bar.png")
-    # plt.show()
-
-    # exit()
 
     test_data = pd.read_csv(config.datasets.test[0].metadata_path)
 
@@ -176,18 +117,6 @@ if __name__ == '__main__':
 
     predictions, targets = inference(model, test_dataloader, device)
 
-    # mse = mean_squared_error(targets, predictions)
-    # mse = np.mean((targets - predictions) ** 2)
-    # lcc = np.corrcoef(targets, predictions)[0][1]
-    # srcc = scipy.stats.spearmanr(targets, predictions)[0]
-    # tau = scipy.stats.kendalltau(targets, predictions)[0]
-
-    # print(f"MSE: {mse:.4f}")
-    # print(f"LCC: {lcc:.4f}")
-    # print(f"SRCC: {srcc:.4f}")
-    # print(f"KTAU: {tau:.4f}")
-    
-    
     true_mean_scores = targets
     predict_mean_scores = predictions
     MSE = np.mean((true_mean_scores - predict_mean_scores) ** 2)
@@ -195,4 +124,52 @@ if __name__ == '__main__':
     SRCC = scipy.stats.spearmanr(true_mean_scores, predict_mean_scores)[0]
     KTAU = scipy.stats.kendalltau(true_mean_scores, predict_mean_scores)[0]
     
-    print(f"{os.path.basename(args.config_path)}\t{MSE:.4f}\t{LCC:.4f}\t{SRCC:.4f}\t{KTAU:.4f}".replace(".", ","))
+    metrics = {
+        "MSE": float(MSE),
+        "LCC": float(LCC),
+        "SRCC": float(SRCC),
+        "KTAU": float(KTAU)
+    }
+    return metrics
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-c",
+        "--config_path",
+        required=True,
+        type=str,
+        help="YAML file with configurations"
+    )
+    parser.add_argument(
+        "-g",
+        "--gpu",
+        required=True,
+        type=int
+    )
+    parser.add_argument(
+        "-ckpt",
+        "--checkpoint-path",
+        required=False,
+        type=str,
+        default=None,
+    )
+
+    args = parser.parse_args()
+
+    config = OmegaConf.load(args.config_path)
+    
+    if args.checkpoint_path is None:
+        checkpoint_dir = config.model_checkpoint.get("dirpath", "../checkpoints/mos-prediction")
+        checkpoint_dir = os.path.join(checkpoint_dir, config.title)
+    else:
+        checkpoint_dir = args.checkpoint_path
+
+    checkpoint_paths = glob.glob(os.path.join(checkpoint_dir, "**", "*.ckpt"), recursive=True)
+    # remove "last.ckpt" from the list
+    checkpoint_paths = [path for path in checkpoint_paths if "last.ckpt" not in path]
+    assert len(checkpoint_paths) >= 1, f"No checkpoint found in {checkpoint_dir}"
+    checkpoint_path = checkpoint_paths[0]
+    
+    metrics = run_inference(config, checkpoint_path, args.gpu)
+    print(f"{os.path.basename(args.config_path)}\t{metrics['MSE']:.4f}\t{metrics['LCC']:.4f}\t{metrics['SRCC']:.4f}\t{metrics['KTAU']:.4f}".replace(".", ","))
