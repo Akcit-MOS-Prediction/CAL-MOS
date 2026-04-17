@@ -14,7 +14,7 @@ model:
     mlp_dropout: 0.1
     mlp_activation_func: "relu"
     layer_weight_strategy: "per_layer"
-    num_feature_layers: 13
+    num_feature_layers: -1 # Must be adapted to the model (-1 is the last layer)
     specific_layer_idx: -1
     pooling_strategy: "attpool"
     freeze_backbone: true
