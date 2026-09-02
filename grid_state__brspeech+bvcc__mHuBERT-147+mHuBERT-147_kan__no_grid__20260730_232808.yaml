@@ -1,0 +1,12 @@
+config_001_mHuBERT-147__source_run_02__brspeech_to_bvcc__finetune_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-30 23:28:25'
+  error_msg: api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+  end_time: '2026-07-30 23:30:42'
+config_002_mHuBERT-147_kan__source_run_01__brspeech_to_bvcc__finetune_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-30 23:30:51'
+  error_msg: api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+  end_time: '2026-07-30 23:33:07'

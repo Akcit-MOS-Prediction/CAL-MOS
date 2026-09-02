@@ -1,0 +1,536 @@
+config_001_mHuBERT-147__brspeech_to_bvcc_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-10 22:59:22'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:24'
+config_002_mHuBERT-147__brspeech_to_singmos_run_01:
+  status: error
+  gpu: 1
+  start_time: '2026-07-10 22:59:21'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:24'
+config_003_mHuBERT-147__brspeech_to_tmhint_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-10 22:59:22'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:24'
+config_004_mHuBERT-147_kan__brspeech_to_bvcc_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-10 22:59:22'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:25'
+config_005_mHuBERT-147_kan__brspeech_to_singmos_run_01:
+  status: error
+  gpu: 1
+  start_time: '2026-07-10 22:59:35'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:38'
+config_006_mHuBERT-147_kan__brspeech_to_tmhint_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-10 22:59:35'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:38'
+config_007_wav2vec2_300m__brspeech_to_bvcc_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-10 22:59:35'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:40'
+config_008_wav2vec2_300m__brspeech_to_singmos_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-10 22:59:36'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:40'
+config_009_wav2vec2_300m__brspeech_to_tmhint_run_01:
+  status: error
+  gpu: 1
+  start_time: '2026-07-10 22:59:49'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:54'
+config_010_wav2vec2_300m_kan__brspeech_to_bvcc_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-10 22:59:49'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:54'
+config_011_wav2vec2_300m_kan__brspeech_to_singmos_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-10 22:59:51'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:56'
+config_012_wav2vec2_300m_kan__brspeech_to_tmhint_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-10 22:59:52'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 22:59:56'
+config_013_wav2vec2_1b__brspeech_to_bvcc_run_01:
+  status: error
+  gpu: 1
+  start_time: '2026-07-10 23:00:04'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:14'
+config_014_wav2vec2_1b__brspeech_to_singmos_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-10 23:00:04'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:14'
+config_015_wav2vec2_1b__brspeech_to_tmhint_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-10 23:00:05'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:14'
+config_016_wav2vec2_1b_kan__brspeech_to_bvcc_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-10 23:00:06'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:15'
+config_017_wav2vec2_1b_kan__brspeech_to_singmos_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-10 23:00:25'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:32'
+config_018_wav2vec2_1b_kan__brspeech_to_tmhint_run_01:
+  status: error
+  gpu: 1
+  start_time: '2026-07-10 23:00:25'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:32'
+config_019_mHuBERT-147__bvcc_to_brspeech_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-10 23:00:25'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:28'
+config_020_mHuBERT-147__bvcc_to_singmos_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-10 23:00:26'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:28'
+config_021_mHuBERT-147__bvcc_to_tmhint_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-10 23:00:39'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:42'
+config_022_mHuBERT-147_kan__bvcc_to_brspeech_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-10 23:00:40'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:42'
+config_023_mHuBERT-147_kan__bvcc_to_singmos_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-10 23:00:42'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:46'
+config_024_mHuBERT-147_kan__bvcc_to_tmhint_run_01:
+  status: error
+  gpu: 1
+  start_time: '2026-07-10 23:00:43'
+  error_msg: "Weights only load failed. This file can still be loaded, to do so you\
+    \ have two options, \e[1mdo those steps only if you trust the source of the checkpoint\e\
+    [0m. \n\t(1) In PyTorch 2.6, we changed the default value of the `weights_only`\
+    \ argument in `torch.load` from `False` to `True`. Re-running `torch.load` with\
+    \ `weights_only` set to `False` will likely succeed, but it can result in arbitrary\
+    \ code execution. Do it only if you got the file from a trusted source.\n\t(2)\
+    \ Alternatively, to load with `weights_only=True` please check the recommended\
+    \ steps in the following error message.\n\tWeightsUnpickler error: Unsupported\
+    \ global: GLOBAL omegaconf.dictconfig.DictConfig was not an allowed global by\
+    \ default. Please use `torch.serialization.add_safe_globals([DictConfig])` or\
+    \ the `torch.serialization.safe_globals([DictConfig])` context manager to allowlist\
+    \ this global if you trust this class/function.\n\nCheck the documentation of\
+    \ torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html."
+  end_time: '2026-07-10 23:00:46'
+config_025_wav2vec2_300m__bvcc_to_brspeech_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-07-10 23:00:52'
+config_026_wav2vec2_300m__bvcc_to_singmos_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-07-10 23:00:54'
+config_027_wav2vec2_300m__bvcc_to_tmhint_run_01:
+  status: running
+  gpu: 4
+  start_time: '2026-07-10 23:00:58'
+config_028_wav2vec2_300m_kan__bvcc_to_brspeech_run_01:
+  status: running
+  gpu: 1
+  start_time: '2026-07-10 23:00:58'
+config_029_wav2vec2_300m_kan__bvcc_to_singmos_run_01:
+  status: pending
+config_030_wav2vec2_300m_kan__bvcc_to_tmhint_run_01:
+  status: pending
+config_031_wav2vec2_1b__bvcc_to_brspeech_run_01:
+  status: pending
+config_032_wav2vec2_1b__bvcc_to_singmos_run_01:
+  status: pending
+config_033_wav2vec2_1b__bvcc_to_tmhint_run_01:
+  status: pending
+config_034_wav2vec2_1b_kan__bvcc_to_brspeech_run_01:
+  status: pending
+config_035_wav2vec2_1b_kan__bvcc_to_singmos_run_01:
+  status: pending
+config_036_wav2vec2_1b_kan__bvcc_to_tmhint_run_01:
+  status: pending
+config_037_mHuBERT-147__singmos_to_brspeech_run_01:
+  status: pending
+config_038_mHuBERT-147__singmos_to_bvcc_run_01:
+  status: pending
+config_039_mHuBERT-147__singmos_to_tmhint_run_01:
+  status: pending
+config_040_mHuBERT-147_kan__singmos_to_brspeech_run_01:
+  status: pending
+config_041_mHuBERT-147_kan__singmos_to_bvcc_run_01:
+  status: pending
+config_042_mHuBERT-147_kan__singmos_to_tmhint_run_01:
+  status: pending
+config_043_wav2vec2_300m__singmos_to_brspeech_run_01:
+  status: pending
+config_044_wav2vec2_300m__singmos_to_bvcc_run_01:
+  status: pending
+config_045_wav2vec2_300m__singmos_to_tmhint_run_01:
+  status: pending
+config_046_wav2vec2_300m_kan_mean__singmos_to_brspeech_run_01:
+  status: pending
+config_047_wav2vec2_300m_kan_mean__singmos_to_bvcc_run_01:
+  status: pending
+config_048_wav2vec2_300m_kan_mean__singmos_to_tmhint_run_01:
+  status: pending
+config_049_wav2vec2_1b__singmos_to_brspeech_run_01:
+  status: pending
+config_050_wav2vec2_1b__singmos_to_bvcc_run_01:
+  status: pending
+config_051_wav2vec2_1b__singmos_to_tmhint_run_01:
+  status: pending
+config_052_wav2vec2_1b_kan__singmos_to_brspeech_run_01:
+  status: pending
+config_053_wav2vec2_1b_kan__singmos_to_bvcc_run_01:
+  status: pending
+config_054_wav2vec2_1b_kan__singmos_to_tmhint_run_01:
+  status: pending
+config_055_mHuBERT-147__tmhint_to_brspeech_run_01:
+  status: pending
+config_056_mHuBERT-147__tmhint_to_bvcc_run_01:
+  status: pending
+config_057_mHuBERT-147__tmhint_to_singmos_run_01:
+  status: pending
+config_058_mHuBERT-147_kan__tmhint_to_brspeech_run_01:
+  status: pending
+config_059_mHuBERT-147_kan__tmhint_to_bvcc_run_01:
+  status: pending
+config_060_mHuBERT-147_kan__tmhint_to_singmos_run_01:
+  status: pending
+config_061_wav2vec2_300m__tmhint_to_brspeech_run_01:
+  status: pending
+config_062_wav2vec2_300m__tmhint_to_bvcc_run_01:
+  status: pending
+config_063_wav2vec2_300m__tmhint_to_singmos_run_01:
+  status: pending
+config_064_wav2vec2_300m_kan__tmhint_to_brspeech_run_01:
+  status: pending
+config_065_wav2vec2_300m_kan__tmhint_to_bvcc_run_01:
+  status: pending
+config_066_wav2vec2_300m_kan__tmhint_to_singmos_run_01:
+  status: pending
+config_067_wav2vec2_1b__tmhint_to_brspeech_run_01:
+  status: pending
+config_068_wav2vec2_1b__tmhint_to_bvcc_run_01:
+  status: pending
+config_069_wav2vec2_1b__tmhint_to_singmos_run_01:
+  status: pending
+config_070_wav2vec2_1b_kan__tmhint_to_brspeech_run_01:
+  status: pending
+config_071_wav2vec2_1b_kan__tmhint_to_bvcc_run_01:
+  status: pending
+config_072_wav2vec2_1b_kan__tmhint_to_singmos_run_01:
+  status: pending

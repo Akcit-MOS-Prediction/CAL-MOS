@@ -1,0 +1,84 @@
+config_001_lr1e-3_mlp_dropout0.1__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-05-08 16:47:19'
+  end_time: '2026-05-09 08:12:14'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/r0zyjkw8/resolved_config.yaml
+config_002_lr1e-3_mlp_dropout0.2__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-05-08 16:47:19'
+  end_time: '2026-05-09 10:07:33'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/nbl3yf9d/resolved_config.yaml
+config_003_lr1e-3_mlp_dropout0.3__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-05-09 08:12:23'
+  end_time: '2026-05-10 01:43:59'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/gqwvxsmr/resolved_config.yaml
+config_004_lr5e-3_mlp_dropout0.1__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-05-09 10:07:42'
+  end_time: '2026-05-10 01:06:44'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/4spuonyd/resolved_config.yaml
+config_005_lr5e-3_mlp_dropout0.2__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-05-10 01:06:53'
+  end_time: '2026-05-10 18:30:14'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/zzwudhe1/resolved_config.yaml
+config_006_lr5e-3_mlp_dropout0.3__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-05-10 01:44:08'
+  end_time: '2026-05-10 21:16:09'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/5ratw83q/resolved_config.yaml
+config_007_lr1e-4_mlp_dropout0.1__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-05-10 18:30:24'
+  end_time: '2026-05-11 10:13:07'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/vku4idak/resolved_config.yaml
+config_008_lr1e-4_mlp_dropout0.2__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-05-10 21:16:19'
+  end_time: '2026-05-11 14:03:53'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/zvygbxl1/resolved_config.yaml
+config_009_lr1e-4_mlp_dropout0.3__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-05-11 10:13:16'
+  end_time: '2026-05-12 03:29:54'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/wu3udtcr/resolved_config.yaml
+config_010_lr5e-4_mlp_dropout0.1__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-05-11 14:04:03'
+  end_time: '2026-05-12 07:05:42'
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/cl9vc0c1/resolved_config.yaml
+config_011_lr5e-4_mlp_dropout0.2__tmhint_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-05-12 03:30:03'
+  end_time: '2026-05-12 17:47:06'
+  error_msg: '[Errno 28] No space left on device'
+  config_path: temp_configs/config_011_lr5e-4_mlp_dropout0.2__tmhint_run_01.yaml
+config_012_lr5e-4_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-12 07:05:51'
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_012_lr5e-4_mlp_dropout0.3__tmhint_run_01.yaml

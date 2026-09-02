@@ -1,0 +1,10 @@
+config_001_mHuBERT-147__source_run_02__brspeech_to_bvcc__finetune_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-31 10:18:29'
+  end_time: '2026-07-31 17:59:56'
+config_002_mHuBERT-147_kan__source_run_01__brspeech_to_bvcc__finetune_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-31 18:00:08'
+  end_time: '2026-08-01 04:27:54'

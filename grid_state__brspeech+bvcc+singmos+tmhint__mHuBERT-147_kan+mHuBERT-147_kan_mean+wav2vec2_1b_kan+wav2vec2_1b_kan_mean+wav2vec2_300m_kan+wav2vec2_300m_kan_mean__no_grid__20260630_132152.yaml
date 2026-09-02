@@ -1,0 +1,152 @@
+config_001___brspeech_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-06-30 13:22:09'
+config_001___brspeech_run_02:
+  status: running
+  gpu: 5
+  start_time: '2026-06-30 13:22:09'
+config_001___brspeech_run_03:
+  status: running
+  gpu: 1
+  start_time: '2026-06-30 13:22:09'
+config_002___brspeech_run_01:
+  status: running
+  gpu: 4
+  start_time: '2026-06-30 13:22:09'
+config_002___brspeech_run_02:
+  status: pending
+config_002___brspeech_run_03:
+  status: pending
+config_003___brspeech_run_01:
+  status: pending
+config_003___brspeech_run_02:
+  status: pending
+config_003___brspeech_run_03:
+  status: pending
+config_004___brspeech_run_01:
+  status: pending
+config_004___brspeech_run_02:
+  status: pending
+config_004___brspeech_run_03:
+  status: pending
+config_005___brspeech_run_01:
+  status: pending
+config_005___brspeech_run_02:
+  status: pending
+config_005___brspeech_run_03:
+  status: pending
+config_006___brspeech_run_01:
+  status: pending
+config_006___brspeech_run_02:
+  status: pending
+config_006___brspeech_run_03:
+  status: pending
+config_007___bvcc_run_01:
+  status: pending
+config_007___bvcc_run_02:
+  status: pending
+config_007___bvcc_run_03:
+  status: pending
+config_008___bvcc_run_01:
+  status: pending
+config_008___bvcc_run_02:
+  status: pending
+config_008___bvcc_run_03:
+  status: pending
+config_009___bvcc_run_01:
+  status: pending
+config_009___bvcc_run_02:
+  status: pending
+config_009___bvcc_run_03:
+  status: pending
+config_010___bvcc_run_01:
+  status: pending
+config_010___bvcc_run_02:
+  status: pending
+config_010___bvcc_run_03:
+  status: pending
+config_011___bvcc_run_01:
+  status: pending
+config_011___bvcc_run_02:
+  status: pending
+config_011___bvcc_run_03:
+  status: pending
+config_012___bvcc_run_01:
+  status: pending
+config_012___bvcc_run_02:
+  status: pending
+config_012___bvcc_run_03:
+  status: pending
+config_013___singmos_run_01:
+  status: pending
+config_013___singmos_run_02:
+  status: pending
+config_013___singmos_run_03:
+  status: pending
+config_014___singmos_run_01:
+  status: pending
+config_014___singmos_run_02:
+  status: pending
+config_014___singmos_run_03:
+  status: pending
+config_015___singmos_run_01:
+  status: pending
+config_015___singmos_run_02:
+  status: pending
+config_015___singmos_run_03:
+  status: pending
+config_016___singmos_run_01:
+  status: pending
+config_016___singmos_run_02:
+  status: pending
+config_016___singmos_run_03:
+  status: pending
+config_017___singmos_run_01:
+  status: pending
+config_017___singmos_run_02:
+  status: pending
+config_017___singmos_run_03:
+  status: pending
+config_018___singmos_run_01:
+  status: pending
+config_018___singmos_run_02:
+  status: pending
+config_018___singmos_run_03:
+  status: pending
+config_019___tmhint_run_01:
+  status: pending
+config_019___tmhint_run_02:
+  status: pending
+config_019___tmhint_run_03:
+  status: pending
+config_020___tmhint_run_01:
+  status: pending
+config_020___tmhint_run_02:
+  status: pending
+config_020___tmhint_run_03:
+  status: pending
+config_021___tmhint_run_01:
+  status: pending
+config_021___tmhint_run_02:
+  status: pending
+config_021___tmhint_run_03:
+  status: pending
+config_022___tmhint_run_01:
+  status: pending
+config_022___tmhint_run_02:
+  status: pending
+config_022___tmhint_run_03:
+  status: pending
+config_023___tmhint_run_01:
+  status: pending
+config_023___tmhint_run_02:
+  status: pending
+config_023___tmhint_run_03:
+  status: pending
+config_024___tmhint_run_01:
+  status: pending
+config_024___tmhint_run_02:
+  status: pending
+config_024___tmhint_run_03:
+  status: pending

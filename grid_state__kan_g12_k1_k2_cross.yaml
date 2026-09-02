@@ -1,0 +1,1032 @@
+train__kan_g12_k1__brspeech__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 00:32:58'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 02:55:01'
+  experiment_id: train__kan_g12_k1__brspeech__run_01
+  phase: train
+  k: 1
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech--(run-01)/epoch=33-step=1054-val/spearman=0.6923.ckpt
+  val_mse: 0.8887455463409424
+  val_pearson: 0.6535032987594604
+  val_spearman: 0.6425760388374329
+  test_mse: 0.8493890166282654
+  test_pearson: 0.6673912786957578
+  test_spearman: 0.6388635901802672
+  wandb_run_id: lwa4jb9f
+train__kan_g12_k1__bvcc__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 00:32:58'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 06:12:39'
+  experiment_id: train__kan_g12_k1__bvcc__run_01
+  phase: train
+  k: 1
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8055.ckpt
+  val_mse: 0.3071880638599396
+  val_pearson: 0.7974311709403992
+  val_spearman: 0.7930058240890503
+  test_mse: 0.3003971576690674
+  test_pearson: 0.8280246882234
+  test_spearman: 0.8251486281784934
+  wandb_run_id: 9agx1aw9
+train__kan_g12_k1__singmos__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 02:55:01'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 04:06:20'
+  experiment_id: train__kan_g12_k1__singmos__run_01
+  phase: train
+  k: 1
+  grid: 12
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos--(run-01)/epoch=10-step=352-val/spearman=0.5936.ckpt
+  val_mse: 0.4491214454174042
+  val_pearson: 0.5787878632545471
+  val_spearman: 0.5403262376785278
+  test_mse: 0.43165069818496704
+  test_pearson: 0.5652068582064022
+  test_spearman: 0.5502429091037306
+  wandb_run_id: x0smz86h
+train__kan_g12_k1__tmhint__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 04:06:21'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 06:30:50'
+  experiment_id: train__kan_g12_k1__tmhint__run_01
+  phase: train
+  k: 1
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint--(run-01)/epoch=09-step=1820-val/spearman=0.6011.ckpt
+  val_mse: 0.93243807554245
+  val_pearson: 0.5631973147392273
+  val_spearman: 0.5385995507240295
+  test_mse: 0.3888223469257355
+  test_pearson: 0.7810438239630072
+  test_spearman: 0.7312639717772731
+  wandb_run_id: 4yzijm3b
+train__kan_g12_k2__brspeech__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 06:31:03'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 08:28:43'
+  experiment_id: train__kan_g12_k2__brspeech__run_01
+  phase: train
+  k: 2
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech--(run-01)/epoch=23-step=744-val/spearman=0.6996.ckpt
+  val_mse: 0.8129341006278992
+  val_pearson: 0.6851284503936768
+  val_spearman: 0.6686590313911438
+  test_mse: 0.8207805752754211
+  test_pearson: 0.6594142270965352
+  test_spearman: 0.6349890534496058
+  wandb_run_id: kp3viw7w
+train__kan_g12_k2__bvcc__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 06:31:03'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 12:03:58'
+  experiment_id: train__kan_g12_k2__bvcc__run_01
+  phase: train
+  k: 2
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8195.ckpt
+  val_mse: 0.29173555970191956
+  val_pearson: 0.8150742650032043
+  val_spearman: 0.8136210441589355
+  test_mse: 0.2674064636230469
+  test_pearson: 0.8338676787671425
+  test_spearman: 0.8323580026829644
+  wandb_run_id: u0dpkpik
+train__kan_g12_k2__singmos__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 08:28:43'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 10:33:37'
+  experiment_id: train__kan_g12_k2__singmos__run_01
+  phase: train
+  k: 2
+  grid: 12
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos--(run-01)/epoch=34-step=1120-val/spearman=0.6034.ckpt
+  val_mse: 0.4038710296154022
+  val_pearson: 0.6234978437423706
+  val_spearman: 0.5741857290267944
+  test_mse: 0.4247630536556244
+  test_pearson: 0.5908918779730097
+  test_spearman: 0.5732772484295678
+  wandb_run_id: vcg9um3i
+train__kan_g12_k2__tmhint__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 10:33:37'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-21 12:40:04'
+  experiment_id: train__kan_g12_k2__tmhint__run_01
+  phase: train
+  k: 2
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint--(run-01)/epoch=19-step=3640-val/spearman=0.6021.ckpt
+  val_mse: 0.842216432094574
+  val_pearson: 0.6026026606559753
+  val_spearman: 0.5807712078094482
+  test_mse: 0.38931572437286377
+  test_pearson: 0.7795018106121867
+  test_spearman: 0.740932719267525
+  wandb_run_id: d895f8fx
+cross__kan_g12_k1__brspeech_to_bvcc__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 12:40:17'
+  experiment_id: cross__kan_g12_k1__brspeech_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech--(run-01)/epoch=33-step=1054-val/spearman=0.6923.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=51-step=4056-val/spearman=0.8100.ckpt
+  val_mse: 0.3159157335758209
+  val_pearson: 0.7919052839279175
+  val_spearman: 0.7919920682907104
+  initial_source_test_mse: 0.8493890166282654
+  initial_source_test_pearson: 0.6673912786957578
+  initial_source_test_spearman: 0.6388635901802672
+  source_test_mse: 1.6560982465744019
+  source_test_pearson: 0.63910947607249
+  source_test_spearman: 0.6033297259626264
+  initial_target_test_mse: 1.012658715248108
+  initial_target_test_pearson: 0.5695791072599911
+  initial_target_test_spearman: 0.5631173957441717
+  target_test_mse: 0.29167479276657104
+  target_test_pearson: 0.8280395042722364
+  target_test_spearman: 0.824848710141016
+  source_spearman_delta_after_minus_before: -0.03553386421764082
+  source_spearman_forgetting_before_minus_after: 0.03553386421764082
+  target_spearman_delta_after_minus_before: 0.2617313143968443
+  ended_at: '2026-08-21 18:22:31'
+  wandb_run_id: a4zm9t9m
+cross__kan_g12_k1__brspeech_to_singmos__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 12:40:17'
+  experiment_id: cross__kan_g12_k1__brspeech_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech--(run-01)/epoch=33-step=1054-val/spearman=0.6923.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=16-step=544-val/spearman=0.5920.ckpt
+  val_mse: 0.4830207824707031
+  val_pearson: 0.5835191011428833
+  val_spearman: 0.5452896952629089
+  initial_source_test_mse: 0.8493890166282654
+  initial_source_test_pearson: 0.6673912786957578
+  initial_source_test_spearman: 0.6388635901802672
+  source_test_mse: 1.220974087715149
+  source_test_pearson: 0.5605602893875247
+  source_test_spearman: 0.4724582247879171
+  initial_target_test_mse: 0.9049589037895203
+  initial_target_test_pearson: 0.4290223475889103
+  initial_target_test_spearman: 0.4054372792323832
+  target_test_mse: 0.42906999588012695
+  target_test_pearson: 0.5582966672603374
+  target_test_spearman: 0.5322058522301486
+  source_spearman_delta_after_minus_before: -0.16640536539235007
+  source_spearman_forgetting_before_minus_after: 0.16640536539235007
+  target_spearman_delta_after_minus_before: 0.1267685729977654
+  ended_at: '2026-08-21 14:08:12'
+  wandb_run_id: 3g29s4hf
+cross__kan_g12_k1__brspeech_to_tmhint__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 14:08:13'
+  experiment_id: cross__kan_g12_k1__brspeech_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech--(run-01)/epoch=33-step=1054-val/spearman=0.6923.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=05-step=1092-val/spearman=0.5855.ckpt
+  val_mse: 0.9430959820747375
+  val_pearson: 0.5518679022789001
+  val_spearman: 0.5368931293487549
+  initial_source_test_mse: 0.8493890166282654
+  initial_source_test_pearson: 0.6673912786957578
+  initial_source_test_spearman: 0.6388635901802672
+  source_test_mse: 1.2222464084625244
+  source_test_pearson: 0.5299797504549982
+  source_test_spearman: 0.46687173265567716
+  initial_target_test_mse: 2.916249990463257
+  initial_target_test_pearson: 0.4672438346251069
+  initial_target_test_spearman: 0.2984163082746543
+  target_test_mse: 0.40518271923065186
+  target_test_pearson: 0.7778038519531488
+  target_test_spearman: 0.722192451304051
+  source_spearman_delta_after_minus_before: -0.17199185752459
+  source_spearman_forgetting_before_minus_after: 0.17199185752459
+  target_spearman_delta_after_minus_before: 0.42377614302939665
+  ended_at: '2026-08-21 16:14:32'
+  wandb_run_id: pk0m7xcw
+cross__kan_g12_k1__bvcc_to_brspeech__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 16:14:33'
+  experiment_id: cross__kan_g12_k1__bvcc_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8055.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=07-step=248-val/spearman=0.6755.ckpt
+  val_mse: 0.8692028522491455
+  val_pearson: 0.6659682989120483
+  val_spearman: 0.6589449048042297
+  initial_source_test_mse: 0.3003971576690674
+  initial_source_test_pearson: 0.8280246882234
+  initial_source_test_spearman: 0.8251486281784934
+  source_test_mse: 0.5375078916549683
+  source_test_pearson: 0.7719829391023662
+  source_test_spearman: 0.7697754426050242
+  initial_target_test_mse: 1.6673448085784912
+  initial_target_test_pearson: 0.6268289334989325
+  initial_target_test_spearman: 0.6158067751177799
+  target_test_mse: 0.8093740344047546
+  target_test_pearson: 0.6697798747699211
+  target_test_spearman: 0.641016862804744
+  source_spearman_delta_after_minus_before: -0.055373185573469264
+  source_spearman_forgetting_before_minus_after: 0.055373185573469264
+  target_spearman_delta_after_minus_before: 0.02521008768696409
+  ended_at: '2026-08-21 17:30:05'
+  wandb_run_id: 7bp0vbxg
+cross__kan_g12_k1__bvcc_to_singmos__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 17:30:05'
+  experiment_id: cross__kan_g12_k1__bvcc_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8055.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=11-step=384-val/spearman=0.5965.ckpt
+  val_mse: 0.437038391828537
+  val_pearson: 0.5802919268608093
+  val_spearman: 0.5360572338104248
+  initial_source_test_mse: 0.3003971576690674
+  initial_source_test_pearson: 0.8280246882234
+  initial_source_test_spearman: 0.8251486281784934
+  source_test_mse: 1.0018675327301025
+  source_test_pearson: 0.6980933951270141
+  source_test_spearman: 0.6960720273805601
+  initial_target_test_mse: 3.1486313343048096
+  initial_target_test_pearson: 0.35437673034652156
+  initial_target_test_spearman: 0.35111415290691866
+  target_test_mse: 0.4046241343021393
+  target_test_pearson: 0.576058451252966
+  target_test_spearman: 0.5549003821901974
+  source_spearman_delta_after_minus_before: -0.12907660079793337
+  source_spearman_forgetting_before_minus_after: 0.12907660079793337
+  target_spearman_delta_after_minus_before: 0.20378622928327877
+  ended_at: '2026-08-21 18:53:37'
+  wandb_run_id: w5eprieu
+cross__kan_g12_k1__bvcc_to_tmhint__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 18:22:31'
+  experiment_id: cross__kan_g12_k1__bvcc_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8055.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=09-step=1820-val/spearman=0.5923.ckpt
+  val_mse: 0.950986921787262
+  val_pearson: 0.5647186040878296
+  val_spearman: 0.549842357635498
+  initial_source_test_mse: 0.3003971576690674
+  initial_source_test_pearson: 0.8280246882234
+  initial_source_test_spearman: 0.8251486281784934
+  source_test_mse: 1.5522936582565308
+  source_test_pearson: 0.563335180938195
+  source_test_spearman: 0.5754719839798073
+  initial_target_test_mse: 2.97843861579895
+  initial_target_test_pearson: 0.49102528367857784
+  initial_target_test_spearman: 0.4318283251166982
+  target_test_mse: 0.39897477626800537
+  target_test_pearson: 0.780196978191634
+  target_test_spearman: 0.7352367712158989
+  source_spearman_delta_after_minus_before: -0.24967664419868618
+  source_spearman_forgetting_before_minus_after: 0.24967664419868618
+  target_spearman_delta_after_minus_before: 0.3034084460992007
+  ended_at: '2026-08-21 21:03:16'
+  wandb_run_id: vzqzjjbo
+cross__kan_g12_k1__singmos_to_brspeech__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 18:53:37'
+  experiment_id: cross__kan_g12_k1__singmos_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos--(run-01)/epoch=10-step=352-val/spearman=0.5936.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=13-step=434-val/spearman=0.6591.ckpt
+  val_mse: 0.8885257840156555
+  val_pearson: 0.6539732217788696
+  val_spearman: 0.6425988078117371
+  initial_source_test_mse: 0.43165069818496704
+  initial_source_test_pearson: 0.5652068582064022
+  initial_source_test_spearman: 0.5502429091037306
+  source_test_mse: 0.9645447134971619
+  source_test_pearson: 0.4941849952606751
+  source_test_spearman: 0.49349344203257944
+  initial_target_test_mse: 1.5175399780273438
+  initial_target_test_pearson: 0.44668880501345454
+  initial_target_test_spearman: 0.3524901785670586
+  target_test_mse: 0.7951029539108276
+  target_test_pearson: 0.6746352153873302
+  target_test_spearman: 0.628835999705227
+  source_spearman_delta_after_minus_before: -0.056749467071151194
+  source_spearman_forgetting_before_minus_after: 0.056749467071151194
+  target_spearman_delta_after_minus_before: 0.27634582113816836
+  ended_at: '2026-08-21 20:02:03'
+  wandb_run_id: 7az2chpo
+cross__kan_g12_k1__singmos_to_bvcc__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 20:02:03'
+  experiment_id: cross__kan_g12_k1__singmos_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos--(run-01)/epoch=10-step=352-val/spearman=0.5936.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=07-step=624-val/spearman=0.8010.ckpt
+  val_mse: 0.32188934087753296
+  val_pearson: 0.8005931973457336
+  val_spearman: 0.7958551049232483
+  initial_source_test_mse: 0.43165069818496704
+  initial_source_test_pearson: 0.5652068582064022
+  initial_source_test_spearman: 0.5502429091037306
+  source_test_mse: 2.6911461353302
+  source_test_pearson: 0.40520403454455256
+  source_test_spearman: 0.4233171467543572
+  initial_target_test_mse: 1.6693497896194458
+  initial_target_test_pearson: 0.4859893795927611
+  initial_target_test_spearman: 0.4690445917539923
+  target_test_mse: 0.332594096660614
+  target_test_pearson: 0.8121656049364592
+  target_test_spearman: 0.8126824346211633
+  source_spearman_delta_after_minus_before: -0.12692576234937342
+  source_spearman_forgetting_before_minus_after: 0.12692576234937342
+  target_spearman_delta_after_minus_before: 0.343637842867171
+  ended_at: '2026-08-21 22:32:14'
+  wandb_run_id: xaaijv14
+cross__kan_g12_k1__singmos_to_tmhint__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 21:03:16'
+  experiment_id: cross__kan_g12_k1__singmos_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos--(run-01)/epoch=10-step=352-val/spearman=0.5936.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=03-step=728-val/spearman=0.6029.ckpt
+  val_mse: 0.9074386954307556
+  val_pearson: 0.5662429928779602
+  val_spearman: 0.5490393042564392
+  initial_source_test_mse: 0.43165069818496704
+  initial_source_test_pearson: 0.5652068582064022
+  initial_source_test_spearman: 0.5502429091037306
+  source_test_mse: 0.840120255947113
+  source_test_pearson: 0.2745224302788521
+  source_test_spearman: 0.27612719007958586
+  initial_target_test_mse: 1.0384514331817627
+  initial_target_test_pearson: 0.21257519864302482
+  initial_target_test_spearman: 0.17551673151810612
+  target_test_mse: 0.40253111720085144
+  target_test_pearson: 0.783469152279933
+  target_test_spearman: 0.7343988441456427
+  source_spearman_delta_after_minus_before: -0.2741157190241448
+  source_spearman_forgetting_before_minus_after: 0.2741157190241448
+  target_spearman_delta_after_minus_before: 0.5588821126275366
+  ended_at: '2026-08-21 23:26:20'
+  wandb_run_id: 8vgwgip2
+cross__kan_g12_k1__tmhint_to_brspeech__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-21 22:32:14'
+  experiment_id: cross__kan_g12_k1__tmhint_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint--(run-01)/epoch=09-step=1820-val/spearman=0.6011.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=13-step=434-val/spearman=0.6701.ckpt
+  val_mse: 0.9260871410369873
+  val_pearson: 0.6381435394287109
+  val_spearman: 0.6195802688598633
+  initial_source_test_mse: 0.3888223469257355
+  initial_source_test_pearson: 0.7810438239630072
+  initial_source_test_spearman: 0.7312639717772731
+  source_test_mse: 1.0105657577514648
+  source_test_pearson: 0.6571625116615307
+  source_test_spearman: 0.5929150670741291
+  initial_target_test_mse: 1.2117030620574951
+  initial_target_test_pearson: 0.39814971186821935
+  initial_target_test_spearman: 0.35113068457168733
+  target_test_mse: 0.7510465383529663
+  target_test_pearson: 0.6945000753118984
+  target_test_spearman: 0.655989491040103
+  source_spearman_delta_after_minus_before: -0.13834890470314398
+  source_spearman_forgetting_before_minus_after: 0.13834890470314398
+  target_spearman_delta_after_minus_before: 0.3048588064684156
+  ended_at: '2026-08-22 00:08:17'
+  wandb_run_id: 9kyvp9n8
+cross__kan_g12_k1__tmhint_to_bvcc__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-21 23:26:21'
+  experiment_id: cross__kan_g12_k1__tmhint_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint--(run-01)/epoch=09-step=1820-val/spearman=0.6011.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=26-step=2106-val/spearman=0.8088.ckpt
+  val_mse: 0.29614686965942383
+  val_pearson: 0.8039582371711731
+  val_spearman: 0.8011816740036011
+  initial_source_test_mse: 0.3888223469257355
+  initial_source_test_pearson: 0.7810438239630072
+  initial_source_test_spearman: 0.7312639717772731
+  source_test_mse: 2.3956851959228516
+  source_test_pearson: 0.5658753443313753
+  source_test_spearman: 0.3270476980870038
+  initial_target_test_mse: 1.208992838859558
+  initial_target_test_pearson: 0.3988794049116121
+  initial_target_test_spearman: 0.39000505051049145
+  target_test_mse: 0.30582472681999207
+  target_test_pearson: 0.8186558355962156
+  target_test_spearman: 0.8199077607361823
+  source_spearman_delta_after_minus_before: -0.4042162736902693
+  source_spearman_forgetting_before_minus_after: 0.4042162736902693
+  target_spearman_delta_after_minus_before: 0.4299027102256909
+  ended_at: '2026-08-22 03:16:06'
+  wandb_run_id: 84y69aju
+cross__kan_g12_k1__tmhint_to_singmos__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 00:08:18'
+  experiment_id: cross__kan_g12_k1__tmhint_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  k: 1
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint--(run-01)/epoch=09-step=1820-val/spearman=0.6011.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k1-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=05-step=192-val/spearman=0.5849.ckpt
+  val_mse: 0.489054411649704
+  val_pearson: 0.5836232304573059
+  val_spearman: 0.5554153919219971
+  initial_source_test_mse: 0.3888223469257355
+  initial_source_test_pearson: 0.7810438239630072
+  initial_source_test_spearman: 0.7312639717772731
+  source_test_mse: 0.6887410879135132
+  source_test_pearson: 0.636729135743332
+  source_test_spearman: 0.5808258134531642
+  initial_target_test_mse: 0.9006075263023376
+  initial_target_test_pearson: 0.2861096006163553
+  initial_target_test_spearman: 0.2776007531980681
+  target_test_mse: 0.4204862713813782
+  target_test_pearson: 0.54653461755008
+  target_test_spearman: 0.5274666056350561
+  source_spearman_delta_after_minus_before: -0.1504381583241089
+  source_spearman_forgetting_before_minus_after: 0.1504381583241089
+  target_spearman_delta_after_minus_before: 0.249865852436988
+  ended_at: '2026-08-22 01:13:52'
+  wandb_run_id: 1jfk0uwu
+cross__kan_g12_k2__brspeech_to_bvcc__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-22 03:16:20'
+  experiment_id: cross__kan_g12_k2__brspeech_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech--(run-01)/epoch=23-step=744-val/spearman=0.6996.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=42-step=3354-val/spearman=0.8070.ckpt
+  val_mse: 0.323912113904953
+  val_pearson: 0.7964718341827393
+  val_spearman: 0.8006099462509155
+  initial_source_test_mse: 0.8207805752754211
+  initial_source_test_pearson: 0.6594142270965352
+  initial_source_test_spearman: 0.6349890534496058
+  source_test_mse: 1.6263543367385864
+  source_test_pearson: 0.6140120558209727
+  source_test_spearman: 0.6313243856955097
+  initial_target_test_mse: 0.649965763092041
+  initial_target_test_pearson: 0.6356165249515949
+  initial_target_test_spearman: 0.6299575289119144
+  target_test_mse: 0.3031502068042755
+  target_test_pearson: 0.8273383892125675
+  target_test_spearman: 0.8284767497976308
+  source_spearman_delta_after_minus_before: -0.003664667754096018
+  source_spearman_forgetting_before_minus_after: 0.003664667754096018
+  target_spearman_delta_after_minus_before: 0.19851922088571639
+  ended_at: '2026-08-22 08:09:41'
+  wandb_run_id: wugygzey
+cross__kan_g12_k2__brspeech_to_singmos__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 03:16:20'
+  experiment_id: cross__kan_g12_k2__brspeech_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech--(run-01)/epoch=23-step=744-val/spearman=0.6996.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=11-step=384-val/spearman=0.6143.ckpt
+  val_mse: 0.3998752236366272
+  val_pearson: 0.6067936420440674
+  val_spearman: 0.5709300637245178
+  initial_source_test_mse: 0.8207805752754211
+  initial_source_test_pearson: 0.6594142270965352
+  initial_source_test_spearman: 0.6349890534496058
+  source_test_mse: 0.9468781352043152
+  source_test_pearson: 0.6065105512315354
+  source_test_spearman: 0.5562517986650868
+  initial_target_test_mse: 1.074959635734558
+  initial_target_test_pearson: 0.3987350002680159
+  initial_target_test_spearman: 0.3884429469200251
+  target_test_mse: 0.4242951273918152
+  target_test_pearson: 0.6021569244686445
+  target_test_spearman: 0.5830598986343904
+  source_spearman_delta_after_minus_before: -0.07873725478451898
+  source_spearman_forgetting_before_minus_after: 0.07873725478451898
+  target_spearman_delta_after_minus_before: 0.19461695171436533
+  ended_at: '2026-08-22 04:33:22'
+  wandb_run_id: d1ojgqe9
+cross__kan_g12_k2__brspeech_to_tmhint__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 04:33:22'
+  experiment_id: cross__kan_g12_k2__brspeech_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech--(run-01)/epoch=23-step=744-val/spearman=0.6996.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=06-step=1274-val/spearman=0.6091.ckpt
+  val_mse: 0.8896439075469971
+  val_pearson: 0.5920717120170593
+  val_spearman: 0.5675318241119385
+  initial_source_test_mse: 0.8207805752754211
+  initial_source_test_pearson: 0.6594142270965352
+  initial_source_test_spearman: 0.6349890534496058
+  source_test_mse: 1.4885326623916626
+  source_test_pearson: 0.590870829940228
+  source_test_spearman: 0.5602579266290381
+  initial_target_test_mse: 3.0005900859832764
+  initial_target_test_pearson: 0.5271641860360325
+  initial_target_test_spearman: 0.3701521636095605
+  target_test_mse: 0.3718348741531372
+  target_test_pearson: 0.7942640270941853
+  target_test_spearman: 0.7468757918957113
+  source_spearman_delta_after_minus_before: -0.0747311268205677
+  source_spearman_forgetting_before_minus_after: 0.0747311268205677
+  target_spearman_delta_after_minus_before: 0.3767236282861508
+  ended_at: '2026-08-22 06:47:48'
+  wandb_run_id: hfhca2a3
+cross__kan_g12_k2__bvcc_to_brspeech__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 06:47:49'
+  experiment_id: cross__kan_g12_k2__bvcc_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8195.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=06-step=217-val/spearman=0.6959.ckpt
+  val_mse: 0.8759324550628662
+  val_pearson: 0.6751111745834351
+  val_spearman: 0.6707863211631775
+  initial_source_test_mse: 0.2674064636230469
+  initial_source_test_pearson: 0.8338676787671425
+  initial_source_test_spearman: 0.8323580026829644
+  source_test_mse: 0.5382267236709595
+  source_test_pearson: 0.7661490475807538
+  source_test_spearman: 0.7503901958379965
+  initial_target_test_mse: 1.4756934642791748
+  initial_target_test_pearson: 0.6121725437462371
+  initial_target_test_spearman: 0.5940599486670789
+  target_test_mse: 0.8253864049911499
+  target_test_pearson: 0.6688975275024069
+  target_test_spearman: 0.6333092553912106
+  source_spearman_delta_after_minus_before: -0.08196780684496796
+  source_spearman_forgetting_before_minus_after: 0.08196780684496796
+  target_spearman_delta_after_minus_before: 0.03924930672413174
+  ended_at: '2026-08-22 08:05:05'
+  wandb_run_id: 265jiqiv
+cross__kan_g12_k2__bvcc_to_singmos__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 08:05:06'
+  experiment_id: cross__kan_g12_k2__bvcc_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8195.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=20-step=672-val/spearman=0.5939.ckpt
+  val_mse: 0.44398051500320435
+  val_pearson: 0.6020822525024414
+  val_spearman: 0.5780850052833557
+  initial_source_test_mse: 0.2674064636230469
+  initial_source_test_pearson: 0.8338676787671425
+  initial_source_test_spearman: 0.8323580026829644
+  source_test_mse: 1.2928825616836548
+  source_test_pearson: 0.6381123819267438
+  source_test_spearman: 0.6403914486208542
+  initial_target_test_mse: 2.075965642929077
+  initial_target_test_pearson: 0.4137045818164288
+  initial_target_test_spearman: 0.4038267949322503
+  target_test_mse: 0.44668489694595337
+  target_test_pearson: 0.5910485495951316
+  target_test_spearman: 0.575976245984453
+  source_spearman_delta_after_minus_before: -0.19196655406211027
+  source_spearman_forgetting_before_minus_after: 0.19196655406211027
+  target_spearman_delta_after_minus_before: 0.17214945105220264
+  ended_at: '2026-08-22 09:41:06'
+  wandb_run_id: 0qet3fm4
+cross__kan_g12_k2__bvcc_to_tmhint__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-22 08:09:42'
+  experiment_id: cross__kan_g12_k2__bvcc_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc--(run-01)/epoch=51-step=4056-val/spearman=0.8195.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=05-step=1092-val/spearman=0.6100.ckpt
+  val_mse: 0.840132474899292
+  val_pearson: 0.6114898920059204
+  val_spearman: 0.5888313055038452
+  initial_source_test_mse: 0.2674064636230469
+  initial_source_test_pearson: 0.8338676787671425
+  initial_source_test_spearman: 0.8323580026829644
+  source_test_mse: 1.6208305358886719
+  source_test_pearson: 0.7335247197440097
+  source_test_spearman: 0.7416465272227554
+  initial_target_test_mse: 2.0630664825439453
+  initial_target_test_pearson: 0.4896496195107012
+  initial_target_test_spearman: 0.4021122330720049
+  target_test_mse: 0.39693841338157654
+  target_test_pearson: 0.7907213075366796
+  target_test_spearman: 0.748413939974661
+  source_spearman_delta_after_minus_before: -0.09071147546020908
+  source_spearman_forgetting_before_minus_after: 0.09071147546020908
+  target_spearman_delta_after_minus_before: 0.3463017069026561
+  ended_at: '2026-08-22 10:19:50'
+  wandb_run_id: 88yuspu1
+cross__kan_g12_k2__singmos_to_brspeech__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 09:41:06'
+  experiment_id: cross__kan_g12_k2__singmos_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos--(run-01)/epoch=34-step=1120-val/spearman=0.6034.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=19-step=620-val/spearman=0.6825.ckpt
+  val_mse: 0.8081709146499634
+  val_pearson: 0.6849742531776428
+  val_spearman: 0.6707199215888977
+  initial_source_test_mse: 0.4247630536556244
+  initial_source_test_pearson: 0.5908918779730097
+  initial_source_test_spearman: 0.5732772484295678
+  source_test_mse: 1.3117034435272217
+  source_test_pearson: 0.4533250764353858
+  source_test_spearman: 0.44812271375617363
+  initial_target_test_mse: 1.3873258829116821
+  initial_target_test_pearson: 0.4036616358361331
+  initial_target_test_spearman: 0.33507147663507936
+  target_test_mse: 0.8514678478240967
+  target_test_pearson: 0.6673960180390761
+  target_test_spearman: 0.6369828087269758
+  source_spearman_delta_after_minus_before: -0.1251545346733942
+  source_spearman_forgetting_before_minus_after: 0.1251545346733942
+  target_spearman_delta_after_minus_before: 0.3019113320918964
+  ended_at: '2026-08-22 11:28:12'
+  wandb_run_id: lhpfia88
+cross__kan_g12_k2__singmos_to_bvcc__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-22 10:19:51'
+  experiment_id: cross__kan_g12_k2__singmos_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos--(run-01)/epoch=34-step=1120-val/spearman=0.6034.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=58-step=4602-val/spearman=0.8217.ckpt
+  val_mse: 0.2801646590232849
+  val_pearson: 0.8153336048126221
+  val_spearman: 0.8123220205307007
+  initial_source_test_mse: 0.4247630536556244
+  initial_source_test_pearson: 0.5908918779730097
+  initial_source_test_spearman: 0.5732772484295678
+  source_test_mse: 2.390754222869873
+  source_test_pearson: 0.4213850078599512
+  source_test_spearman: 0.4063212418745255
+  initial_target_test_mse: 1.3274084329605103
+  initial_target_test_pearson: 0.40708724107229805
+  initial_target_test_spearman: 0.4165485651614956
+  target_test_mse: 0.28179097175598145
+  target_test_pearson: 0.8282271669392404
+  target_test_spearman: 0.8224433133500599
+  source_spearman_delta_after_minus_before: -0.16695600655504234
+  source_spearman_forgetting_before_minus_after: 0.16695600655504234
+  target_spearman_delta_after_minus_before: 0.40589474818856436
+  ended_at: '2026-08-22 16:21:24'
+  wandb_run_id: 87cf79w2
+cross__kan_g12_k2__singmos_to_tmhint__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 11:28:13'
+  experiment_id: cross__kan_g12_k2__singmos_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos--(run-01)/epoch=34-step=1120-val/spearman=0.6034.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=07-step=1456-val/spearman=0.6069.ckpt
+  val_mse: 0.8603600859642029
+  val_pearson: 0.5938740372657776
+  val_spearman: 0.5684936046600342
+  initial_source_test_mse: 0.4247630536556244
+  initial_source_test_pearson: 0.5908918779730097
+  initial_source_test_spearman: 0.5732772484295678
+  source_test_mse: 0.756310760974884
+  source_test_pearson: 0.34716131858364624
+  source_test_spearman: 0.352352366144888
+  initial_target_test_mse: 2.177098274230957
+  initial_target_test_pearson: 0.2165738838776265
+  initial_target_test_spearman: 0.20231724505524684
+  target_test_mse: 0.4034426808357239
+  target_test_pearson: 0.7948688255882105
+  target_test_spearman: 0.7493457026555099
+  source_spearman_delta_after_minus_before: -0.22092488228467982
+  source_spearman_forgetting_before_minus_after: 0.22092488228467982
+  target_spearman_delta_after_minus_before: 0.5470284576002631
+  ended_at: '2026-08-22 13:47:39'
+  wandb_run_id: wtmvok79
+cross__kan_g12_k2__tmhint_to_brspeech__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 13:47:39'
+  experiment_id: cross__kan_g12_k2__tmhint_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint--(run-01)/epoch=19-step=3640-val/spearman=0.6021.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=23-step=744-val/spearman=0.6976.ckpt
+  val_mse: 0.83370441198349
+  val_pearson: 0.6890245676040649
+  val_spearman: 0.6742036938667297
+  initial_source_test_mse: 0.38931572437286377
+  initial_source_test_pearson: 0.7795018106121867
+  initial_source_test_spearman: 0.740932719267525
+  source_test_mse: 1.2313828468322754
+  source_test_pearson: 0.7156967164834391
+  source_test_spearman: 0.6518300403867039
+  initial_target_test_mse: 1.4344977140426636
+  initial_target_test_pearson: 0.4494136064552828
+  initial_target_test_spearman: 0.4073493366691041
+  target_test_mse: 0.7607335448265076
+  target_test_pearson: 0.690076459073673
+  target_test_spearman: 0.6551318208475672
+  source_spearman_delta_after_minus_before: -0.08910267888082113
+  source_spearman_forgetting_before_minus_after: 0.08910267888082113
+  target_spearman_delta_after_minus_before: 0.24778248417846305
+  ended_at: '2026-08-22 15:49:05'
+  wandb_run_id: fx8lonns
+cross__kan_g12_k2__tmhint_to_bvcc__source_run_01__run_01:
+  status: done
+  gpu: 7
+  started_at: '2026-08-22 15:49:05'
+  experiment_id: cross__kan_g12_k2__tmhint_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint--(run-01)/epoch=19-step=3640-val/spearman=0.6021.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=44-step=3510-val/spearman=0.8134.ckpt
+  val_mse: 0.2903229892253876
+  val_pearson: 0.8126781582832336
+  val_spearman: 0.8085688948631287
+  initial_source_test_mse: 0.38931572437286377
+  initial_source_test_pearson: 0.7795018106121867
+  initial_source_test_spearman: 0.740932719267525
+  source_test_mse: 2.7868082523345947
+  source_test_pearson: 0.5772081782358428
+  source_test_spearman: 0.3848912052286239
+  initial_target_test_mse: 1.6945950984954834
+  initial_target_test_pearson: 0.5048645416778034
+  initial_target_test_spearman: 0.5184482563759778
+  target_test_mse: 0.275177925825119
+  target_test_pearson: 0.8273606516392634
+  target_test_spearman: 0.8242899031153177
+  source_spearman_delta_after_minus_before: -0.3560415140389011
+  source_spearman_forgetting_before_minus_after: 0.3560415140389011
+  target_spearman_delta_after_minus_before: 0.3058416467393399
+  ended_at: '2026-08-22 21:01:55'
+  wandb_run_id: ec95d10b
+cross__kan_g12_k2__tmhint_to_singmos__source_run_01__run_01:
+  status: done
+  gpu: 6
+  started_at: '2026-08-22 16:21:24'
+  experiment_id: cross__kan_g12_k2__tmhint_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  k: 2
+  grid: 12
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  model_config: config/models/mHuBERT-147_kan.yaml
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint--(run-01)/epoch=19-step=3640-val/spearman=0.6021.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g12-k2-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=08-step=288-val/spearman=0.6049.ckpt
+  val_mse: 0.42632728815078735
+  val_pearson: 0.5915290117263794
+  val_spearman: 0.5486834645271301
+  initial_source_test_mse: 0.38931572437286377
+  initial_source_test_pearson: 0.7795018106121867
+  initial_source_test_spearman: 0.740932719267525
+  source_test_mse: 0.7297384738922119
+  source_test_pearson: 0.6349131853001532
+  source_test_spearman: 0.5705459625110032
+  initial_target_test_mse: 0.8667469024658203
+  initial_target_test_pearson: 0.2140612569621376
+  initial_target_test_spearman: 0.21224031101615073
+  target_test_mse: 0.39361515641212463
+  target_test_pearson: 0.5887832327311172
+  target_test_spearman: 0.5715967129663145
+  source_spearman_delta_after_minus_before: -0.17038675675652182
+  source_spearman_forgetting_before_minus_after: 0.17038675675652182
+  target_spearman_delta_after_minus_before: 0.35935640195016383
+  ended_at: '2026-08-22 17:32:17'
+  wandb_run_id: 1lz8q23m

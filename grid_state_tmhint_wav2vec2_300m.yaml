@@ -1,0 +1,84 @@
+config_001_lr1e-3_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-06 15:29:35'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/azqeoog9/resolved_config.yaml
+config_002_lr1e-3_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-05-06 15:29:35'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/n8wedvjs/resolved_config.yaml
+config_003_lr1e-3_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-06 15:29:35'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/rqtvdydd/resolved_config.yaml
+config_004_lr5e-3_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-06 22:38:00'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/gkf8gqrb/resolved_config.yaml
+config_005_lr5e-3_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-06 23:50:48'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/x1aalhxt/resolved_config.yaml
+config_006_lr5e-3_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-05-07 00:40:48'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/v8jxaxbg/resolved_config.yaml
+config_007_lr1e-4_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-07 06:50:08'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/guu9jx72/resolved_config.yaml
+config_008_lr1e-4_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-07 08:14:23'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/6pwcsnwz/resolved_config.yaml
+config_009_lr1e-4_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-05-07 08:25:40'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/5f71gcwr/resolved_config.yaml
+config_010_lr5e-4_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-07 16:20:10'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/ynkj3xp6/resolved_config.yaml
+config_011_lr5e-4_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-07 19:12:10'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/tmy3ay0a/resolved_config.yaml
+config_012_lr5e-4_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-05-07 19:24:39'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/2rutdgdy/resolved_config.yaml

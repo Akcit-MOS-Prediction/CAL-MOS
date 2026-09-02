@@ -1,0 +1,110 @@
+datasets:
+  train:
+  - name: Train
+    metadata_path: /workspace/datasets/BRSPEECH/sets/train.csv
+    base_dir: /workspace/datasets/BRSPEECH
+    filename_column: filepath
+    target_column: mos
+  val:
+  - name: Validation
+    metadata_path: /workspace/datasets/BRSPEECH/sets/val.csv
+    base_dir: /workspace/datasets/BRSPEECH
+    filename_column: filepath
+    target_column: mos
+  test:
+  - name: Test
+    metadata_path: /workspace/datasets/BRSPEECH/sets/test.csv
+    base_dir: /workspace/datasets/BRSPEECH
+    filename_column: filepath
+    target_column: mos
+data:
+  use_seqaug: false
+  num_classes: 1
+  target_sr: 16000
+  mixup_alpha: 0.0
+  use_rand_truncation: false
+  min_duration: 2.0
+  min_white_noise_amp: 0.01
+  max_white_noise_amp: 0.1
+  insert_white_noise: false
+train:
+  batch_size: 16
+  shuffle: true
+  num_workers: 12
+wandb_entity: snaxofc10-utfpr-medianeira
+title: KAN-MEAN-facebook/wav2vec2-xls-r-1b-(epochs-100)-(bs-16)-(LR-0.001)-brspeech--(run-01)
+model:
+  model_type: dynamic_kan
+  model_name: facebook/wav2vec2-xls-r-1b
+  mlp_input_dim: 1280
+  mlp_hidden_dim: 1280
+  mlp_num_layers: 1
+  mlp_output_size: 1
+  mlp_dropout: 0.1
+  mlp_activation_func: relu
+  layer_weight_strategy: per_layer
+  num_feature_layers: -1
+  specific_layer_idx: -1
+  pooling_strategy: mean
+  relukan_k: 6
+  relukan_grid: 6
+  freeze_backbone: true
+  use_peft: false
+  lora_keys:
+  - key
+  lora_r: 2
+  lora_alpha: 2
+  lora_dropout: 0.1
+  bias: none
+  ced_embedding_dim: 192
+  ced_proj_size: 512
+  ced_proj_dropout: 0.5
+  ced_pretrained: true
+  ced_freeze: false
+optimizer:
+  name: adamw
+  params:
+    min_learning_rate: 1.0e-05
+    learning_rate: 0.001
+    eps: 1.0e-08
+    weight_decay: 1.0e-06
+    betas:
+    - 0.9
+    - 0.98
+scheduler:
+  name: CosineWarmupLR
+  params:
+    warmup_lr: 1.0e-06
+    warmup_steps: 500
+tags:
+- 16-BS
+- LR-0.001
+- WD-1e-06
+- facebook/wav2vec2-xls-r-1b-HS
+- 1280-AH
+- 1280-HL
+- 1-IS
+trainer:
+  accelerator: gpu
+  max_epochs: 100
+  num_sanity_val_steps: 2
+  overfit_batches: 0.0
+  log_every_n_steps: 10
+  gradient_clip_val: 10.0
+  gradient_clip_algorithm: norm
+  val_check_interval: 1.0
+  accumulate_grad_batches: 4
+model_checkpoint:
+  mode: max
+  save_last: true
+  save_weights_only: true
+  monitor: val/spearman
+  dirpath: ../checkpoints/mos-prediction
+  filename: '{epoch:02d}-{step:02d}-{val/spearman:.4f}'
+early_stopping:
+  monitor: val/spearman
+  patience: 20
+  mode: max
+  min_delta: 0.001
+  verbose: true
+dataset_name: brspeech

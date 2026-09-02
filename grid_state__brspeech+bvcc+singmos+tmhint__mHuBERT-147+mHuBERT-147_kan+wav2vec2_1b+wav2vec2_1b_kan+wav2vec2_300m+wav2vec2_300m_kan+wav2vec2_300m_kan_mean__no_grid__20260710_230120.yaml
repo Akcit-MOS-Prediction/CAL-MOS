@@ -1,0 +1,362 @@
+config_001_mHuBERT-147__brspeech_to_bvcc_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-10 23:01:37'
+  end_time: '2026-07-11 05:57:11'
+config_002_mHuBERT-147__brspeech_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-10 23:01:37'
+  end_time: '2026-07-11 00:39:06'
+config_003_mHuBERT-147__brspeech_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-10 23:01:37'
+  end_time: '2026-07-11 02:43:47'
+config_004_mHuBERT-147_kan__brspeech_to_bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-10 23:01:37'
+  end_time: '2026-07-11 06:32:50'
+config_005_mHuBERT-147_kan__brspeech_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-11 00:39:17'
+  end_time: '2026-07-11 03:46:12'
+config_006_mHuBERT-147_kan__brspeech_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-11 02:43:58'
+  end_time: '2026-07-11 06:36:23'
+config_007_wav2vec2_300m__brspeech_to_bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-11 03:46:21'
+  end_time: '2026-07-11 14:19:53'
+config_008_wav2vec2_300m__brspeech_to_singmos_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-11 05:57:20'
+  end_time: '2026-07-11 09:28:39'
+config_009_wav2vec2_300m__brspeech_to_tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-11 06:33:00'
+  end_time: '2026-07-11 15:03:51'
+config_010_wav2vec2_300m_kan__brspeech_to_bvcc_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-11 06:36:33'
+  end_time: '2026-07-11 15:47:17'
+config_011_wav2vec2_300m_kan__brspeech_to_singmos_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-11 09:28:49'
+  end_time: '2026-07-11 13:24:12'
+config_012_wav2vec2_300m_kan__brspeech_to_tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-11 13:24:24'
+  end_time: '2026-07-11 20:11:29'
+config_013_wav2vec2_1b__brspeech_to_bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-11 14:20:03'
+  end_time: '2026-07-12 12:32:15'
+config_014_wav2vec2_1b__brspeech_to_singmos_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-11 15:04:02'
+  end_time: '2026-07-11 23:39:18'
+config_015_wav2vec2_1b__brspeech_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-11 15:47:28'
+  end_time: '2026-07-12 12:06:37'
+config_016_wav2vec2_1b_kan__brspeech_to_bvcc_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-11 20:11:40'
+  end_time: '2026-07-12 00:53:24'
+config_017_wav2vec2_1b_kan__brspeech_to_singmos_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-11 23:39:30'
+  end_time: '2026-07-12 05:09:25'
+config_018_wav2vec2_1b_kan__brspeech_to_tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-12 00:53:34'
+  end_time: '2026-07-12 12:59:23'
+config_019_mHuBERT-147__bvcc_to_brspeech_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-12 05:09:35'
+  end_time: '2026-07-12 08:33:07'
+config_020_mHuBERT-147__bvcc_to_singmos_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-12 08:33:17'
+  end_time: '2026-07-12 11:38:09'
+config_021_mHuBERT-147__bvcc_to_tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-12 11:38:18'
+  end_time: '2026-07-12 16:03:56'
+config_022_mHuBERT-147_kan__bvcc_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-12 12:06:48'
+  end_time: '2026-07-12 14:04:33'
+config_023_mHuBERT-147_kan__bvcc_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-12 12:32:26'
+  end_time: '2026-07-12 15:57:36'
+config_024_mHuBERT-147_kan__bvcc_to_tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-12 12:59:33'
+  end_time: '2026-07-12 18:23:54'
+config_025_wav2vec2_300m__bvcc_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-12 14:04:44'
+  end_time: '2026-07-12 20:15:55'
+config_026_wav2vec2_300m__bvcc_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-12 15:57:48'
+  end_time: '2026-07-12 19:24:17'
+config_027_wav2vec2_300m__bvcc_to_tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-12 16:04:07'
+  end_time: '2026-07-13 00:07:39'
+config_028_wav2vec2_300m_kan__bvcc_to_brspeech_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-12 18:24:05'
+  end_time: '2026-07-12 21:39:35'
+config_029_wav2vec2_300m_kan__bvcc_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-12 19:24:27'
+  end_time: '2026-07-12 22:11:34'
+config_030_wav2vec2_300m_kan__bvcc_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-12 20:16:05'
+  end_time: '2026-07-13 02:52:45'
+config_031_wav2vec2_1b__bvcc_to_brspeech_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-12 21:39:46'
+  end_time: '2026-07-13 06:27:50'
+config_032_wav2vec2_1b__bvcc_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-12 22:11:43'
+  end_time: '2026-07-13 04:09:44'
+config_033_wav2vec2_1b__bvcc_to_tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-13 00:07:50'
+  end_time: '2026-07-13 17:24:51'
+config_034_wav2vec2_1b_kan__bvcc_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-13 02:52:55'
+  end_time: '2026-07-13 08:01:44'
+config_035_wav2vec2_1b_kan__bvcc_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-13 04:09:55'
+  end_time: '2026-07-13 09:07:26'
+config_036_wav2vec2_1b_kan__bvcc_to_tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-13 06:28:00'
+  end_time: '2026-07-13 14:49:27'
+config_037_mHuBERT-147__singmos_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-13 08:01:55'
+  end_time: '2026-07-13 11:47:53'
+config_038_mHuBERT-147__singmos_to_bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-13 09:07:37'
+  end_time: '2026-07-13 15:19:20'
+config_039_mHuBERT-147__singmos_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-13 11:48:04'
+  end_time: '2026-07-13 15:43:42'
+config_040_mHuBERT-147_kan__singmos_to_brspeech_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-13 14:49:38'
+  end_time: '2026-07-13 19:29:07'
+config_041_mHuBERT-147_kan__singmos_to_bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-13 15:19:31'
+  end_time: '2026-07-13 21:21:58'
+config_042_mHuBERT-147_kan__singmos_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-13 15:43:51'
+  end_time: '2026-07-13 20:39:17'
+config_043_wav2vec2_300m__singmos_to_brspeech_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-13 17:25:01'
+  end_time: '2026-07-13 22:38:54'
+config_044_wav2vec2_300m__singmos_to_bvcc_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-13 19:29:16'
+  end_time: '2026-07-14 06:32:35'
+config_045_wav2vec2_300m__singmos_to_tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-13 20:39:27'
+  end_time: '2026-07-14 05:44:53'
+config_046_wav2vec2_300m_kan_mean__singmos_to_brspeech_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-13 21:22:08'
+  end_time: '2026-07-14 03:27:57'
+config_047_wav2vec2_300m_kan_mean__singmos_to_bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-13 22:39:04'
+  end_time: '2026-07-14 11:40:20'
+config_048_wav2vec2_300m_kan_mean__singmos_to_tmhint_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-14 03:28:09'
+  end_time: '2026-07-14 13:09:20'
+config_049_wav2vec2_1b__singmos_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-14 05:45:05'
+  end_time: '2026-07-14 15:15:34'
+config_050_wav2vec2_1b__singmos_to_bvcc_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-14 06:32:47'
+  end_time: '2026-07-15 05:04:30'
+config_051_wav2vec2_1b__singmos_to_tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-14 11:40:32'
+  end_time: '2026-07-15 08:33:42'
+config_052_wav2vec2_1b_kan__singmos_to_brspeech_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-14 13:09:30'
+  end_time: '2026-07-14 16:14:41'
+config_053_wav2vec2_1b_kan__singmos_to_bvcc_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-14 15:15:48'
+  end_time: '2026-07-14 20:07:48'
+config_054_wav2vec2_1b_kan__singmos_to_tmhint_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-14 16:14:52'
+  end_time: '2026-07-14 20:35:18'
+config_055_mHuBERT-147__tmhint_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-14 20:08:00'
+  end_time: '2026-07-15 00:26:20'
+config_056_mHuBERT-147__tmhint_to_bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-14 20:35:30'
+  end_time: '2026-07-15 03:43:06'
+config_057_mHuBERT-147__tmhint_to_singmos_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-15 00:26:30'
+  end_time: '2026-07-15 03:04:59'
+config_058_mHuBERT-147_kan__tmhint_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-15 03:05:08'
+  end_time: '2026-07-15 07:28:37'
+config_059_mHuBERT-147_kan__tmhint_to_bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-15 03:43:17'
+  end_time: '2026-07-15 10:01:12'
+config_060_mHuBERT-147_kan__tmhint_to_singmos_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-15 05:04:41'
+  end_time: '2026-07-15 07:29:49'
+config_061_wav2vec2_300m__tmhint_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-15 07:28:47'
+  end_time: '2026-07-15 14:21:21'
+config_062_wav2vec2_300m__tmhint_to_bvcc_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-15 07:29:59'
+  end_time: '2026-07-15 19:57:03'
+config_063_wav2vec2_300m__tmhint_to_singmos_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-15 08:33:52'
+  end_time: '2026-07-15 12:08:18'
+config_064_wav2vec2_300m_kan__tmhint_to_brspeech_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-15 10:01:21'
+  end_time: '2026-07-15 13:55:38'
+config_065_wav2vec2_300m_kan__tmhint_to_bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-15 12:08:28'
+  end_time: '2026-07-15 20:01:25'
+config_066_wav2vec2_300m_kan__tmhint_to_singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-15 13:55:49'
+  end_time: '2026-07-15 17:46:19'
+config_067_wav2vec2_1b__tmhint_to_brspeech_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-07-15 14:21:32'
+  end_time: '2026-07-15 23:50:21'
+config_068_wav2vec2_1b__tmhint_to_bvcc_run_01:
+  status: error
+  gpu: 4
+  start_time: '2026-07-15 17:46:29'
+  error_msg: '[Errno 28] No space left on device'
+  end_time: '2026-07-16 14:23:46'
+config_069_wav2vec2_1b__tmhint_to_singmos_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-15 19:57:14'
+  end_time: '2026-07-16 01:51:38'
+config_070_wav2vec2_1b_kan__tmhint_to_brspeech_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-15 20:01:36'
+  end_time: '2026-07-16 00:52:17'
+config_071_wav2vec2_1b_kan__tmhint_to_bvcc_run_01:
+  status: error
+  gpu: 5
+  start_time: '2026-07-15 23:50:33'
+  error_msg: '[Errno 28] No space left on device'
+  end_time: '2026-07-16 14:26:53'
+config_072_wav2vec2_1b_kan__tmhint_to_singmos_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-16 00:52:26'
+  end_time: '2026-07-16 04:58:31'

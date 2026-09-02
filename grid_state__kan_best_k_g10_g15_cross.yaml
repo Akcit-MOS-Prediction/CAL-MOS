@@ -1,0 +1,3464 @@
+train__mhubert_kan__g10_k3__brspeech__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-26 01:16:15'
+  experiment_id: train__mhubert_kan__g10_k3__brspeech__run_01
+  phase: train
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech--(run-01)/epoch=68-step=2139-val/spearman=0.7025.ckpt
+  val_mse: 0.7442543506622314
+  val_pearson: 0.7119989991188049
+  val_spearman: 0.7019638419151306
+  test_mse: 0.8279303908348083
+  test_pearson: 0.6647695964093628
+  test_spearman: 0.6323754230700825
+  ended_at: '2026-08-26 07:29:03'
+  wandb_run_id: gfdwf3b7
+  dataset: brspeech
+  run: 1
+train__mhubert_kan__g10_k3__bvcc__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-26 13:01:46'
+  experiment_id: train__mhubert_kan__g10_k3__bvcc__run_01
+  phase: train
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc--(run-01)/epoch=39-step=3120-val/spearman=0.8107-v1.ckpt
+  val_mse: 0.32536205649375916
+  val_pearson: 0.8051418662071228
+  val_spearman: 0.8059743046760559
+  test_mse: 0.28565138578414917
+  test_pearson: 0.8264599961014645
+  test_spearman: 0.8290339210149138
+  ended_at: '2026-08-26 19:17:06'
+  wandb_run_id: 8yiqryvk
+  dataset: bvcc
+  run: 1
+train__mhubert_kan__g10_k3__singmos__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-26 13:01:47'
+  experiment_id: train__mhubert_kan__g10_k3__singmos__run_01
+  phase: train
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos--(run-01)/epoch=57-step=1856-val/spearman=0.6138.ckpt
+  val_mse: 0.35122761130332947
+  val_pearson: 0.6497789025306702
+  val_spearman: 0.612868070602417
+  test_mse: 0.4111465811729431
+  test_pearson: 0.6081324142640112
+  test_spearman: 0.5939007519574266
+  ended_at: '2026-08-26 16:08:06'
+  wandb_run_id: qqnantke
+  dataset: singmos
+  run: 1
+train__mhubert_kan__g10_k3__tmhint__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-26 16:08:06'
+  experiment_id: train__mhubert_kan__g10_k3__tmhint__run_01
+  phase: train
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6118.ckpt
+  val_mse: 0.8469358086585999
+  val_pearson: 0.6148980259895325
+  val_spearman: 0.5958839058876038
+  test_mse: 0.3582257628440857
+  test_pearson: 0.8011863683291576
+  test_spearman: 0.7557589073518697
+  ended_at: '2026-08-26 19:57:42'
+  wandb_run_id: p711o91m
+  dataset: tmhint
+  run: 1
+train__wav2vec2_1b_kan__g10_k6__brspeech__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-01 10:16:03'
+  experiment_id: train__wav2vec2_1b_kan__g10_k6__brspeech__run_01
+  phase: train
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech--(run-01)/epoch=29-step=930-val/spearman=0.6563.ckpt
+  val_mse: 1.0303943157196045
+  val_pearson: 0.6081915497779846
+  val_spearman: 0.6177184581756592
+  test_mse: 0.9215664267539978
+  test_pearson: 0.6174282172536442
+  test_spearman: 0.601709588238295
+  ended_at: '2026-09-01 15:21:47'
+  wandb_run_id: wm295f9c
+  dataset: brspeech
+  run: 1
+  worker_id: 1b-gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788257762.8482997
+  attempt: 1
+train__wav2vec2_1b_kan__g10_k6__bvcc__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-01 15:21:52'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-09-01 22:51:59'
+  experiment_id: train__wav2vec2_1b_kan__g10_k6__bvcc__run_01
+  phase: train
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc--(run-01)/epoch=24-step=1950-val/spearman=0.8078.ckpt
+  val_mse: 0.3357888162136078
+  val_pearson: 0.7963730692863464
+  val_spearman: 0.7942625880241394
+  test_mse: 0.3036733567714691
+  test_pearson: 0.8010336173791675
+  test_spearman: 0.8056516358687109
+  wandb_run_id: gqw13jy3
+  dataset: bvcc
+  run: 1
+  worker_id: 1b-gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788276112.5018184
+  attempt: 1
+train__wav2vec2_1b_kan__g10_k6__singmos__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-01 22:52:04'
+  experiment_id: train__wav2vec2_1b_kan__g10_k6__singmos__run_01
+  phase: train
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos--(run-01)/epoch=22-step=736-val/spearman=0.5777.ckpt
+  val_mse: 0.46785682439804077
+  val_pearson: 0.5631061792373657
+  val_spearman: 0.5416735410690308
+  test_mse: 0.47413188219070435
+  test_pearson: 0.548131268959184
+  test_spearman: 0.5688477077657699
+  ended_at: '2026-09-02 01:14:19'
+  wandb_run_id: 8zu7e5wl
+  dataset: singmos
+  run: 1
+  worker_id: 1b-gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788303123.7399662
+  attempt: 1
+train__wav2vec2_1b_kan__g10_k6__tmhint__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-02 01:14:23'
+  experiment_id: train__wav2vec2_1b_kan__g10_k6__tmhint__run_01
+  phase: train
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint--(run-01)/epoch=15-step=2912-val/spearman=0.5948.ckpt
+  val_mse: 0.8751823902130127
+  val_pearson: 0.5933299660682678
+  val_spearman: 0.5759254693984985
+  test_mse: 0.41271787881851196
+  test_pearson: 0.7855435373583353
+  test_spearman: 0.7412913383085463
+  ended_at: '2026-09-02 06:28:22'
+  wandb_run_id: cq55iaga
+  dataset: tmhint
+  run: 1
+  worker_id: 1b-gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788311663.6541402
+  attempt: 1
+train__wav2vec2_300m_kan__g10_k2__brspeech__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-27 02:57:54'
+  experiment_id: train__wav2vec2_300m_kan__g10_k2__brspeech__run_01
+  phase: train
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech--(run-01)/epoch=30-step=961-val/spearman=0.6756.ckpt
+  val_mse: 0.8564205765724182
+  val_pearson: 0.6704897880554199
+  val_spearman: 0.662081778049469
+  test_mse: 0.7913666367530823
+  test_pearson: 0.676505724924181
+  test_spearman: 0.6436300700613308
+  ended_at: '2026-08-27 07:39:08'
+  wandb_run_id: cqizectu
+  dataset: brspeech
+  run: 1
+train__wav2vec2_300m_kan__g10_k2__bvcc__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-27 07:39:09'
+  experiment_id: train__wav2vec2_300m_kan__g10_k2__bvcc__run_01
+  phase: train
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc--(run-01)/epoch=23-step=1872-val/spearman=0.7950.ckpt
+  val_mse: 0.3086206018924713
+  val_pearson: 0.7924749851226807
+  val_spearman: 0.7878695726394653
+  test_mse: 0.4624677002429962
+  test_pearson: 0.8014043102380864
+  test_spearman: 0.8020986798183647
+  ended_at: '2026-08-27 14:02:14'
+  wandb_run_id: sfnpmihf
+  dataset: bvcc
+  run: 1
+train__wav2vec2_300m_kan__g10_k2__singmos__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 1
+  started_at: '2026-08-27 10:43:56'
+  experiment_id: train__wav2vec2_300m_kan__g10_k2__singmos__run_01
+  phase: train
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos--(run-01)/epoch=10-step=352-val/spearman=0.6082.ckpt
+  val_mse: 0.5310407280921936
+  val_pearson: 0.5913002490997314
+  val_spearman: 0.5637826323509216
+  test_mse: 0.4498704671859741
+  test_pearson: 0.506972505223011
+  test_spearman: 0.5083392428015502
+  ended_at: '2026-08-27 12:38:58'
+  wandb_run_id: 4uth5z5p
+  dataset: singmos
+  run: 1
+train__wav2vec2_300m_kan__g10_k2__tmhint__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 1
+  started_at: '2026-08-27 12:38:58'
+  experiment_id: train__wav2vec2_300m_kan__g10_k2__tmhint__run_01
+  phase: train
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint--(run-01)/epoch=62-step=11466-val/spearman=0.5945.ckpt
+  val_mse: 0.8331117630004883
+  val_pearson: 0.6076406240463257
+  val_spearman: 0.5908339619636536
+  test_mse: 0.42369315028190613
+  test_pearson: 0.7837113418746708
+  test_spearman: 0.7360249859912419
+  ended_at: '2026-08-27 22:12:25'
+  wandb_run_id: atbadp43
+  dataset: tmhint
+  run: 1
+train__mhubert_kan__g15_k3__brspeech__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-27 14:02:14'
+  experiment_id: train__mhubert_kan__g15_k3__brspeech__run_01
+  phase: train
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech--(run-01)/epoch=50-step=1581-val/spearman=0.7012.ckpt
+  val_mse: 0.9002913236618042
+  val_pearson: 0.6865124106407166
+  val_spearman: 0.6793599128723145
+  test_mse: 0.8060105443000793
+  test_pearson: 0.6781931129413247
+  test_spearman: 0.6565230490631853
+  ended_at: '2026-08-27 17:11:49'
+  wandb_run_id: kfqu22r8
+  dataset: brspeech
+  run: 1
+train__mhubert_kan__g15_k3__bvcc__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-27 17:11:49'
+  experiment_id: train__mhubert_kan__g15_k3__bvcc__run_01
+  phase: train
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc--(run-01)/epoch=32-step=2574-val/spearman=0.8021.ckpt
+  val_mse: 0.31322434544563293
+  val_pearson: 0.7971318960189819
+  val_spearman: 0.7938724160194397
+  test_mse: 0.295042484998703
+  test_pearson: 0.8183497192404855
+  test_spearman: 0.8207188689034833
+  ended_at: '2026-08-27 21:39:44'
+  wandb_run_id: nkwxu1bi
+  dataset: bvcc
+  run: 1
+train__mhubert_kan__g15_k3__singmos__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-27 21:39:44'
+  experiment_id: train__mhubert_kan__g15_k3__singmos__run_01
+  phase: train
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos--(run-01)/epoch=20-step=672-val/spearman=0.6176.ckpt
+  val_mse: 0.419234961271286
+  val_pearson: 0.6450793743133545
+  val_spearman: 0.6031280159950256
+  test_mse: 0.41628482937812805
+  test_pearson: 0.5974266814283963
+  test_spearman: 0.5802939097051314
+  ended_at: '2026-08-27 23:19:32'
+  wandb_run_id: nvdav4br
+  dataset: singmos
+  run: 1
+train__mhubert_kan__g15_k3__tmhint__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-27 22:12:25'
+  experiment_id: train__mhubert_kan__g15_k3__tmhint__run_01
+  phase: train
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6088.ckpt
+  val_mse: 0.8576471209526062
+  val_pearson: 0.5962949991226196
+  val_spearman: 0.5751467943191528
+  test_mse: 0.36550116539001465
+  test_pearson: 0.7951715335880212
+  test_spearman: 0.7505436178295821
+  ended_at: '2026-08-28 01:03:09'
+  wandb_run_id: fvpw4p7e
+  dataset: tmhint
+  run: 1
+train__wav2vec2_1b_kan__g15_k6__brspeech__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-02 06:28:25'
+  experiment_id: train__wav2vec2_1b_kan__g15_k6__brspeech__run_01
+  phase: train
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech--(run-01)/epoch=31-step=992-val/spearman=0.6112.ckpt
+  val_mse: 1.2115905284881592
+  val_pearson: 0.6048378348350525
+  val_spearman: 0.5986600518226624
+  test_mse: 1.2039912939071655
+  test_pearson: 0.5870315830370622
+  test_spearman: 0.5497820091854437
+  ended_at: '2026-09-02 10:43:00'
+  wandb_run_id: shgh0nza
+  dataset: brspeech
+  run: 1
+  worker_id: 1b-gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788330504.8977168
+  attempt: 1
+train__wav2vec2_1b_kan__g15_k6__bvcc__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: running
+  gpu: 0
+  started_at: '2026-09-02 10:43:02'
+  error: 'UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])'
+  ended_at: '2026-08-29 11:59:55'
+  experiment_id: train__wav2vec2_1b_kan__g15_k6__bvcc__run_01
+  phase: train
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc--(run-01)/epoch=42-step=3354-val/spearman=0.7764.ckpt
+  val_mse: 0.381775438785553
+  val_pearson: 0.7487306594848633
+  val_spearman: 0.7495604753494263
+  test_mse: 0.35947251319885254
+  test_pearson: 0.7790472527893281
+  test_spearman: 0.782917016844131
+  wandb_run_id: ui428m50
+  dataset: bvcc
+  run: 1
+  worker_id: 1b-gpu7
+  worker_gpu: '7'
+  claim_token: ba955f1937f14267acbfb1ef11eb4b4c
+  claimed_at_epoch: 1788345782.4077473
+  lease_expires_epoch: 1788353320.9858546
+  attempt: 1
+  heartbeat_at_epoch: 1788353020.9858599
+train__wav2vec2_1b_kan__g15_k6__singmos__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  gpu: 1
+  started_at: '2026-08-28 01:17:46'
+  experiment_id: train__wav2vec2_1b_kan__g15_k6__singmos__run_01
+  phase: train
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-singmos--(run-01)/epoch=25-step=832-val/spearman=0.5104.ckpt
+  val_mse: 0.5352259874343872
+  val_pearson: 0.48769062757492065
+  val_spearman: 0.4762278199195862
+  test_mse: 0.49898794293403625
+  test_pearson: 0.48323693095383374
+  test_spearman: 0.5078860513209175
+  ended_at: '2026-08-28 05:21:33'
+  wandb_run_id: lnppkg4g
+  dataset: singmos
+  run: 1
+train__wav2vec2_1b_kan__g15_k6__tmhint__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-28 04:55:03'
+  experiment_id: train__wav2vec2_1b_kan__g15_k6__tmhint__run_01
+  phase: train
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-tmhint--(run-01)/epoch=12-step=2366-val/spearman=0.5733.ckpt
+  val_mse: 0.9154391884803772
+  val_pearson: 0.5600693225860596
+  val_spearman: 0.5358811616897583
+  test_mse: 0.4174152612686157
+  test_pearson: 0.7677936734350358
+  test_spearman: 0.731313480384252
+  ended_at: '2026-08-28 11:38:47'
+  wandb_run_id: rmq893b4
+  dataset: tmhint
+  run: 1
+train__wav2vec2_300m_kan__g15_k2__brspeech__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  gpu: 1
+  started_at: '2026-08-28 05:21:34'
+  experiment_id: train__wav2vec2_300m_kan__g15_k2__brspeech__run_01
+  phase: train
+  source_dataset: brspeech
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech--(run-01)/epoch=11-step=372-val/spearman=0.6605.ckpt
+  val_mse: 0.935541570186615
+  val_pearson: 0.6519452333450317
+  val_spearman: 0.6396418809890747
+  test_mse: 0.8640221953392029
+  test_pearson: 0.6583401160066059
+  test_spearman: 0.6226055144634461
+  ended_at: '2026-08-28 07:37:07'
+  wandb_run_id: f4hwwhfz
+  dataset: brspeech
+  run: 1
+train__wav2vec2_300m_kan__g15_k2__bvcc__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  gpu: 1
+  started_at: '2026-08-28 07:37:08'
+  experiment_id: train__wav2vec2_300m_kan__g15_k2__bvcc__run_01
+  phase: train
+  source_dataset: bvcc
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc--(run-01)/epoch=50-step=3978-val/spearman=0.7871.ckpt
+  val_mse: 0.3215572237968445
+  val_pearson: 0.7831876277923584
+  val_spearman: 0.7840951085090637
+  test_mse: 0.33453741669654846
+  test_pearson: 0.7934740011471342
+  test_spearman: 0.7943384046955366
+  ended_at: '2026-08-28 16:18:19'
+  wandb_run_id: gtz0xuf7
+  dataset: bvcc
+  run: 1
+train__wav2vec2_300m_kan__g15_k2__singmos__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-28 11:38:48'
+  experiment_id: train__wav2vec2_300m_kan__g15_k2__singmos__run_01
+  phase: train
+  source_dataset: singmos
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos--(run-01)/epoch=05-step=192-val/spearman=0.6094.ckpt
+  val_mse: 0.4499700963497162
+  val_pearson: 0.5591567754745483
+  val_spearman: 0.5202717185020447
+  test_mse: 0.48664435744285583
+  test_pearson: 0.4891886504766443
+  test_spearman: 0.49073859586713303
+  ended_at: '2026-08-28 13:02:32'
+  wandb_run_id: i9hjfsaa
+  dataset: singmos
+  run: 1
+train__wav2vec2_300m_kan__g15_k2__tmhint__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-28 13:02:33'
+  experiment_id: train__wav2vec2_300m_kan__g15_k2__tmhint__run_01
+  phase: train
+  source_dataset: tmhint
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: ''
+  init_checkpoint_path: ''
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint--(run-01)/epoch=17-step=3276-val/spearman=0.5935.ckpt
+  val_mse: 0.8494762778282166
+  val_pearson: 0.5968483686447144
+  val_spearman: 0.5753597617149353
+  test_mse: 0.3859979808330536
+  test_pearson: 0.7872187633364589
+  test_spearman: 0.7395785241371869
+  ended_at: '2026-08-28 17:34:27'
+  wandb_run_id: azfokmp7
+  dataset: tmhint
+  run: 1
+cross__mhubert_kan__g10_k3__brspeech_to_bvcc__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-29 12:00:10'
+  error: 'MisconfigurationException: No supported gpu backend found!'
+  ended_at: '2026-08-29 15:41:31'
+  experiment_id: cross__mhubert_kan__g10_k3__brspeech_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech--(run-01)/epoch=68-step=2139-val/spearman=0.7025.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=26-step=2106-val/spearman=0.8035.ckpt
+  val_mse: 0.38032492995262146
+  val_pearson: 0.7926292419433594
+  val_spearman: 0.7966375946998596
+  initial_source_test_mse: 0.8279303908348083
+  initial_source_test_pearson: 0.6647695964093628
+  initial_source_test_spearman: 0.6323754230700825
+  source_test_mse: 1.7840349674224854
+  source_test_pearson: 0.6615044330067422
+  source_test_spearman: 0.6354850618741738
+  initial_target_test_mse: 0.4937983453273773
+  initial_target_test_pearson: 0.6733881267336241
+  initial_target_test_spearman: 0.674455944408484
+  target_test_mse: 0.3144572973251343
+  target_test_pearson: 0.826428728408092
+  target_test_spearman: 0.8289952762803479
+  source_spearman_delta_after_minus_before: 0.003109638804091208
+  source_spearman_forgetting_before_minus_after: -0.003109638804091208
+  target_spearman_delta_after_minus_before: 0.15453933187186386
+  wandb_run_id: 56qhnlga
+cross__mhubert_kan__g10_k3__brspeech_to_singmos__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-29 12:00:10'
+  error: 'MisconfigurationException: No supported gpu backend found!'
+  ended_at: '2026-08-29 13:47:48'
+  experiment_id: cross__mhubert_kan__g10_k3__brspeech_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech--(run-01)/epoch=68-step=2139-val/spearman=0.7025.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=27-step=896-val/spearman=0.6249.ckpt
+  val_mse: 0.37110304832458496
+  val_pearson: 0.6489901542663574
+  val_spearman: 0.6128998398780823
+  initial_source_test_mse: 0.8279303908348083
+  initial_source_test_pearson: 0.6647695964093628
+  initial_source_test_spearman: 0.6323754230700825
+  source_test_mse: 1.179984211921692
+  source_test_pearson: 0.5434449899639647
+  source_test_spearman: 0.4865575272820851
+  initial_target_test_mse: 1.4034100770950317
+  initial_target_test_pearson: 0.325498996624718
+  initial_target_test_spearman: 0.3402550089452212
+  target_test_mse: 0.38943955302238464
+  target_test_pearson: 0.6074427074115952
+  target_test_spearman: 0.5888807346725534
+  source_spearman_delta_after_minus_before: -0.14581789578799742
+  source_spearman_forgetting_before_minus_after: 0.14581789578799742
+  target_spearman_delta_after_minus_before: 0.24862572572733221
+  wandb_run_id: l23w4pv3
+cross__mhubert_kan__g10_k3__brspeech_to_tmhint__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-29 13:47:49'
+  error: 'MisconfigurationException: No supported gpu backend found!'
+  ended_at: '2026-08-29 16:15:54'
+  experiment_id: cross__mhubert_kan__g10_k3__brspeech_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech--(run-01)/epoch=68-step=2139-val/spearman=0.7025.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=26-step=4914-val/spearman=0.6112.ckpt
+  val_mse: 0.8236740231513977
+  val_pearson: 0.617472231388092
+  val_spearman: 0.598338782787323
+  initial_source_test_mse: 0.8279303908348083
+  initial_source_test_pearson: 0.6647695964093628
+  initial_source_test_spearman: 0.6323754230700825
+  source_test_mse: 1.5862864255905151
+  source_test_pearson: 0.4085114324294579
+  source_test_spearman: 0.39663205580736777
+  initial_target_test_mse: 2.469780921936035
+  initial_target_test_pearson: 0.5036518603147356
+  initial_target_test_spearman: 0.3464979951133517
+  target_test_mse: 0.36386266350746155
+  target_test_pearson: 0.7967080685010904
+  target_test_spearman: 0.7547962114109815
+  source_spearman_delta_after_minus_before: -0.23574336726271478
+  source_spearman_forgetting_before_minus_after: 0.23574336726271478
+  target_spearman_delta_after_minus_before: 0.4082982162976298
+  wandb_run_id: t1blyh92
+cross__mhubert_kan__g10_k3__bvcc_to_brspeech__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-29 15:41:32'
+  error: 'MisconfigurationException: No supported gpu backend found!'
+  ended_at: '2026-08-29 18:25:10'
+  experiment_id: cross__mhubert_kan__g10_k3__bvcc_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc--(run-01)/epoch=39-step=3120-val/spearman=0.8107-v1.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=60-step=1891-val/spearman=0.6941.ckpt
+  val_mse: 0.7908649444580078
+  val_pearson: 0.7036263346672058
+  val_spearman: 0.6940866708755493
+  initial_source_test_mse: 0.28565138578414917
+  initial_source_test_pearson: 0.8264599961014645
+  initial_source_test_spearman: 0.8290339210149138
+  source_test_mse: 0.5439062714576721
+  source_test_pearson: 0.7572893923474325
+  source_test_spearman: 0.755481456208228
+  initial_target_test_mse: 1.504301905632019
+  initial_target_test_pearson: 0.6433855477721355
+  initial_target_test_spearman: 0.6169843468657866
+  target_test_mse: 0.8256662487983704
+  target_test_pearson: 0.6649439168110916
+  target_test_spearman: 0.6327228070010504
+  source_spearman_delta_after_minus_before: -0.07355246480668576
+  source_spearman_forgetting_before_minus_after: 0.07355246480668576
+  target_spearman_delta_after_minus_before: 0.01573846013526381
+  wandb_run_id: e0v0ng1f
+cross__mhubert_kan__g10_k3__bvcc_to_singmos__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-29 16:15:55'
+  experiment_id: cross__mhubert_kan__g10_k3__bvcc_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc--(run-01)/epoch=39-step=3120-val/spearman=0.8107-v1.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=22-step=736-val/spearman=0.6162.ckpt
+  val_mse: 0.37644028663635254
+  val_pearson: 0.6261026263237
+  val_spearman: 0.5889878869056702
+  initial_source_test_mse: 0.28565138578414917
+  initial_source_test_pearson: 0.8264599961014645
+  initial_source_test_spearman: 0.8290339210149138
+  source_test_mse: 0.8325597047805786
+  source_test_pearson: 0.6516457565862003
+  source_test_spearman: 0.6551172388693732
+  initial_target_test_mse: 2.272869348526001
+  initial_target_test_pearson: 0.38667872810193865
+  initial_target_test_spearman: 0.38460864551022234
+  target_test_mse: 0.37414637207984924
+  target_test_pearson: 0.6076744705866022
+  target_test_spearman: 0.5915508868469234
+  source_spearman_delta_after_minus_before: -0.17391668214554057
+  source_spearman_forgetting_before_minus_after: 0.17391668214554057
+  target_spearman_delta_after_minus_before: 0.20694224133670103
+  ended_at: '2026-08-29 17:56:19'
+  wandb_run_id: 76qrdg6s
+cross__mhubert_kan__g10_k3__bvcc_to_tmhint__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-29 17:56:20'
+  experiment_id: cross__mhubert_kan__g10_k3__bvcc_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc--(run-01)/epoch=39-step=3120-val/spearman=0.8107-v1.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=20-step=3822-val/spearman=0.6156.ckpt
+  val_mse: 0.818103551864624
+  val_pearson: 0.6183938384056091
+  val_spearman: 0.5980986952781677
+  initial_source_test_mse: 0.28565138578414917
+  initial_source_test_pearson: 0.8264599961014645
+  initial_source_test_spearman: 0.8290339210149138
+  source_test_mse: 1.3862106800079346
+  source_test_pearson: 0.6520776371937538
+  source_test_spearman: 0.6824285078076743
+  initial_target_test_mse: 3.245645046234131
+  initial_target_test_pearson: 0.5819685739183011
+  initial_target_test_spearman: 0.4692705763606476
+  target_test_mse: 0.36478546261787415
+  target_test_pearson: 0.7945392749497472
+  target_test_spearman: 0.753356149377402
+  source_spearman_delta_after_minus_before: -0.14660541320723952
+  source_spearman_forgetting_before_minus_after: 0.14660541320723952
+  target_spearman_delta_after_minus_before: 0.2840855730167544
+  ended_at: '2026-08-29 21:13:16'
+  wandb_run_id: t35yle4t
+cross__mhubert_kan__g10_k3__singmos_to_brspeech__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-29 18:25:11'
+  experiment_id: cross__mhubert_kan__g10_k3__singmos_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos--(run-01)/epoch=57-step=1856-val/spearman=0.6138.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=67-step=2108-val/spearman=0.6959.ckpt
+  val_mse: 0.7526227235794067
+  val_pearson: 0.7083560228347778
+  val_spearman: 0.6934228539466858
+  initial_source_test_mse: 0.4111465811729431
+  initial_source_test_pearson: 0.6081324142640112
+  initial_source_test_spearman: 0.5939007519574266
+  source_test_mse: 1.8600962162017822
+  source_test_pearson: 0.44210108026795997
+  source_test_spearman: 0.44227271782400074
+  initial_target_test_mse: 1.4194847345352173
+  initial_target_test_pearson: 0.46020985187831104
+  initial_target_test_spearman: 0.3942701835751354
+  target_test_mse: 0.7895309329032898
+  target_test_pearson: 0.6740723825057137
+  target_test_spearman: 0.6362952339549626
+  source_spearman_delta_after_minus_before: -0.1516280341334259
+  source_spearman_forgetting_before_minus_after: 0.1516280341334259
+  target_spearman_delta_after_minus_before: 0.2420250503798272
+  ended_at: '2026-08-29 22:17:41'
+  wandb_run_id: l1kedd6m
+cross__mhubert_kan__g10_k3__singmos_to_bvcc__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-29 21:13:16'
+  experiment_id: cross__mhubert_kan__g10_k3__singmos_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos--(run-01)/epoch=57-step=1856-val/spearman=0.6138.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=58-step=4602-val/spearman=0.8218.ckpt
+  val_mse: 0.28283217549324036
+  val_pearson: 0.8170564770698547
+  val_spearman: 0.8146283030509949
+  initial_source_test_mse: 0.4111465811729431
+  initial_source_test_pearson: 0.6081324142640112
+  initial_source_test_spearman: 0.5939007519574266
+  source_test_mse: 2.5271224975585938
+  source_test_pearson: 0.4111870201969281
+  source_test_spearman: 0.40887035128392996
+  initial_target_test_mse: 1.873366355895996
+  initial_target_test_pearson: 0.567870394124999
+  initial_target_test_spearman: 0.5691604438054321
+  target_test_mse: 0.28789255023002625
+  target_test_pearson: 0.8309203673778092
+  target_test_spearman: 0.833124373968601
+  source_spearman_delta_after_minus_before: -0.1850304006734967
+  source_spearman_forgetting_before_minus_after: 0.1850304006734967
+  target_spearman_delta_after_minus_before: 0.2639639301631689
+  ended_at: '2026-08-30 03:17:24'
+  wandb_run_id: 46svbu4y
+cross__mhubert_kan__g10_k3__singmos_to_tmhint__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-29 22:17:42'
+  experiment_id: cross__mhubert_kan__g10_k3__singmos_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos--(run-01)/epoch=57-step=1856-val/spearman=0.6138.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=13-step=2548-val/spearman=0.6122.ckpt
+  val_mse: 0.837579071521759
+  val_pearson: 0.6168755888938904
+  val_spearman: 0.5983367562294006
+  initial_source_test_mse: 0.4111465811729431
+  initial_source_test_pearson: 0.6081324142640112
+  initial_source_test_spearman: 0.5939007519574266
+  source_test_mse: 0.6403192281723022
+  source_test_pearson: 0.3293931414755084
+  source_test_spearman: 0.3255722384927602
+  initial_target_test_mse: 0.9829066395759583
+  initial_target_test_pearson: 0.5126717610601804
+  initial_target_test_spearman: 0.5140702672713559
+  target_test_mse: 0.36354291439056396
+  target_test_pearson: 0.7958841663833908
+  target_test_spearman: 0.7597526105548517
+  source_spearman_delta_after_minus_before: -0.26832851346466646
+  source_spearman_forgetting_before_minus_after: 0.26832851346466646
+  target_spearman_delta_after_minus_before: 0.2456823432834958
+  ended_at: '2026-08-30 01:01:02'
+  wandb_run_id: uxpt10oe
+cross__mhubert_kan__g10_k3__tmhint_to_brspeech__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-30 01:01:03'
+  experiment_id: cross__mhubert_kan__g10_k3__tmhint_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6118.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=42-step=1333-val/spearman=0.7098.ckpt
+  val_mse: 0.7380933165550232
+  val_pearson: 0.7152383923530579
+  val_spearman: 0.7033600807189941
+  initial_source_test_mse: 0.3582257628440857
+  initial_source_test_pearson: 0.8011863683291576
+  initial_source_test_spearman: 0.7557589073518697
+  source_test_mse: 1.221450924873352
+  source_test_pearson: 0.6910135001703768
+  source_test_spearman: 0.6183656725062175
+  initial_target_test_mse: 1.0284202098846436
+  initial_target_test_pearson: 0.5757793398110823
+  initial_target_test_spearman: 0.5389062970011435
+  target_test_mse: 0.7962983250617981
+  target_test_pearson: 0.698776288465445
+  target_test_spearman: 0.6614096958582499
+  source_spearman_delta_after_minus_before: -0.13739323484565213
+  source_spearman_forgetting_before_minus_after: 0.13739323484565213
+  target_spearman_delta_after_minus_before: 0.12250339885710648
+  ended_at: '2026-08-30 03:46:21'
+  wandb_run_id: xwjzaqhk
+cross__mhubert_kan__g10_k3__tmhint_to_bvcc__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 0
+  started_at: '2026-08-30 03:17:25'
+  experiment_id: cross__mhubert_kan__g10_k3__tmhint_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6118.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=24-step=1950-val/spearman=0.8167.ckpt
+  val_mse: 0.27945321798324585
+  val_pearson: 0.8139678239822388
+  val_spearman: 0.8082171678543091
+  initial_source_test_mse: 0.3582257628440857
+  initial_source_test_pearson: 0.8011863683291576
+  initial_source_test_spearman: 0.7557589073518697
+  source_test_mse: 2.401447057723999
+  source_test_pearson: 0.6190219853175026
+  source_test_spearman: 0.4632255638456174
+  initial_target_test_mse: 1.2436097860336304
+  initial_target_test_pearson: 0.5504982971296496
+  initial_target_test_spearman: 0.5732878858572887
+  target_test_mse: 0.302145779132843
+  target_test_pearson: 0.828732808169873
+  target_test_spearman: 0.8295420328507194
+  source_spearman_delta_after_minus_before: -0.29253334350625226
+  source_spearman_forgetting_before_minus_after: 0.29253334350625226
+  target_spearman_delta_after_minus_before: 0.25625414699343063
+  ended_at: '2026-08-30 06:41:59'
+  wandb_run_id: ps6oes0y
+cross__mhubert_kan__g10_k3__tmhint_to_singmos__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 10
+  k: 3
+  status: done
+  gpu: 1
+  started_at: '2026-08-30 03:46:22'
+  experiment_id: cross__mhubert_kan__g10_k3__tmhint_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6118.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g10-k3-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=20-step=672-val/spearman=0.6190.ckpt
+  val_mse: 0.37014877796173096
+  val_pearson: 0.6435525417327881
+  val_spearman: 0.6015306115150452
+  initial_source_test_mse: 0.3582257628440857
+  initial_source_test_pearson: 0.8011863683291576
+  initial_source_test_spearman: 0.7557589073518697
+  source_test_mse: 1.1052517890930176
+  source_test_pearson: 0.40122621577474293
+  source_test_spearman: 0.3149721428683343
+  initial_target_test_mse: 0.7517715096473694
+  initial_target_test_pearson: 0.3130997762437431
+  initial_target_test_spearman: 0.30108925001027187
+  target_test_mse: 0.43736544251441956
+  target_test_pearson: 0.5939921433693824
+  target_test_spearman: 0.5782532787556804
+  source_spearman_delta_after_minus_before: -0.4407867644835354
+  source_spearman_forgetting_before_minus_after: 0.4407867644835354
+  target_spearman_delta_after_minus_before: 0.2771640287454086
+  ended_at: '2026-08-30 05:20:07'
+  wandb_run_id: ccuk4rqf
+cross__wav2vec2_1b_kan__g10_k6__brspeech_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 1
+  started_at: '2026-08-30 05:20:07'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__brspeech_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech--(run-01)/epoch=29-step=930-val/spearman=0.6563.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=24-step=1950-val/spearman=0.8025.ckpt
+  val_mse: 0.3187025189399719
+  val_pearson: 0.7911756634712219
+  val_spearman: 0.7885938882827759
+  initial_source_test_mse: 0.9215664267539978
+  initial_source_test_pearson: 0.6174282172536442
+  initial_source_test_spearman: 0.601709588238295
+  source_test_mse: 1.6224370002746582
+  source_test_pearson: 0.48565386023901674
+  source_test_spearman: 0.47875852531424085
+  initial_target_test_mse: 1.4885907173156738
+  initial_target_test_pearson: 0.36361156434857783
+  initial_target_test_spearman: 0.3787237473433895
+  target_test_mse: 0.32637718319892883
+  target_test_pearson: 0.8031693698306507
+  target_test_spearman: 0.8049574136481854
+  source_spearman_delta_after_minus_before: -0.12295106292405417
+  source_spearman_forgetting_before_minus_after: 0.12295106292405417
+  target_spearman_delta_after_minus_before: 0.4262336663047959
+  ended_at: '2026-08-30 15:05:34'
+  wandb_run_id: g8tlr7fx
+cross__wav2vec2_1b_kan__g10_k6__brspeech_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-30 06:42:00'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__brspeech_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech--(run-01)/epoch=29-step=930-val/spearman=0.6563.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=16-step=544-val/spearman=0.5983.ckpt
+  val_mse: 0.4518592059612274
+  val_pearson: 0.5650051236152649
+  val_spearman: 0.533663809299469
+  initial_source_test_mse: 0.9215664267539978
+  initial_source_test_pearson: 0.6174282172536442
+  initial_source_test_spearman: 0.601709588238295
+  source_test_mse: 1.0242235660552979
+  source_test_pearson: 0.612810645217882
+  source_test_spearman: 0.5854285731632823
+  initial_target_test_mse: 1.5830328464508057
+  initial_target_test_pearson: 0.282354978946755
+  initial_target_test_spearman: 0.25841010575637574
+  target_test_mse: 0.43998071551322937
+  target_test_pearson: 0.5293892353512378
+  target_test_spearman: 0.536788920409866
+  source_spearman_delta_after_minus_before: -0.016281015075012673
+  source_spearman_forgetting_before_minus_after: 0.016281015075012673
+  target_spearman_delta_after_minus_before: 0.2783788146534903
+  ended_at: '2026-08-30 09:44:27'
+  wandb_run_id: cu0jhsyy
+cross__wav2vec2_1b_kan__g10_k6__brspeech_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-30 09:44:28'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__brspeech_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech--(run-01)/epoch=29-step=930-val/spearman=0.6563.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=18-step=3458-val/spearman=0.5905.ckpt
+  val_mse: 0.8585458993911743
+  val_pearson: 0.593576967716217
+  val_spearman: 0.5737788081169128
+  initial_source_test_mse: 0.9215664267539978
+  initial_source_test_pearson: 0.6174282172536442
+  initial_source_test_spearman: 0.601709588238295
+  source_test_mse: 2.4199047088623047
+  source_test_pearson: 0.07513439796575691
+  source_test_spearman: 0.2027871679749843
+  initial_target_test_mse: 1.8687448501586914
+  initial_target_test_pearson: 0.5576380399239632
+  initial_target_test_spearman: 0.3739676741264371
+  target_test_mse: 0.37491780519485474
+  target_test_pearson: 0.7921053968583596
+  target_test_spearman: 0.7519153845427056
+  source_spearman_delta_after_minus_before: -0.3989224202633107
+  source_spearman_forgetting_before_minus_after: 0.3989224202633107
+  target_spearman_delta_after_minus_before: 0.37794771041626846
+  ended_at: '2026-08-30 17:13:08'
+  wandb_run_id: 4xsi6ral
+cross__wav2vec2_1b_kan__g10_k6__singmos_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-30 20:06:46'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__singmos_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos--(run-01)/epoch=22-step=736-val/spearman=0.5777.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=15-step=496-val/spearman=0.6448.ckpt
+  val_mse: 1.0879430770874023
+  val_pearson: 0.5973047614097595
+  val_spearman: 0.5939658284187317
+  initial_source_test_mse: 0.47413188219070435
+  initial_source_test_pearson: 0.548131268959184
+  initial_source_test_spearman: 0.5688477077657699
+  source_test_mse: 2.3012053966522217
+  source_test_pearson: 0.31302202094372744
+  source_test_spearman: 0.3102523984915071
+  initial_target_test_mse: 1.1032307147979736
+  initial_target_test_pearson: 0.5325547373418683
+  initial_target_test_spearman: 0.5271895997631023
+  target_test_mse: 1.078690528869629
+  target_test_pearson: 0.6284029821451537
+  target_test_spearman: 0.6009158096091893
+  source_spearman_delta_after_minus_before: -0.2585953092742628
+  source_spearman_forgetting_before_minus_after: 0.2585953092742628
+  target_spearman_delta_after_minus_before: 0.07372620984608702
+  ended_at: '2026-08-31 01:07:28'
+  wandb_run_id: 0zzvrep8
+cross__wav2vec2_1b_kan__g10_k6__singmos_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 1
+  started_at: '2026-08-31 00:51:33'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__singmos_to_bvcc__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos--(run-01)/epoch=22-step=736-val/spearman=0.5777.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=19-step=1560-val/spearman=0.8017.ckpt
+  val_mse: 0.30047139525413513
+  val_pearson: 0.8002304434776306
+  val_spearman: 0.7972928881645203
+  initial_source_test_mse: 0.47413188219070435
+  initial_source_test_pearson: 0.548131268959184
+  initial_source_test_spearman: 0.5688477077657699
+  source_test_mse: 3.433154344558716
+  source_test_pearson: 0.31903656461036095
+  source_test_spearman: 0.3189131116649372
+  initial_target_test_mse: 1.6091560125350952
+  initial_target_test_pearson: 0.5482769102489647
+  initial_target_test_spearman: 0.5623888661598789
+  target_test_mse: 0.39232465624809265
+  target_test_pearson: 0.8030010985224451
+  target_test_spearman: 0.8074821550555357
+  source_spearman_delta_after_minus_before: -0.24993459610083268
+  source_spearman_forgetting_before_minus_after: 0.24993459610083268
+  target_spearman_delta_after_minus_before: 0.24509328889565674
+  ended_at: '2026-08-31 09:39:11'
+  wandb_run_id: y3ac6mue
+cross__wav2vec2_1b_kan__g10_k6__singmos_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-31 01:07:29'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__singmos_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos--(run-01)/epoch=22-step=736-val/spearman=0.5777.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=06-step=1274-val/spearman=0.5915.ckpt
+  val_mse: 0.8586134910583496
+  val_pearson: 0.5964308977127075
+  val_spearman: 0.5810779929161072
+  initial_source_test_mse: 0.47413188219070435
+  initial_source_test_pearson: 0.548131268959184
+  initial_source_test_spearman: 0.5688477077657699
+  source_test_mse: 0.7795844674110413
+  source_test_pearson: 0.3409691080946202
+  source_test_spearman: 0.3473846704263854
+  initial_target_test_mse: 0.6928685307502747
+  initial_target_test_pearson: 0.6071110877622696
+  initial_target_test_spearman: 0.4642330945508306
+  target_test_mse: 0.4149836301803589
+  target_test_pearson: 0.7988663415055166
+  target_test_spearman: 0.7545973731154166
+  source_spearman_delta_after_minus_before: -0.2214630373393845
+  source_spearman_forgetting_before_minus_after: 0.2214630373393845
+  target_spearman_delta_after_minus_before: 0.290364278564586
+  ended_at: '2026-08-31 06:37:38'
+  wandb_run_id: u0y7musz
+cross__wav2vec2_1b_kan__g10_k6__tmhint_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-31 06:37:40'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__tmhint_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint--(run-01)/epoch=15-step=2912-val/spearman=0.5948.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=06-step=217-val/spearman=0.6576.ckpt
+  val_mse: 1.0825514793395996
+  val_pearson: 0.6013513803482056
+  val_spearman: 0.5985382795333862
+  initial_source_test_mse: 0.41271787881851196
+  initial_source_test_pearson: 0.7855435373583353
+  initial_source_test_spearman: 0.7412913383085463
+  source_test_mse: 1.0199816226959229
+  source_test_pearson: 0.7789272083467186
+  source_test_spearman: 0.7331412040930497
+  initial_target_test_mse: 2.160191297531128
+  initial_target_test_pearson: 0.06679612020566768
+  initial_target_test_spearman: 0.17448616723598545
+  target_test_mse: 0.9536816477775574
+  target_test_pearson: 0.603476664613193
+  target_test_spearman: 0.5693186811938936
+  source_spearman_delta_after_minus_before: -0.008150134215496596
+  source_spearman_forgetting_before_minus_after: 0.008150134215496596
+  target_spearman_delta_after_minus_before: 0.3948325139579082
+  ended_at: '2026-08-31 10:31:45'
+  wandb_run_id: op4top4y
+cross__wav2vec2_1b_kan__g10_k6__tmhint_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-01 10:15:59'
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788257759.6997476
+  attempt: 1
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__tmhint_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint--(run-01)/epoch=15-step=2912-val/spearman=0.5948.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=23-step=1872-val/spearman=0.7854.ckpt
+  val_mse: 0.34351298213005066
+  val_pearson: 0.7822163105010986
+  val_spearman: 0.7783134579658508
+  initial_source_test_mse: 0.41271787881851196
+  initial_source_test_pearson: 0.7855435373583353
+  initial_source_test_spearman: 0.7412913383085463
+  source_test_mse: 2.3079686164855957
+  source_test_pearson: 0.6666559400344779
+  source_test_spearman: 0.5839772713781041
+  initial_target_test_mse: 1.4047752618789673
+  initial_target_test_pearson: 0.36715261058284754
+  initial_target_test_spearman: 0.4630794676572492
+  target_test_mse: 0.3552998900413513
+  target_test_pearson: 0.7729567718469518
+  target_test_spearman: 0.7737350011435051
+  source_spearman_delta_after_minus_before: -0.15731406693044225
+  source_spearman_forgetting_before_minus_after: 0.15731406693044225
+  target_spearman_delta_after_minus_before: 0.3106555334862559
+  ended_at: '2026-09-01 17:08:51'
+  wandb_run_id: a30t9qlw
+cross__wav2vec2_1b_kan__g10_k6__tmhint_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-09-01 10:16:00'
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788257760.579162
+  attempt: 1
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__tmhint_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint--(run-01)/epoch=15-step=2912-val/spearman=0.5948.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=08-step=288-val/spearman=0.5598-v1.ckpt
+  val_mse: 0.5453892946243286
+  val_pearson: 0.4819572865962982
+  val_spearman: 0.467471718788147
+  initial_source_test_mse: 0.41271787881851196
+  initial_source_test_pearson: 0.7855435373583353
+  initial_source_test_spearman: 0.7412913383085463
+  source_test_mse: 0.573360800743103
+  source_test_pearson: 0.6719707947462519
+  source_test_spearman: 0.6282877106694589
+  initial_target_test_mse: 0.9290511012077332
+  initial_target_test_pearson: 0.23373833852180814
+  initial_target_test_spearman: 0.2612699544985573
+  target_test_mse: 0.4857234060764313
+  target_test_pearson: 0.4764586013798871
+  target_test_spearman: 0.5026210729541616
+  source_spearman_delta_after_minus_before: -0.11300362763908745
+  source_spearman_forgetting_before_minus_after: 0.11300362763908745
+  target_spearman_delta_after_minus_before: 0.2413511184556043
+  ended_at: '2026-09-01 12:01:42'
+  wandb_run_id: vbopfdkz
+cross__wav2vec2_300m_kan__g10_k2__brspeech_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-31 12:50:37'
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788180637.4118142
+  attempt: 1
+  observation: Tarefa recuperada apos lease expirar; worker anterior=desconhecido.
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__brspeech_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech--(run-01)/epoch=30-step=961-val/spearman=0.6756.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=47-step=3744-val/spearman=0.8004.ckpt
+  val_mse: 0.30827730894088745
+  val_pearson: 0.7919877171516418
+  val_spearman: 0.7923493385314941
+  initial_source_test_mse: 0.7913666367530823
+  initial_source_test_pearson: 0.676505724924181
+  initial_source_test_spearman: 0.6436300700613308
+  source_test_mse: 1.9935029745101929
+  source_test_pearson: 0.6213343174349527
+  source_test_spearman: 0.5780007407304709
+  initial_target_test_mse: 1.3903247117996216
+  initial_target_test_pearson: 0.4915010062213247
+  initial_target_test_spearman: 0.5093453791036927
+  target_test_mse: 0.3292563557624817
+  target_test_pearson: 0.8048186762539581
+  target_test_spearman: 0.8058071715070476
+  source_spearman_delta_after_minus_before: -0.06562932933085985
+  source_spearman_forgetting_before_minus_after: 0.06562932933085985
+  target_spearman_delta_after_minus_before: 0.2964617924033549
+  ended_at: '2026-08-31 20:18:34'
+  wandb_run_id: xkro69i8
+cross__wav2vec2_300m_kan__g10_k2__brspeech_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-31 12:50:38'
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788180638.349197
+  attempt: 1
+  observation: Tarefa recuperada apos lease expirar; worker anterior=desconhecido.
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__brspeech_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech--(run-01)/epoch=30-step=961-val/spearman=0.6756.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=23-step=768-val/spearman=0.5692.ckpt
+  val_mse: 0.4286983013153076
+  val_pearson: 0.566958487033844
+  val_spearman: 0.5400415658950806
+  initial_source_test_mse: 0.7913666367530823
+  initial_source_test_pearson: 0.676505724924181
+  initial_source_test_spearman: 0.6436300700613308
+  source_test_mse: 1.227357268333435
+  source_test_pearson: 0.592041223931516
+  source_test_spearman: 0.593827231051936
+  initial_target_test_mse: 0.9268583059310913
+  initial_target_test_pearson: 0.1704352216903182
+  initial_target_test_spearman: 0.1560435564814595
+  target_test_mse: 0.562894880771637
+  target_test_pearson: 0.501332917960443
+  target_test_spearman: 0.5162065058235668
+  source_spearman_delta_after_minus_before: -0.04980283900939475
+  source_spearman_forgetting_before_minus_after: 0.04980283900939475
+  target_spearman_delta_after_minus_before: 0.36016294934210724
+  ended_at: '2026-08-31 14:20:52'
+  wandb_run_id: 4fnxyvkb
+cross__wav2vec2_300m_kan__g10_k2__brspeech_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  gpu: 0
+  started_at: '2026-08-31 12:52:59'
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788180779.6265934
+  attempt: 2
+  observation: Worker interrompido; tarefa devolvida a fila. worker=gpu7.
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__brspeech_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech--(run-01)/epoch=30-step=961-val/spearman=0.6756.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=50-step=9282-val/spearman=0.5964.ckpt
+  val_mse: 0.8280566334724426
+  val_pearson: 0.6112100481987
+  val_spearman: 0.5926985740661621
+  initial_source_test_mse: 0.7913666367530823
+  initial_source_test_pearson: 0.676505724924181
+  initial_source_test_spearman: 0.6436300700613308
+  source_test_mse: 1.8919788599014282
+  source_test_pearson: 0.260462048049343
+  source_test_spearman: 0.23224752556033149
+  initial_target_test_mse: 1.0832579135894775
+  initial_target_test_pearson: 0.4516037020683064
+  initial_target_test_spearman: 0.33883215603741884
+  target_test_mse: 0.41679105162620544
+  target_test_pearson: 0.7866628971035469
+  target_test_spearman: 0.7369132037679501
+  source_spearman_delta_after_minus_before: -0.4113825445009993
+  source_spearman_forgetting_before_minus_after: 0.4113825445009993
+  target_spearman_delta_after_minus_before: 0.39808104773053127
+  ended_at: '2026-08-31 20:42:21'
+  wandb_run_id: 4cf9ox66
+cross__wav2vec2_300m_kan__g10_k2__bvcc_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788186054.0922306
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 14:20:54'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__bvcc_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc--(run-01)/epoch=23-step=1872-val/spearman=0.7950.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=20-step=651-val/spearman=0.6670.ckpt
+  val_mse: 0.909294843673706
+  val_pearson: 0.6594566702842712
+  val_spearman: 0.6463553309440613
+  initial_source_test_mse: 0.4624677002429962
+  initial_source_test_pearson: 0.8014043102380864
+  initial_source_test_spearman: 0.8020986798183647
+  source_test_mse: 1.0985794067382812
+  source_test_pearson: 0.7015058222525924
+  source_test_spearman: 0.6976611401505348
+  initial_target_test_mse: 2.364244222640991
+  initial_target_test_pearson: 0.5872470010295804
+  initial_target_test_spearman: 0.5475045781962694
+  target_test_mse: 0.8272745609283447
+  target_test_pearson: 0.6571253086185219
+  target_test_spearman: 0.6204111989141167
+  source_spearman_delta_after_minus_before: -0.10443753966782987
+  source_spearman_forgetting_before_minus_after: 0.10443753966782987
+  target_spearman_delta_after_minus_before: 0.07290662071784726
+  ended_at: '2026-08-31 19:08:35'
+  wandb_run_id: q4w0qdtu
+cross__wav2vec2_300m_kan__g10_k2__bvcc_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788203316.2713943
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 19:08:36'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__bvcc_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc--(run-01)/epoch=23-step=1872-val/spearman=0.7950.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=29-step=960-val/spearman=0.5809.ckpt
+  val_mse: 0.4685671329498291
+  val_pearson: 0.559677243232727
+  val_spearman: 0.5413542985916138
+  initial_source_test_mse: 0.4624677002429962
+  initial_source_test_pearson: 0.8014043102380864
+  initial_source_test_spearman: 0.8020986798183647
+  source_test_mse: 0.8307949304580688
+  source_test_pearson: 0.6651952419414155
+  source_test_spearman: 0.6808452633693209
+  initial_target_test_mse: 4.180535316467285
+  initial_target_test_pearson: 0.3054632008585067
+  initial_target_test_spearman: 0.31071219475552875
+  target_test_mse: 0.5104384422302246
+  target_test_pearson: 0.5594240069958035
+  target_test_spearman: 0.5621091662805316
+  source_spearman_delta_after_minus_before: -0.12125341644904375
+  source_spearman_forgetting_before_minus_after: 0.12125341644904375
+  target_spearman_delta_after_minus_before: 0.2513969715250029
+  ended_at: '2026-08-31 20:32:30'
+  wandb_run_id: tc82wzq2
+cross__wav2vec2_300m_kan__g10_k2__bvcc_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788205044.7323833
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 19:37:24'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__bvcc_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc--(run-01)/epoch=23-step=1872-val/spearman=0.7950.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=25-step=4732-val/spearman=0.5943.ckpt
+  val_mse: 0.8333737254142761
+  val_pearson: 0.609603762626648
+  val_spearman: 0.5905030369758606
+  initial_source_test_mse: 0.4624677002429962
+  initial_source_test_pearson: 0.8014043102380864
+  initial_source_test_spearman: 0.8020986798183647
+  source_test_mse: 1.6445099115371704
+  source_test_pearson: 0.6556812126509217
+  source_test_spearman: 0.6823190424827102
+  initial_target_test_mse: 1.9329725503921509
+  initial_target_test_pearson: 0.601381221452797
+  initial_target_test_spearman: 0.5163587735140256
+  target_test_mse: 0.38215699791908264
+  target_test_pearson: 0.7889398750997493
+  target_test_spearman: 0.7395520772559713
+  source_spearman_delta_after_minus_before: -0.11977963733565444
+  source_spearman_forgetting_before_minus_after: 0.11977963733565444
+  target_spearman_delta_after_minus_before: 0.22319330374194568
+  ended_at: '2026-08-31 22:02:04'
+  wandb_run_id: ahh2j9w3
+cross__wav2vec2_300m_kan__g10_k2__singmos_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788205045.727927
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 19:37:25'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__singmos_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos--(run-01)/epoch=10-step=352-val/spearman=0.6082.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=16-step=527-val/spearman=0.6694.ckpt
+  val_mse: 0.8436834812164307
+  val_pearson: 0.6801477074623108
+  val_spearman: 0.6665008664131165
+  initial_source_test_mse: 0.4498704671859741
+  initial_source_test_pearson: 0.506972505223011
+  initial_source_test_spearman: 0.5083392428015502
+  source_test_mse: 1.2800360918045044
+  source_test_pearson: 0.34984729324055863
+  source_test_spearman: 0.3409867695211717
+  initial_target_test_mse: 1.1262867450714111
+  initial_target_test_pearson: 0.5101028599884682
+  initial_target_test_spearman: 0.4510778228003321
+  target_test_mse: 0.8806083798408508
+  target_test_pearson: 0.68452409622351
+  target_test_spearman: 0.6400326788541578
+  source_spearman_delta_after_minus_before: -0.1673524732803785
+  source_spearman_forgetting_before_minus_after: 0.1673524732803785
+  target_spearman_delta_after_minus_before: 0.18895485605382573
+  ended_at: '2026-08-31 21:42:20'
+  wandb_run_id: aemc7uqj
+cross__wav2vec2_300m_kan__g10_k2__singmos_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788207515.6946247
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 20:18:35'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__singmos_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos--(run-01)/epoch=10-step=352-val/spearman=0.6082.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=48-step=3822-val/spearman=0.7991.ckpt
+  val_mse: 0.33103108406066895
+  val_pearson: 0.7991912364959717
+  val_spearman: 0.7956324219703674
+  initial_source_test_mse: 0.4498704671859741
+  initial_source_test_pearson: 0.506972505223011
+  initial_source_test_spearman: 0.5083392428015502
+  source_test_mse: 2.7100651264190674
+  source_test_pearson: 0.3658300271285047
+  source_test_spearman: 0.36792592867537655
+  initial_target_test_mse: 2.131854295730591
+  initial_target_test_pearson: 0.41247397524162693
+  initial_target_test_spearman: 0.43617821161977965
+  target_test_mse: 0.3027677834033966
+  target_test_pearson: 0.8038428828422395
+  target_test_spearman: 0.8054450778787982
+  source_spearman_delta_after_minus_before: -0.14041331412617364
+  source_spearman_forgetting_before_minus_after: 0.14041331412617364
+  target_spearman_delta_after_minus_before: 0.3692668662590185
+  ended_at: '2026-08-31 23:55:10'
+  wandb_run_id: qg0og4mc
+cross__wav2vec2_300m_kan__g10_k2__singmos_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788208352.0543225
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 20:32:32'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__singmos_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos--(run-01)/epoch=10-step=352-val/spearman=0.6082.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=50-step=9282-val/spearman=0.5960.ckpt
+  val_mse: 0.829298198223114
+  val_pearson: 0.6109970808029175
+  val_spearman: 0.591384768486023
+  initial_source_test_mse: 0.4498704671859741
+  initial_source_test_pearson: 0.506972505223011
+  initial_source_test_spearman: 0.5083392428015502
+  source_test_mse: 1.0922693014144897
+  source_test_pearson: 0.28166453925393936
+  source_test_spearman: 0.2524424368466807
+  initial_target_test_mse: 0.8597646355628967
+  initial_target_test_pearson: 0.46515120066639404
+  initial_target_test_spearman: 0.41086108254769793
+  target_test_mse: 0.38111862540245056
+  target_test_pearson: 0.7893076144615744
+  target_test_spearman: 0.741471203306267
+  source_spearman_delta_after_minus_before: -0.25589680595486947
+  source_spearman_forgetting_before_minus_after: 0.25589680595486947
+  target_spearman_delta_after_minus_before: 0.3306101207585691
+  ended_at: '2026-09-01 01:06:23'
+  wandb_run_id: n42v44if
+cross__wav2vec2_300m_kan__g10_k2__tmhint_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788208942.4594336
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 20:42:22'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__tmhint_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint--(run-01)/epoch=62-step=11466-val/spearman=0.5945.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=16-step=527-val/spearman=0.6583.ckpt
+  val_mse: 0.9338736534118652
+  val_pearson: 0.6469882130622864
+  val_spearman: 0.6413434147834778
+  initial_source_test_mse: 0.42369315028190613
+  initial_source_test_pearson: 0.7837113418746708
+  initial_source_test_spearman: 0.7360249859912419
+  source_test_mse: 1.4900600910186768
+  source_test_pearson: 0.6924145127065919
+  source_test_spearman: 0.6095102072196391
+  initial_target_test_mse: 1.7427922487258911
+  initial_target_test_pearson: 0.26160970532868366
+  initial_target_test_spearman: 0.24691592840425808
+  target_test_mse: 0.9284642934799194
+  target_test_pearson: 0.6573492101565803
+  target_test_spearman: 0.616432573941046
+  source_spearman_delta_after_minus_before: -0.12651477877160278
+  source_spearman_forgetting_before_minus_after: 0.12651477877160278
+  target_spearman_delta_after_minus_before: 0.3695166455367879
+  ended_at: '2026-08-31 22:30:03'
+  wandb_run_id: uux8p3ms
+cross__wav2vec2_300m_kan__g10_k2__tmhint_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788212541.7457259
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 21:42:22'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__tmhint_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint--(run-01)/epoch=62-step=11466-val/spearman=0.5945.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=46-step=3666-val/spearman=0.7993.ckpt
+  val_mse: 0.29883310198783875
+  val_pearson: 0.7991124391555786
+  val_spearman: 0.7985964417457581
+  initial_source_test_mse: 0.42369315028190613
+  initial_source_test_pearson: 0.7837113418746708
+  initial_source_test_spearman: 0.7360249859912419
+  source_test_mse: 0.9982714056968689
+  source_test_pearson: 0.679597596669633
+  source_test_spearman: 0.6336126992129177
+  initial_target_test_mse: 1.0639623403549194
+  initial_target_test_pearson: 0.5118571535237708
+  initial_target_test_spearman: 0.5558255318826061
+  target_test_mse: 0.3299439549446106
+  target_test_pearson: 0.7935571246632919
+  target_test_spearman: 0.794854383282722
+  source_spearman_delta_after_minus_before: -0.10241228677832415
+  source_spearman_forgetting_before_minus_after: 0.10241228677832415
+  target_spearman_delta_after_minus_before: 0.23902885140011587
+  ended_at: '2026-09-01 01:29:40'
+  wandb_run_id: 90xpofe2
+cross__wav2vec2_300m_kan__g10_k2__tmhint_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 10
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788213725.7483819
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 22:02:05'
+  experiment_id: cross__wav2vec2_300m_kan__g10_k2__tmhint_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint--(run-01)/epoch=62-step=11466-val/spearman=0.5945.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g10-k2-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=21-step=704-val/spearman=0.5705.ckpt
+  val_mse: 0.4457598626613617
+  val_pearson: 0.5584619045257568
+  val_spearman: 0.5381107926368713
+  initial_source_test_mse: 0.42369315028190613
+  initial_source_test_pearson: 0.7837113418746708
+  initial_source_test_spearman: 0.7360249859912419
+  source_test_mse: 0.944039523601532
+  source_test_pearson: 0.5110239185414809
+  source_test_spearman: 0.5215417228213479
+  initial_target_test_mse: 1.1255617141723633
+  initial_target_test_pearson: 0.24623744362895464
+  initial_target_test_spearman: 0.21716141380693652
+  target_test_mse: 0.4637882709503174
+  target_test_pearson: 0.5145036016253449
+  target_test_spearman: 0.5111498926470586
+  source_spearman_delta_after_minus_before: -0.21448326316989397
+  source_spearman_forgetting_before_minus_after: 0.21448326316989397
+  target_spearman_delta_after_minus_before: 0.293988478840122
+  ended_at: '2026-08-31 23:00:16'
+  wandb_run_id: 4b1h3lh5
+cross__mhubert_kan__g15_k3__brspeech_to_bvcc__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788215405.0633905
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 22:30:05'
+  experiment_id: cross__mhubert_kan__g15_k3__brspeech_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech--(run-01)/epoch=50-step=1581-val/spearman=0.7012.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=27-step=2184-val/spearman=0.7958.ckpt
+  val_mse: 0.3310500383377075
+  val_pearson: 0.7920506596565247
+  val_spearman: 0.7929617166519165
+  initial_source_test_mse: 0.8060105443000793
+  initial_source_test_pearson: 0.6781931129413247
+  initial_source_test_spearman: 0.6565230490631853
+  source_test_mse: 1.571641206741333
+  source_test_pearson: 0.632901207024819
+  source_test_spearman: 0.631439898257208
+  initial_target_test_mse: 0.6936455368995667
+  initial_target_test_pearson: 0.6321325324301071
+  initial_target_test_spearman: 0.6275513142167505
+  target_test_mse: 0.286667138338089
+  target_test_pearson: 0.818572362482499
+  target_test_spearman: 0.8208443155809664
+  source_spearman_delta_after_minus_before: -0.025083150805977228
+  source_spearman_forgetting_before_minus_after: 0.025083150805977228
+  target_spearman_delta_after_minus_before: 0.1932930013642159
+  ended_at: '2026-08-31 23:47:49'
+  wandb_run_id: mr1lm2ks
+cross__mhubert_kan__g15_k3__brspeech_to_singmos__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788217218.0311167
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 23:00:18'
+  experiment_id: cross__mhubert_kan__g15_k3__brspeech_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech--(run-01)/epoch=50-step=1581-val/spearman=0.7012.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=12-step=416-val/spearman=0.6259.ckpt
+  val_mse: 0.46041053533554077
+  val_pearson: 0.592108964920044
+  val_spearman: 0.5616646409034729
+  initial_source_test_mse: 0.8060105443000793
+  initial_source_test_pearson: 0.6781931129413247
+  initial_source_test_spearman: 0.6565230490631853
+  source_test_mse: 1.2180200815200806
+  source_test_pearson: 0.5265062645351091
+  source_test_spearman: 0.43028767730933687
+  initial_target_test_mse: 1.3575942516326904
+  initial_target_test_pearson: 0.3472070081077552
+  initial_target_test_spearman: 0.36199117135637837
+  target_test_mse: 0.380887895822525
+  target_test_pearson: 0.5944668481500198
+  target_test_spearman: 0.5751017636776513
+  source_spearman_delta_after_minus_before: -0.2262353717538484
+  source_spearman_forgetting_before_minus_after: 0.2262353717538484
+  target_spearman_delta_after_minus_before: 0.21311059232127294
+  ended_at: '2026-08-31 23:19:52'
+  wandb_run_id: 1wbhizvu
+cross__mhubert_kan__g15_k3__brspeech_to_tmhint__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788218393.6876292
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 23:19:53'
+  experiment_id: cross__mhubert_kan__g15_k3__brspeech_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech--(run-01)/epoch=50-step=1581-val/spearman=0.7012.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=11-step=2184-val/spearman=0.6039.ckpt
+  val_mse: 0.8880491852760315
+  val_pearson: 0.5896198153495789
+  val_spearman: 0.5692529678344727
+  initial_source_test_mse: 0.8060105443000793
+  initial_source_test_pearson: 0.6781931129413247
+  initial_source_test_spearman: 0.6565230490631853
+  source_test_mse: 1.6393568515777588
+  source_test_pearson: 0.4163545319219945
+  source_test_spearman: 0.4168552165632875
+  initial_target_test_mse: 2.5012025833129883
+  initial_target_test_pearson: 0.3623773542803616
+  initial_target_test_spearman: 0.2845990921640143
+  target_test_mse: 0.38888198137283325
+  target_test_pearson: 0.7879370043008603
+  target_test_spearman: 0.7457569296066802
+  source_spearman_delta_after_minus_before: -0.23966783249989776
+  source_spearman_forgetting_before_minus_after: 0.23966783249989776
+  target_spearman_delta_after_minus_before: 0.46115783744266586
+  ended_at: '2026-09-01 00:14:32'
+  wandb_run_id: b1bjpl9x
+cross__mhubert_kan__g15_k3__bvcc_to_brspeech__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788220071.4042342
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 23:47:51'
+  experiment_id: cross__mhubert_kan__g15_k3__bvcc_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc--(run-01)/epoch=32-step=2574-val/spearman=0.8021.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=22-step=713-val/spearman=0.6785.ckpt
+  val_mse: 0.8508260846138
+  val_pearson: 0.6690452098846436
+  val_spearman: 0.6590529084205627
+  initial_source_test_mse: 0.295042484998703
+  initial_source_test_pearson: 0.8183497192404855
+  initial_source_test_spearman: 0.8207188689034833
+  source_test_mse: 1.0155929327011108
+  source_test_pearson: 0.7275716725756615
+  source_test_spearman: 0.7246655711529398
+  initial_target_test_mse: 1.287608027458191
+  initial_target_test_pearson: 0.636294380524347
+  initial_target_test_spearman: 0.6181123719994414
+  target_test_mse: 0.8343508243560791
+  target_test_pearson: 0.6656299236850022
+  target_test_spearman: 0.6426179599969274
+  source_spearman_delta_after_minus_before: -0.0960532977505435
+  source_spearman_forgetting_before_minus_after: 0.0960532977505435
+  target_spearman_delta_after_minus_before: 0.024505587997486034
+  ended_at: '2026-09-01 00:30:57'
+  wandb_run_id: p2r1z42j
+cross__mhubert_kan__g15_k3__bvcc_to_singmos__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788220512.0047853
+  attempt: 1
+  gpu: 0
+  started_at: '2026-08-31 23:55:12'
+  experiment_id: cross__mhubert_kan__g15_k3__bvcc_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc--(run-01)/epoch=32-step=2574-val/spearman=0.8021.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=11-step=384-val/spearman=0.6087.ckpt
+  val_mse: 0.4047390818595886
+  val_pearson: 0.6087703704833984
+  val_spearman: 0.5611660480499268
+  initial_source_test_mse: 0.295042484998703
+  initial_source_test_pearson: 0.8183497192404855
+  initial_source_test_spearman: 0.8207188689034833
+  source_test_mse: 1.0770925283432007
+  source_test_pearson: 0.6978445175338445
+  source_test_spearman: 0.7103929401752731
+  initial_target_test_mse: 1.5957313776016235
+  initial_target_test_pearson: 0.3826454119315098
+  initial_target_test_spearman: 0.3732294349452348
+  target_test_mse: 0.37891215085983276
+  target_test_pearson: 0.598476213231767
+  target_test_spearman: 0.5799747459037459
+  source_spearman_delta_after_minus_before: -0.11032592872821023
+  source_spearman_forgetting_before_minus_after: 0.11032592872821023
+  target_spearman_delta_after_minus_before: 0.20674531095851106
+  ended_at: '2026-09-01 00:14:16'
+  wandb_run_id: tlvp43s1
+cross__mhubert_kan__g15_k3__bvcc_to_tmhint__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788221657.444391
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 00:14:17'
+  experiment_id: cross__mhubert_kan__g15_k3__bvcc_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc--(run-01)/epoch=32-step=2574-val/spearman=0.8021.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=09-step=1820-val/spearman=0.6017.ckpt
+  val_mse: 0.8649336695671082
+  val_pearson: 0.5942598581314087
+  val_spearman: 0.5693770051002502
+  initial_source_test_mse: 0.295042484998703
+  initial_source_test_pearson: 0.8183497192404855
+  initial_source_test_spearman: 0.8207188689034833
+  source_test_mse: 1.3302074670791626
+  source_test_pearson: 0.620028303482547
+  source_test_spearman: 0.6651065656789783
+  initial_target_test_mse: 2.689272403717041
+  initial_target_test_pearson: 0.5356031851206775
+  initial_target_test_spearman: 0.4165357117804964
+  target_test_mse: 0.4162721037864685
+  target_test_pearson: 0.7854999350653871
+  target_test_spearman: 0.7481588775897657
+  source_spearman_delta_after_minus_before: -0.15561230322450503
+  source_spearman_forgetting_before_minus_after: 0.15561230322450503
+  target_spearman_delta_after_minus_before: 0.3316231658092693
+  ended_at: '2026-09-01 01:04:05'
+  wandb_run_id: qycwc54m
+cross__mhubert_kan__g15_k3__singmos_to_brspeech__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788221673.7485275
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 00:14:33'
+  experiment_id: cross__mhubert_kan__g15_k3__singmos_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos--(run-01)/epoch=20-step=672-val/spearman=0.6176.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=32-step=1023-val/spearman=0.6914.ckpt
+  val_mse: 0.7972531914710999
+  val_pearson: 0.6884141564369202
+  val_spearman: 0.6765018701553345
+  initial_source_test_mse: 0.41628482937812805
+  initial_source_test_pearson: 0.5974266814283963
+  initial_source_test_spearman: 0.5802939097051314
+  source_test_mse: 1.4549314975738525
+  source_test_pearson: 0.4303058047150397
+  source_test_spearman: 0.4462772608954421
+  initial_target_test_mse: 1.2401074171066284
+  initial_target_test_pearson: 0.4364548472617886
+  initial_target_test_spearman: 0.35115014822677204
+  target_test_mse: 0.780838131904602
+  target_test_pearson: 0.6816446090816042
+  target_test_spearman: 0.6517878802794317
+  source_spearman_delta_after_minus_before: -0.13401664880968928
+  source_spearman_forgetting_before_minus_after: 0.13401664880968928
+  target_spearman_delta_after_minus_before: 0.30063773205265965
+  ended_at: '2026-09-01 01:09:11'
+  wandb_run_id: lbebw6ua
+cross__mhubert_kan__g15_k3__singmos_to_bvcc__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788222659.3155162
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 00:30:59'
+  experiment_id: cross__mhubert_kan__g15_k3__singmos_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos--(run-01)/epoch=20-step=672-val/spearman=0.6176.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=47-step=3744-val/spearman=0.8204.ckpt
+  val_mse: 0.27615925669670105
+  val_pearson: 0.8208438158035278
+  val_spearman: 0.8153020143508911
+  initial_source_test_mse: 0.41628482937812805
+  initial_source_test_pearson: 0.5974266814283963
+  initial_source_test_spearman: 0.5802939097051314
+  source_test_mse: 2.283189296722412
+  source_test_pearson: 0.45310664390577193
+  source_test_spearman: 0.44533475381278387
+  initial_target_test_mse: 1.132103443145752
+  initial_target_test_pearson: 0.5186263318109107
+  initial_target_test_spearman: 0.5212105022942636
+  target_test_mse: 0.27888381481170654
+  target_test_pearson: 0.8326039455387662
+  target_test_spearman: 0.8311140794369197
+  source_spearman_delta_after_minus_before: -0.13495915589234753
+  source_spearman_forgetting_before_minus_after: 0.13495915589234753
+  target_spearman_delta_after_minus_before: 0.30990357714265615
+  ended_at: '2026-09-01 01:54:14'
+  wandb_run_id: 2kv7ubbr
+cross__mhubert_kan__g15_k3__singmos_to_tmhint__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788224646.683755
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:04:06'
+  experiment_id: cross__mhubert_kan__g15_k3__singmos_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos--(run-01)/epoch=20-step=672-val/spearman=0.6176.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=06-step=1274-val/spearman=0.6073.ckpt
+  val_mse: 0.8397281765937805
+  val_pearson: 0.6166922450065613
+  val_spearman: 0.5995403528213501
+  initial_source_test_mse: 0.41628482937812805
+  initial_source_test_pearson: 0.5974266814283963
+  initial_source_test_spearman: 0.5802939097051314
+  source_test_mse: 0.8533716201782227
+  source_test_pearson: 0.35369008915328726
+  source_test_spearman: 0.33559841200348955
+  initial_target_test_mse: 1.7809841632843018
+  initial_target_test_pearson: 0.40423215207551033
+  initial_target_test_spearman: 0.39325322651132605
+  target_test_mse: 0.3716672360897064
+  target_test_pearson: 0.8008654293546745
+  target_test_spearman: 0.7584955395845789
+  source_spearman_delta_after_minus_before: -0.24469549770164184
+  source_spearman_forgetting_before_minus_after: 0.24469549770164184
+  target_spearman_delta_after_minus_before: 0.3652423130732529
+  ended_at: '2026-09-01 01:49:09'
+  wandb_run_id: zem8n7i9
+cross__mhubert_kan__g15_k3__tmhint_to_brspeech__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788224784.981097
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:06:25'
+  experiment_id: cross__mhubert_kan__g15_k3__tmhint_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6088.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=30-step=961-val/spearman=0.7055.ckpt
+  val_mse: 0.7709454894065857
+  val_pearson: 0.706428050994873
+  val_spearman: 0.6919135451316833
+  initial_source_test_mse: 0.36550116539001465
+  initial_source_test_pearson: 0.7951715335880212
+  initial_source_test_spearman: 0.7505436178295821
+  source_test_mse: 1.2621777057647705
+  source_test_pearson: 0.6532042798850128
+  source_test_spearman: 0.5734710331973624
+  initial_target_test_mse: 1.1255110502243042
+  initial_target_test_pearson: 0.5043742234251607
+  initial_target_test_spearman: 0.4764470047114668
+  target_test_mse: 0.7204180359840393
+  target_test_pearson: 0.6977333131469053
+  target_test_spearman: 0.6650536305884515
+  source_spearman_delta_after_minus_before: -0.17707258463221975
+  source_spearman_forgetting_before_minus_after: 0.17707258463221975
+  target_spearman_delta_after_minus_before: 0.18860662587698468
+  ended_at: '2026-09-01 01:58:35'
+  wandb_run_id: knsa3391
+cross__mhubert_kan__g15_k3__tmhint_to_bvcc__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788224953.605974
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:09:13'
+  experiment_id: cross__mhubert_kan__g15_k3__tmhint_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6088.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=41-step=3276-val/spearman=0.8176.ckpt
+  val_mse: 0.28673407435417175
+  val_pearson: 0.8160146474838257
+  val_spearman: 0.8139492273330688
+  initial_source_test_mse: 0.36550116539001465
+  initial_source_test_pearson: 0.7951715335880212
+  initial_source_test_spearman: 0.7505436178295821
+  source_test_mse: 2.2246880531311035
+  source_test_pearson: 0.5529952422214449
+  source_test_spearman: 0.40940552390498364
+  initial_target_test_mse: 1.419714093208313
+  initial_target_test_pearson: 0.5014533392758217
+  initial_target_test_spearman: 0.5438211567829248
+  target_test_mse: 0.27920296788215637
+  target_test_pearson: 0.8249149994840804
+  target_test_spearman: 0.8243943123051792
+  source_spearman_delta_after_minus_before: -0.3411380939245985
+  source_spearman_forgetting_before_minus_after: 0.3411380939245985
+  target_spearman_delta_after_minus_before: 0.2805731555222545
+  ended_at: '2026-09-01 02:50:40'
+  wandb_run_id: 5k7sl81x
+cross__mhubert_kan__g15_k3__tmhint_to_singmos__source_run_01__run_01:
+  model_key: mhubert_kan
+  model_label: mHuBERT-147 KAN
+  model_config: config/models/mHuBERT-147_kan.yaml
+  grid: 15
+  k: 3
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788226181.544245
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:29:41'
+  experiment_id: cross__mhubert_kan__g15_k3__tmhint_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint--(run-01)/epoch=10-step=2002-val/spearman=0.6088.ckpt
+  checkpoint_path: /checkpoints/KAN-utter-project/mHuBERT-147-g15-k3-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=10-step=352-val/spearman=0.6089.ckpt
+  val_mse: 0.3801973760128021
+  val_pearson: 0.634172797203064
+  val_spearman: 0.5677148103713989
+  initial_source_test_mse: 0.36550116539001465
+  initial_source_test_pearson: 0.7951715335880212
+  initial_source_test_spearman: 0.7505436178295821
+  source_test_mse: 2.0384347438812256
+  source_test_pearson: 0.3077627647591203
+  source_test_spearman: 0.1801250947737126
+  initial_target_test_mse: 0.8967697620391846
+  initial_target_test_pearson: 0.2976839698182157
+  initial_target_test_spearman: 0.29668392688556683
+  target_test_mse: 0.39539456367492676
+  target_test_pearson: 0.5990189298884381
+  target_test_spearman: 0.5813031835096675
+  source_spearman_delta_after_minus_before: -0.5704185230558695
+  source_spearman_forgetting_before_minus_after: 0.5704185230558695
+  target_spearman_delta_after_minus_before: 0.28461925662410065
+  ended_at: '2026-09-01 01:48:55'
+  wandb_run_id: 6qad2pai
+cross__wav2vec2_1b_kan__g15_k6__brspeech_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788257761.911367
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 10:16:02'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__brspeech_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech--(run-01)/epoch=31-step=992-val/spearman=0.6112.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=32-step=2574-val/spearman=0.7743.ckpt
+  val_mse: 0.36057451367378235
+  val_pearson: 0.7709198594093323
+  val_spearman: 0.7669088840484619
+  initial_source_test_mse: 1.2039912939071655
+  initial_source_test_pearson: 0.5870315830370622
+  initial_source_test_spearman: 0.5497820091854437
+  source_test_mse: 1.7132322788238525
+  source_test_pearson: 0.473382737038967
+  source_test_spearman: 0.45546485663525405
+  initial_target_test_mse: 1.2076376676559448
+  initial_target_test_pearson: 0.3546785157539838
+  initial_target_test_spearman: 0.3636835163642057
+  target_test_mse: 0.3752440810203552
+  target_test_pearson: 0.7613674256325573
+  target_test_spearman: 0.7580511515506932
+  source_spearman_delta_after_minus_before: -0.09431715255018969
+  source_spearman_forgetting_before_minus_after: 0.09431715255018969
+  target_spearman_delta_after_minus_before: 0.39436763518648754
+  ended_at: '2026-09-01 19:23:44'
+  wandb_run_id: b41faws4
+cross__wav2vec2_1b_kan__g15_k6__brspeech_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788276109.11717
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 15:21:49'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__brspeech_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech--(run-01)/epoch=31-step=992-val/spearman=0.6112.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=28-step=928-val/spearman=0.5361.ckpt
+  val_mse: 0.5138111710548401
+  val_pearson: 0.5286115407943726
+  val_spearman: 0.5120035409927368
+  initial_source_test_mse: 1.2039912939071655
+  initial_source_test_pearson: 0.5870315830370622
+  initial_source_test_spearman: 0.5497820091854437
+  source_test_mse: 1.3463059663772583
+  source_test_pearson: 0.4715732358483006
+  source_test_spearman: 0.4675529343176265
+  initial_target_test_mse: 2.9870893955230713
+  initial_target_test_pearson: 0.2606460966674878
+  initial_target_test_spearman: 0.2418167664986081
+  target_test_mse: 0.5300499200820923
+  target_test_pearson: 0.4878840435940012
+  target_test_spearman: 0.5087623140704199
+  source_spearman_delta_after_minus_before: -0.08222907486781722
+  source_spearman_forgetting_before_minus_after: 0.08222907486781722
+  target_spearman_delta_after_minus_before: 0.2669455475718119
+  ended_at: '2026-09-01 18:19:09'
+  wandb_run_id: n0uaxtpj
+cross__wav2vec2_1b_kan__g15_k6__brspeech_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788303121.472189
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 22:52:01'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__brspeech_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech--(run-01)/epoch=31-step=992-val/spearman=0.6112.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=20-step=3822-val/spearman=0.5803.ckpt
+  val_mse: 0.9437530636787415
+  val_pearson: 0.5866740345954895
+  val_spearman: 0.5686240792274475
+  initial_source_test_mse: 1.2039912939071655
+  initial_source_test_pearson: 0.5870315830370622
+  initial_source_test_spearman: 0.5497820091854437
+  source_test_mse: 2.5383617877960205
+  source_test_pearson: 0.10712365921645939
+  source_test_spearman: 0.12969945064026217
+  initial_target_test_mse: 3.9394757747650146
+  initial_target_test_pearson: 0.520147755003236
+  initial_target_test_spearman: 0.410560979799849
+  target_test_mse: 0.4037962853908539
+  target_test_pearson: 0.7698929613012232
+  target_test_spearman: 0.7208883003240496
+  source_spearman_delta_after_minus_before: -0.42008255854518156
+  source_spearman_forgetting_before_minus_after: 0.42008255854518156
+  target_spearman_delta_after_minus_before: 0.3103273205242006
+  ended_at: '2026-09-02 03:45:42'
+  wandb_run_id: 3jd4fy16
+cross__wav2vec2_1b_kan__g15_k6__singmos_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788318009.4520743
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-02 03:00:09'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__singmos_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-singmos--(run-01)/epoch=25-step=832-val/spearman=0.5104.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=19-step=620-val/spearman=0.6250.ckpt
+  val_mse: 1.0818952322006226
+  val_pearson: 0.6290245652198792
+  val_spearman: 0.619730532169342
+  initial_source_test_mse: 0.49898794293403625
+  initial_source_test_pearson: 0.48323693095383374
+  initial_source_test_spearman: 0.5078860513209175
+  source_test_mse: 1.2274670600891113
+  source_test_pearson: 0.3377445875215255
+  source_test_spearman: 0.34437962877589434
+  initial_target_test_mse: 1.4733198881149292
+  initial_target_test_pearson: 0.3518322816995792
+  initial_target_test_spearman: 0.33584409911735386
+  target_test_mse: 1.0716392993927002
+  target_test_pearson: 0.5912364546579352
+  target_test_spearman: 0.5527883102212502
+  source_spearman_delta_after_minus_before: -0.16350642254502312
+  source_spearman_forgetting_before_minus_after: 0.16350642254502312
+  target_spearman_delta_after_minus_before: 0.21694421110389633
+  ended_at: '2026-09-02 07:19:33'
+  wandb_run_id: pe9dbv2u
+cross__wav2vec2_1b_kan__g15_k6__singmos_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: running
+  observation: Retomado apos pausa do modelo.
+  phase: cross
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu6
+  worker_gpu: '6'
+  claim_token: bc5cd0b7a95a409283ae5758b4d00ead
+  claimed_at_epoch: 1788329912.4742548
+  lease_expires_epoch: 1788353321.9454176
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-02 06:18:32'
+  heartbeat_at_epoch: 1788353021.9454234
+cross__wav2vec2_1b_kan__g15_k6__singmos_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788333575.8361418
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-02 07:19:36'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__singmos_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-singmos--(run-01)/epoch=25-step=832-val/spearman=0.5104.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=09-step=1820-val/spearman=0.5756.ckpt
+  val_mse: 1.0245025157928467
+  val_pearson: 0.5699364542961121
+  val_spearman: 0.5507563352584839
+  initial_source_test_mse: 0.49898794293403625
+  initial_source_test_pearson: 0.48323693095383374
+  initial_source_test_spearman: 0.5078860513209175
+  source_test_mse: 1.0201489925384521
+  source_test_pearson: 0.32239848187998604
+  source_test_spearman: 0.3183632746804289
+  initial_target_test_mse: 0.7455170154571533
+  initial_target_test_pearson: 0.5331262249654146
+  initial_target_test_spearman: 0.33194916497825033
+  target_test_mse: 0.3767143785953522
+  target_test_pearson: 0.7885300872798012
+  target_test_spearman: 0.743817114850167
+  source_spearman_delta_after_minus_before: -0.18952277664048855
+  source_spearman_forgetting_before_minus_after: 0.18952277664048855
+  target_spearman_delta_after_minus_before: 0.41186794987191666
+  ended_at: '2026-09-02 11:55:45'
+  wandb_run_id: bbinwqt8
+cross__wav2vec2_1b_kan__g15_k6__tmhint_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: running
+  observation: Retomado apos pausa do modelo.
+  phase: cross
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu5
+  worker_gpu: '5'
+  claim_token: 21a8cd68e5c64c6f87703beb0e3cba64
+  claimed_at_epoch: 1788350147.536233
+  lease_expires_epoch: 1788353313.7737656
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-02 11:55:47'
+  heartbeat_at_epoch: 1788353013.7737715
+cross__wav2vec2_1b_kan__g15_k6__tmhint_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: pending
+  observation: Retomado apos pausa do modelo.
+  phase: cross
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+cross__wav2vec2_1b_kan__g15_k6__tmhint_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: pending
+  observation: Retomado apos pausa do modelo.
+  phase: cross
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+cross__wav2vec2_300m_kan__g15_k2__brspeech_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788227337.4740229
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:48:57'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__brspeech_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech--(run-01)/epoch=11-step=372-val/spearman=0.6605.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech-to-bvcc--(source-run-01)--(run-01)/epoch=64-step=5070-val/spearman=0.7895.ckpt
+  val_mse: 0.34500211477279663
+  val_pearson: 0.7910728454589844
+  val_spearman: 0.7894840836524963
+  initial_source_test_mse: 0.8640221953392029
+  initial_source_test_pearson: 0.6583401160066059
+  initial_source_test_spearman: 0.6226055144634461
+  source_test_mse: 1.8242590427398682
+  source_test_pearson: 0.6168742261233557
+  source_test_spearman: 0.557535130531866
+  initial_target_test_mse: 1.0581496953964233
+  initial_target_test_pearson: 0.3992953185611497
+  initial_target_test_spearman: 0.4002399319912343
+  target_test_mse: 0.32134637236595154
+  target_test_pearson: 0.7944897412647223
+  target_test_spearman: 0.7965351516446063
+  source_spearman_delta_after_minus_before: -0.06507038393158016
+  source_spearman_forgetting_before_minus_after: 0.06507038393158016
+  target_spearman_delta_after_minus_before: 0.396295219653372
+  ended_at: '2026-09-01 06:07:23'
+  wandb_run_id: urh3a14x
+cross__wav2vec2_300m_kan__g15_k2__brspeech_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788227351.5541592
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:49:11'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__brspeech_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech--(run-01)/epoch=11-step=372-val/spearman=0.6605.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech-to-singmos--(source-run-01)--(run-01)/epoch=06-step=224-val/spearman=0.5792.ckpt
+  val_mse: 0.4225521683692932
+  val_pearson: 0.5764230489730835
+  val_spearman: 0.550579309463501
+  initial_source_test_mse: 0.8640221953392029
+  initial_source_test_pearson: 0.6583401160066059
+  initial_source_test_spearman: 0.6226055144634461
+  source_test_mse: 1.013723373413086
+  source_test_pearson: 0.6064872152803169
+  source_test_spearman: 0.5730506254949127
+  initial_target_test_mse: 1.384840726852417
+  initial_target_test_pearson: 0.15505757749145735
+  initial_target_test_spearman: 0.1390128529299627
+  target_test_mse: 0.4414433538913727
+  target_test_pearson: 0.5045119330448038
+  target_test_spearman: 0.5040950629123866
+  source_spearman_delta_after_minus_before: -0.04955488896853344
+  source_spearman_forgetting_before_minus_after: 0.04955488896853344
+  target_spearman_delta_after_minus_before: 0.3650822099824239
+  ended_at: '2026-09-01 02:25:32'
+  wandb_run_id: q69gx8a6
+cross__wav2vec2_300m_kan__g15_k2__brspeech_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: brspeech
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788227656.3691902
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:54:16'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__brspeech_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech--(run-01)/epoch=11-step=372-val/spearman=0.6605.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-brspeech-to-tmhint--(source-run-01)--(run-01)/epoch=13-step=2548-val/spearman=0.5955.ckpt
+  val_mse: 0.8952798843383789
+  val_pearson: 0.6047928929328918
+  val_spearman: 0.5850989818572998
+  initial_source_test_mse: 0.8640221953392029
+  initial_source_test_pearson: 0.6583401160066059
+  initial_source_test_spearman: 0.6226055144634461
+  source_test_mse: 1.6458536386489868
+  source_test_pearson: 0.4628264865009032
+  source_test_spearman: 0.44685505589282964
+  initial_target_test_mse: 1.3809001445770264
+  initial_target_test_pearson: 0.44510815350985417
+  initial_target_test_spearman: 0.36282632894924793
+  target_test_mse: 0.41198965907096863
+  target_test_pearson: 0.7778611831639167
+  target_test_spearman: 0.7291241911563004
+  source_spearman_delta_after_minus_before: -0.1757504585706165
+  source_spearman_forgetting_before_minus_after: 0.1757504585706165
+  target_spearman_delta_after_minus_before: 0.3662978622070525
+  ended_at: '2026-09-01 03:58:04'
+  wandb_run_id: 3mzh70yw
+cross__wav2vec2_300m_kan__g15_k2__bvcc_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788227919.0111806
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 01:58:39'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__bvcc_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc--(run-01)/epoch=50-step=3978-val/spearman=0.7871.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=19-step=620-val/spearman=0.6420.ckpt
+  val_mse: 0.9417661428451538
+  val_pearson: 0.6302752494812012
+  val_spearman: 0.6274856925010681
+  initial_source_test_mse: 0.33453741669654846
+  initial_source_test_pearson: 0.7934740011471342
+  initial_source_test_spearman: 0.7943384046955366
+  source_test_mse: 0.9761775135993958
+  source_test_pearson: 0.5696701128502576
+  source_test_spearman: 0.6075383581907682
+  initial_target_test_mse: 2.3884754180908203
+  initial_target_test_pearson: 0.6111084660667325
+  initial_target_test_spearman: 0.5441576757675776
+  target_test_mse: 0.980556309223175
+  target_test_pearson: 0.6112855269951546
+  target_test_spearman: 0.5913083802102164
+  source_spearman_delta_after_minus_before: -0.18680004650476845
+  source_spearman_forgetting_before_minus_after: 0.18680004650476845
+  target_spearman_delta_after_minus_before: 0.0471507044426388
+  ended_at: '2026-09-01 03:39:35'
+  wandb_run_id: rtvlk359
+cross__wav2vec2_300m_kan__g15_k2__bvcc_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788229534.3799186
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 02:25:34'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__bvcc_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc--(run-01)/epoch=50-step=3978-val/spearman=0.7871.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=17-step=576-val/spearman=0.5597.ckpt
+  val_mse: 0.4590774178504944
+  val_pearson: 0.5587946772575378
+  val_spearman: 0.5391160249710083
+  initial_source_test_mse: 0.33453741669654846
+  initial_source_test_pearson: 0.7934740011471342
+  initial_source_test_spearman: 0.7943384046955366
+  source_test_mse: 1.0968999862670898
+  source_test_pearson: 0.6450052292850256
+  source_test_spearman: 0.6628085919309643
+  initial_target_test_mse: 3.4426493644714355
+  initial_target_test_pearson: 0.32956195771510577
+  initial_target_test_spearman: 0.3290847701322213
+  target_test_mse: 0.46218544244766235
+  target_test_pearson: 0.5352855972903283
+  target_test_spearman: 0.551037504982875
+  source_spearman_delta_after_minus_before: -0.13152981276457232
+  source_spearman_forgetting_before_minus_after: 0.13152981276457232
+  target_spearman_delta_after_minus_before: 0.22195273485065364
+  ended_at: '2026-09-01 03:16:26'
+  wandb_run_id: j6r3j5c3
+cross__wav2vec2_300m_kan__g15_k2__bvcc_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788231041.9470851
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 02:50:42'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__bvcc_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc--(run-01)/epoch=50-step=3978-val/spearman=0.7871.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=45-step=8372-val/spearman=0.5984.ckpt
+  val_mse: 0.8314036130905151
+  val_pearson: 0.6090542674064636
+  val_spearman: 0.5921377539634705
+  initial_source_test_mse: 0.33453741669654846
+  initial_source_test_pearson: 0.7934740011471342
+  initial_source_test_spearman: 0.7943384046955366
+  source_test_mse: 2.134385347366333
+  source_test_pearson: 0.5078661152967407
+  source_test_spearman: 0.539331036177385
+  initial_target_test_mse: 1.6463192701339722
+  initial_target_test_pearson: 0.6147273715620287
+  initial_target_test_spearman: 0.5459120168224534
+  target_test_mse: 0.3818815052509308
+  target_test_pearson: 0.7873208133862656
+  target_test_spearman: 0.7405154093363516
+  source_spearman_delta_after_minus_before: -0.25500736851815164
+  source_spearman_forgetting_before_minus_after: 0.25500736851815164
+  target_spearman_delta_after_minus_before: 0.19460339251389824
+  ended_at: '2026-09-01 06:57:18'
+  wandb_run_id: cp5ya28l
+cross__wav2vec2_300m_kan__g15_k2__singmos_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788232588.7037337
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 03:16:29'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__singmos_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos--(run-01)/epoch=05-step=192-val/spearman=0.6094.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos-to-brspeech--(source-run-01)--(run-01)/epoch=09-step=310-val/spearman=0.6634.ckpt
+  val_mse: 0.8682894110679626
+  val_pearson: 0.6624621748924255
+  val_spearman: 0.6433547139167786
+  initial_source_test_mse: 0.48664435744285583
+  initial_source_test_pearson: 0.4891886504766443
+  initial_source_test_spearman: 0.49073859586713303
+  source_test_mse: 1.0271801948547363
+  source_test_pearson: 0.35250048733882955
+  source_test_spearman: 0.3353195957904259
+  initial_target_test_mse: 1.4628690481185913
+  initial_target_test_pearson: 0.4791061644920224
+  initial_target_test_spearman: 0.41811527666855225
+  target_test_mse: 0.7908396124839783
+  target_test_pearson: 0.6742973726069046
+  target_test_spearman: 0.637862481312216
+  source_spearman_delta_after_minus_before: -0.15541900007670711
+  source_spearman_forgetting_before_minus_after: 0.15541900007670711
+  target_spearman_delta_after_minus_before: 0.21974720464366376
+  ended_at: '2026-09-01 04:30:22'
+  wandb_run_id: h3bsprpc
+cross__wav2vec2_300m_kan__g15_k2__singmos_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu4
+  worker_gpu: '4'
+  claimed_at_epoch: 1788233977.5501711
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 03:39:37'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__singmos_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos--(run-01)/epoch=05-step=192-val/spearman=0.6094.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos-to-bvcc--(source-run-01)--(run-01)/epoch=25-step=2028-val/spearman=0.7882.ckpt
+  val_mse: 0.41198718547821045
+  val_pearson: 0.7807942628860474
+  val_spearman: 0.7790248394012451
+  initial_source_test_mse: 0.48664435744285583
+  initial_source_test_pearson: 0.4891886504766443
+  initial_source_test_spearman: 0.49073859586713303
+  source_test_mse: 3.60540509223938
+  source_test_pearson: 0.3540178120021493
+  source_test_spearman: 0.36172918161528184
+  initial_target_test_mse: 2.4799773693084717
+  initial_target_test_pearson: 0.3870880194171147
+  initial_target_test_spearman: 0.3822306529083434
+  target_test_mse: 0.38347065448760986
+  target_test_pearson: 0.7925701408611752
+  target_test_spearman: 0.7949034228362186
+  source_spearman_delta_after_minus_before: -0.1290094142518512
+  source_spearman_forgetting_before_minus_after: 0.1290094142518512
+  target_spearman_delta_after_minus_before: 0.4126727699278752
+  ended_at: '2026-09-01 06:37:59'
+  wandb_run_id: cvi20uzy
+cross__wav2vec2_300m_kan__g15_k2__singmos_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: singmos
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu7
+  worker_gpu: '7'
+  claimed_at_epoch: 1788235085.6879692
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 03:58:05'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__singmos_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos--(run-01)/epoch=05-step=192-val/spearman=0.6094.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-singmos-to-tmhint--(source-run-01)--(run-01)/epoch=15-step=2912-val/spearman=0.5933.ckpt
+  val_mse: 0.8429630994796753
+  val_pearson: 0.6059173345565796
+  val_spearman: 0.5871456265449524
+  initial_source_test_mse: 0.48664435744285583
+  initial_source_test_pearson: 0.4891886504766443
+  initial_source_test_spearman: 0.49073859586713303
+  source_test_mse: 0.7686916589736938
+  source_test_pearson: 0.31703477022207405
+  source_test_spearman: 0.27960604630986297
+  initial_target_test_mse: 0.9701626300811768
+  initial_target_test_pearson: 0.41772203022784204
+  initial_target_test_spearman: 0.35638761651677425
+  target_test_mse: 0.37205278873443604
+  target_test_pearson: 0.7900059811173628
+  target_test_spearman: 0.7414366393296695
+  source_spearman_delta_after_minus_before: -0.21113254955727007
+  source_spearman_forgetting_before_minus_after: 0.21113254955727007
+  target_spearman_delta_after_minus_before: 0.38504902281289527
+  ended_at: '2026-09-01 06:09:03'
+  wandb_run_id: f2ud7w2c
+cross__wav2vec2_300m_kan__g15_k2__tmhint_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788237024.2417266
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 04:30:24'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__tmhint_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint--(run-01)/epoch=17-step=3276-val/spearman=0.5935.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint-to-brspeech--(source-run-01)--(run-01)/epoch=11-step=372-val/spearman=0.6594.ckpt
+  val_mse: 0.9577100872993469
+  val_pearson: 0.6588631272315979
+  val_spearman: 0.6492860913276672
+  initial_source_test_mse: 0.3859979808330536
+  initial_source_test_pearson: 0.7872187633364589
+  initial_source_test_spearman: 0.7395785241371869
+  source_test_mse: 1.060348391532898
+  source_test_pearson: 0.6895599470728451
+  source_test_spearman: 0.6066094518212252
+  initial_target_test_mse: 1.3814465999603271
+  initial_target_test_pearson: 0.3982071507715722
+  initial_target_test_spearman: 0.3430761163501226
+  target_test_mse: 0.851645290851593
+  target_test_pearson: 0.6754705602567584
+  target_test_spearman: 0.6473907867220404
+  source_spearman_delta_after_minus_before: -0.13296907231596178
+  source_spearman_forgetting_before_minus_after: 0.13296907231596178
+  target_spearman_delta_after_minus_before: 0.30431467037191784
+  ended_at: '2026-09-01 05:49:40'
+  wandb_run_id: kwkt6d7f
+cross__wav2vec2_300m_kan__g15_k2__tmhint_to_bvcc__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: bvcc
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu0
+  worker_gpu: '0'
+  claimed_at_epoch: 1788241782.3932242
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 05:49:42'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__tmhint_to_bvcc__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint--(run-01)/epoch=17-step=3276-val/spearman=0.5935.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint-to-bvcc--(source-run-01)--(run-01)/epoch=27-step=2184-val/spearman=0.7913.ckpt
+  val_mse: 0.32446882128715515
+  val_pearson: 0.7812272310256958
+  val_spearman: 0.7837390303611755
+  initial_source_test_mse: 0.3859979808330536
+  initial_source_test_pearson: 0.7872187633364589
+  initial_source_test_spearman: 0.7395785241371869
+  source_test_mse: 1.6554423570632935
+  source_test_pearson: 0.6976995122079844
+  source_test_spearman: 0.6267099133672906
+  initial_target_test_mse: 1.4764715433120728
+  initial_target_test_pearson: 0.5395623508372682
+  initial_target_test_spearman: 0.5665824348555418
+  target_test_mse: 0.3201885521411896
+  target_test_pearson: 0.7946113713288199
+  target_test_spearman: 0.7927887686846279
+  source_spearman_delta_after_minus_before: -0.1128686107698963
+  source_spearman_forgetting_before_minus_after: 0.1128686107698963
+  target_spearman_delta_after_minus_before: 0.22620633382908606
+  ended_at: '2026-09-01 08:54:47'
+  wandb_run_id: qjs28pqm
+cross__wav2vec2_300m_kan__g15_k2__tmhint_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_300m_kan
+  model_label: wav2vec2 XLS-R 300M KAN
+  model_config: config/models/wav2vec2_300m_kan.yaml
+  grid: 15
+  k: 2
+  status: done
+  phase: cross_finetune
+  source_dataset: tmhint
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788242845.582973
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 06:07:25'
+  experiment_id: cross__wav2vec2_300m_kan__g15_k2__tmhint_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint--(run-01)/epoch=17-step=3276-val/spearman=0.5935.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-300m-g15-k2-tmhint-to-singmos--(source-run-01)--(run-01)/epoch=20-step=672-val/spearman=0.5745.ckpt
+  val_mse: 0.46216726303100586
+  val_pearson: 0.579600989818573
+  val_spearman: 0.5539212226867676
+  initial_source_test_mse: 0.3859979808330536
+  initial_source_test_pearson: 0.7872187633364589
+  initial_source_test_spearman: 0.7395785241371869
+  source_test_mse: 0.6278577446937561
+  source_test_pearson: 0.6112804731993159
+  source_test_spearman: 0.5647032347571436
+  initial_target_test_mse: 0.8686801791191101
+  initial_target_test_pearson: 0.27576953333729143
+  initial_target_test_spearman: 0.23849747012231864
+  target_test_mse: 0.4599732458591461
+  target_test_pearson: 0.509348428866179
+  target_test_spearman: 0.5096945263807705
+  source_spearman_delta_after_minus_before: -0.17487528938004337
+  source_spearman_forgetting_before_minus_after: 0.17487528938004337
+  target_spearman_delta_after_minus_before: 0.27119705625845186
+  ended_at: '2026-09-01 07:03:10'
+  wandb_run_id: 1mehjyui
+cross__wav2vec2_1b_kan__g10_k6__bvcc_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 1
+  started_at: '2026-08-30 15:05:35'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__bvcc_to_brspeech__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc--(run-01)/epoch=24-step=1950-val/spearman=0.8078.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=05-step=186-val/spearman=0.6485.ckpt
+  val_mse: 1.0259181261062622
+  val_pearson: 0.6114004850387573
+  val_spearman: 0.5945838689804077
+  initial_source_test_mse: 0.3036733567714691
+  initial_source_test_pearson: 0.8010336173791675
+  initial_source_test_spearman: 0.8056516358687109
+  source_test_mse: 0.50405353307724
+  source_test_pearson: 0.6859064997553377
+  source_test_spearman: 0.6900978270256088
+  initial_target_test_mse: 1.4942824840545654
+  initial_target_test_pearson: 0.4776327449355868
+  initial_target_test_spearman: 0.4673117805097656
+  target_test_mse: 1.044792890548706
+  target_test_pearson: 0.6638010588819607
+  target_test_spearman: 0.6012524717024729
+  source_spearman_delta_after_minus_before: -0.11555380884310207
+  source_spearman_forgetting_before_minus_after: 0.11555380884310207
+  target_spearman_delta_after_minus_before: 0.1339406911927073
+  ended_at: '2026-08-30 18:39:38'
+  wandb_run_id: 91aqm8ts
+cross__wav2vec2_1b_kan__g10_k6__bvcc_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 0
+  started_at: '2026-08-30 17:13:09'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__bvcc_to_singmos__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc--(run-01)/epoch=24-step=1950-val/spearman=0.8078.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=12-step=416-val/spearman=0.5965.ckpt
+  val_mse: 0.5325698256492615
+  val_pearson: 0.5070990920066833
+  val_spearman: 0.5046908259391785
+  initial_source_test_mse: 0.3036733567714691
+  initial_source_test_pearson: 0.8010336173791675
+  initial_source_test_spearman: 0.8056516358687109
+  source_test_mse: 1.0000221729278564
+  source_test_pearson: 0.6196208229945225
+  source_test_spearman: 0.6749426980504586
+  initial_target_test_mse: 2.2442750930786133
+  initial_target_test_pearson: 0.33156867922778194
+  initial_target_test_spearman: 0.33222489532869187
+  target_test_mse: 0.4571647644042969
+  target_test_pearson: 0.5256568631523945
+  target_test_spearman: 0.5603468573086527
+  source_spearman_delta_after_minus_before: -0.13070893781825232
+  source_spearman_forgetting_before_minus_after: 0.13070893781825232
+  target_spearman_delta_after_minus_before: 0.22812196197996087
+  ended_at: '2026-08-30 20:06:45'
+  wandb_run_id: kmb2us20
+cross__wav2vec2_1b_kan__g10_k6__bvcc_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 10
+  k: 6
+  status: done
+  gpu: 1
+  started_at: '2026-08-30 18:39:39'
+  experiment_id: cross__wav2vec2_1b_kan__g10_k6__bvcc_to_tmhint__source_run_01__run_01
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc--(run-01)/epoch=24-step=1950-val/spearman=0.8078.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g10-k6-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=14-step=2730-val/spearman=0.5916.ckpt
+  val_mse: 0.8785369396209717
+  val_pearson: 0.5987646579742432
+  val_spearman: 0.5832070708274841
+  initial_source_test_mse: 0.3036733567714691
+  initial_source_test_pearson: 0.8010336173791675
+  initial_source_test_spearman: 0.8056516358687109
+  source_test_mse: 1.8018689155578613
+  source_test_pearson: 0.4769876806541743
+  source_test_spearman: 0.5297964541932807
+  initial_target_test_mse: 1.3720134496688843
+  initial_target_test_pearson: 0.6378411081525768
+  initial_target_test_spearman: 0.5431581070378743
+  target_test_mse: 0.3749610483646393
+  target_test_pearson: 0.7932527029699132
+  target_test_spearman: 0.753561048555163
+  source_spearman_delta_after_minus_before: -0.2758551816754302
+  source_spearman_forgetting_before_minus_after: 0.2758551816754302
+  target_spearman_delta_after_minus_before: 0.21040294151728878
+  ended_at: '2026-08-31 00:51:32'
+  wandb_run_id: r5qg76q9
+cross__wav2vec2_1b_kan__g15_k6__bvcc_to_brspeech__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: brspeech
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu5
+  worker_gpu: '5'
+  claimed_at_epoch: 1788305507.050066
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 23:31:47'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__bvcc_to_brspeech__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc--(run-01)/epoch=42-step=3354-val/spearman=0.7764.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc-to-brspeech--(source-run-01)--(run-01)/epoch=10-step=341-val/spearman=0.6165.ckpt
+  val_mse: 1.097432017326355
+  val_pearson: 0.6029042601585388
+  val_spearman: 0.593757688999176
+  initial_source_test_mse: 0.35947251319885254
+  initial_source_test_pearson: 0.7790472527893281
+  initial_source_test_spearman: 0.782917016844131
+  source_test_mse: 0.7070258855819702
+  source_test_pearson: 0.6121923265955391
+  source_test_spearman: 0.6168823639439966
+  initial_target_test_mse: 1.5806492567062378
+  initial_target_test_pearson: 0.5076135636971854
+  initial_target_test_spearman: 0.4843500949217203
+  target_test_mse: 0.9524733424186707
+  target_test_pearson: 0.6475426298455884
+  target_test_spearman: 0.6131592949033267
+  source_spearman_delta_after_minus_before: -0.1660346529001343
+  source_spearman_forgetting_before_minus_after: 0.1660346529001343
+  target_spearman_delta_after_minus_before: 0.12880919998160634
+  ended_at: '2026-09-02 03:00:07'
+  wandb_run_id: 2bl810vv
+cross__wav2vec2_1b_kan__g15_k6__bvcc_to_singmos__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: singmos
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788305507.594519
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-01 23:31:47'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__bvcc_to_singmos__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc--(run-01)/epoch=42-step=3354-val/spearman=0.7764.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc-to-singmos--(source-run-01)--(run-01)/epoch=05-step=192-val/spearman=0.5551.ckpt
+  val_mse: 0.5530868172645569
+  val_pearson: 0.48766472935676575
+  val_spearman: 0.4755941331386566
+  initial_source_test_mse: 0.35947251319885254
+  initial_source_test_pearson: 0.7790472527893281
+  initial_source_test_spearman: 0.782917016844131
+  source_test_mse: 1.2597264051437378
+  source_test_pearson: 0.5393338726482825
+  source_test_spearman: 0.6286751492971214
+  initial_target_test_mse: 2.8826496601104736
+  initial_target_test_pearson: 0.2435675068458954
+  initial_target_test_spearman: 0.25938014690232547
+  target_test_mse: 0.45291781425476074
+  target_test_pearson: 0.48863906571050697
+  target_test_spearman: 0.49513214720103593
+  source_spearman_delta_after_minus_before: -0.15424186754700953
+  source_spearman_forgetting_before_minus_after: 0.15424186754700953
+  target_spearman_delta_after_minus_before: 0.23575200029871046
+  ended_at: '2026-09-02 01:10:44'
+  wandb_run_id: y5xl9bpe
+cross__wav2vec2_1b_kan__g15_k6__bvcc_to_tmhint__source_run_01__run_01:
+  model_key: wav2vec2_1b_kan
+  model_label: wav2vec2 XLS-R 1B KAN
+  model_config: config/models/wav2vec2_1b_kan.yaml
+  grid: 15
+  k: 6
+  status: done
+  observation: Retomado apos pausa do modelo.
+  phase: cross_finetune
+  source_dataset: bvcc
+  target_dataset: tmhint
+  source_run: 1
+  finetune_run: 1
+  worker_id: 1b-gpu6
+  worker_gpu: '6'
+  claimed_at_epoch: 1788311446.7187898
+  attempt: 1
+  gpu: 0
+  started_at: '2026-09-02 01:10:46'
+  experiment_id: cross__wav2vec2_1b_kan__g15_k6__bvcc_to_tmhint__source_run_01__run_01
+  init_checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc--(run-01)/epoch=42-step=3354-val/spearman=0.7764.ckpt
+  checkpoint_path: /checkpoints/KAN-facebook/wav2vec2-xls-r-1b-g15-k6-bvcc-to-tmhint--(source-run-01)--(run-01)/epoch=31-step=5824-val/spearman=0.5789.ckpt
+  val_mse: 0.890937089920044
+  val_pearson: 0.5897092819213867
+  val_spearman: 0.5687563419342041
+  initial_source_test_mse: 0.35947251319885254
+  initial_source_test_pearson: 0.7790472527893281
+  initial_source_test_spearman: 0.782917016844131
+  source_test_mse: 1.81168532371521
+  source_test_pearson: 0.3382853974354943
+  source_test_spearman: 0.3376826129328437
+  initial_target_test_mse: 1.7633930444717407
+  initial_target_test_pearson: 0.6485401523901644
+  initial_target_test_spearman: 0.5504205693845176
+  target_test_mse: 0.41629689931869507
+  target_test_pearson: 0.7732271262547533
+  target_test_spearman: 0.7278536560737805
+  source_spearman_delta_after_minus_before: -0.44523440391128727
+  source_spearman_forgetting_before_minus_after: 0.44523440391128727
+  target_spearman_delta_after_minus_before: 0.17743308668926294
+  ended_at: '2026-09-02 06:18:30'
+  wandb_run_id: nbydt9ia

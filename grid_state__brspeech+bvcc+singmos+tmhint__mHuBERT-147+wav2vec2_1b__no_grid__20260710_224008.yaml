@@ -1,0 +1,24 @@
+config_001___brspeech_run_01:
+  status: running
+  gpu: 4
+  start_time: '2026-07-10 22:40:24'
+config_002___brspeech_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-07-10 22:40:24'
+config_003___bvcc_run_01:
+  status: running
+  gpu: 1
+  start_time: '2026-07-10 22:40:24'
+config_004___bvcc_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-07-10 22:40:24'
+config_005___singmos_run_01:
+  status: pending
+config_006___singmos_run_01:
+  status: pending
+config_007___tmhint_run_01:
+  status: pending
+config_008___tmhint_run_01:
+  status: pending

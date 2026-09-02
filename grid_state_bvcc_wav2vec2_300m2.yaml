@@ -1,0 +1,263 @@
+config_001_lr1e-3_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-04-30 21:32:33'
+  end_time: '2026-05-01 10:25:27'
+  error_msg: null
+  config_path: ./resolved_config.yaml
+config_002_lr1e-3_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-04-30 21:32:33'
+  end_time: '2026-05-01 10:20:27'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/9vdejgma/resolved_config.yaml
+config_003_lr1e-3_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-04-30 21:32:33'
+  end_time: '2026-05-01 09:54:02'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/chckqrd8/resolved_config.yaml
+config_004_lr5e-3_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-01 09:54:13'
+  end_time: '2026-05-01 22:38:09'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/wthxih88/resolved_config.yaml
+config_005_lr5e-3_mlp_dropout0.2__bvcc_run_01:
+  status: error
+  gpu: 0
+  start_time: '2026-05-01 10:20:39'
+  end_time: '2026-05-01 22:35:57'
+  error_msg: '[Errno 2] No such file or directory: ''/checkpoints/mos-prediction/CAL-MOS-facebook/wav2vec2-xls-r-300m-(epochs-100)-(bs-32)-(LR-0.005)-(WD-1e-06)-bvcc-(run-01)/last-v2.ckpt'''
+  config_path: temp_configs/config_005_lr5e-3_mlp_dropout0.2__bvcc_run_01.yaml
+config_006_lr5e-3_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-01 10:25:39'
+  end_time: '2026-05-01 23:12:49'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/qenj4w5s/resolved_config.yaml
+config_007_lr1e-4_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-05-01 22:36:11'
+  end_time: '2026-05-02 11:08:35'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/7bh6hek0/resolved_config.yaml
+config_008_lr1e-4_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-01 22:38:21'
+  end_time: '2026-05-02 11:00:21'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/cvb8ta3k/resolved_config.yaml
+config_009_lr1e-4_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-01 23:13:02'
+  end_time: '2026-05-02 11:51:27'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/6w0yh799/resolved_config.yaml
+config_010_lr5e-4_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-02 11:00:32'
+  end_time: '2026-05-02 23:11:21'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/v9ehm6va/resolved_config.yaml
+config_011_lr5e-4_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-05-02 11:08:47'
+  end_time: '2026-05-02 23:36:21'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/esfevg7j/resolved_config.yaml
+config_012_lr5e-4_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-02 11:51:39'
+  end_time: '2026-05-02 23:58:01'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/w8org4bd/resolved_config.yaml
+config_013_lr1e-3_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-02 23:11:32'
+  end_time: '2026-05-03 07:20:02'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/usf4k2ez/resolved_config.yaml
+config_014_lr1e-3_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-05-02 23:36:32'
+  end_time: '2026-05-03 07:44:19'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/zng70qcw/resolved_config.yaml
+config_015_lr1e-3_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-02 23:58:14'
+  end_time: '2026-05-03 08:10:12'
+  error_msg: null
+  config_path: ./resolved_config.yaml
+config_016_lr5e-3_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-03 07:20:12'
+  end_time: '2026-05-03 15:29:37'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/ac9mtmbz/resolved_config.yaml
+config_017_lr5e-3_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-05-03 07:44:30'
+  end_time: '2026-05-03 15:56:47'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/7nqb6ee9/resolved_config.yaml
+config_018_lr5e-3_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-03 08:10:24'
+  end_time: '2026-05-03 16:04:19'
+  error_msg: null
+  config_path: ./resolved_config.yaml
+config_019_lr1e-4_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-03 15:29:50'
+  end_time: '2026-05-03 23:43:35'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/yrcxgqsn/resolved_config.yaml
+config_020_lr1e-4_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-05-03 15:56:57'
+  end_time: '2026-05-04 00:04:17'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/duylflcg/resolved_config.yaml
+config_021_lr1e-4_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-03 16:04:31'
+  end_time: '2026-05-04 00:29:24'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/d4bmicrr/resolved_config.yaml
+config_022_lr5e-4_mlp_dropout0.1__bvcc_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-05-03 23:43:48'
+  end_time: '2026-05-04 07:34:18'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/hcs1cl3f/resolved_config.yaml
+config_023_lr5e-4_mlp_dropout0.2__bvcc_run_01:
+  status: done
+  gpu: 0
+  start_time: '2026-05-04 00:04:29'
+  end_time: '2026-05-04 08:16:57'
+  error_msg: null
+  config_path: ../checkpoints/mos-prediction/o4kx2fa9/resolved_config.yaml
+config_024_lr5e-4_mlp_dropout0.3__bvcc_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-05-04 00:29:35'
+  end_time: '2026-05-04 08:58:18'
+  error_msg: null
+  config_path: ./resolved_config.yaml
+config_025_lr1e-3_mlp_dropout0.1__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_025_lr1e-3_mlp_dropout0.1__bvcc_run_01.yaml
+
+config_026_lr1e-3_mlp_dropout0.2__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_026_lr1e-3_mlp_dropout0.2__bvcc_run_01.yaml
+
+config_027_lr1e-3_mlp_dropout0.3__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_027_lr1e-3_mlp_dropout0.3__bvcc_run_01.yaml
+
+config_028_lr5e-3_mlp_dropout0.1__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_028_lr5e-3_mlp_dropout0.1__bvcc_run_01.yaml
+
+config_029_lr5e-3_mlp_dropout0.2__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_029_lr5e-3_mlp_dropout0.2__bvcc_run_01.yaml
+
+config_030_lr5e-3_mlp_dropout0.3__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_030_lr5e-3_mlp_dropout0.3__bvcc_run_01.yaml
+
+config_031_lr1e-4_mlp_dropout0.1__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_031_lr1e-4_mlp_dropout0.1__bvcc_run_01.yaml
+
+config_032_lr1e-4_mlp_dropout0.2__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_032_lr1e-4_mlp_dropout0.2__bvcc_run_01.yaml
+
+config_033_lr1e-4_mlp_dropout0.3__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_033_lr1e-4_mlp_dropout0.3__bvcc_run_01.yaml
+
+config_034_lr5e-4_mlp_dropout0.1__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_034_lr5e-4_mlp_dropout0.1__bvcc_run_01.yaml
+
+config_035_lr5e-4_mlp_dropout0.2__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_035_lr5e-4_mlp_dropout0.2__bvcc_run_01.yaml
+
+config_036_lr5e-4_mlp_dropout0.3__bvcc_run_01:
+  status: null
+  gpu: null
+  start_time: null
+  end_time: null
+  error_msg: null
+  config_path: temp_configs/config_036_lr5e-4_mlp_dropout0.3__bvcc_run_01.yaml

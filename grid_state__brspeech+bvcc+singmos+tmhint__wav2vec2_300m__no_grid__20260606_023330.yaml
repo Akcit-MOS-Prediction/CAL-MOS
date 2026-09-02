@@ -1,0 +1,48 @@
+config_001___brspeech_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-06-06 02:33:46'
+config_001___brspeech_run_02:
+  status: running
+  gpu: 2
+  start_time: '2026-06-06 02:33:46'
+config_001___brspeech_run_03:
+  status: running
+  gpu: 5
+  start_time: '2026-06-06 02:33:46'
+config_002___bvcc_run_01:
+  status: running
+  gpu: 1
+  start_time: '2026-06-06 02:33:46'
+config_002___bvcc_run_02:
+  status: running
+  gpu: 2
+  start_time: '2026-06-06 02:33:55'
+config_002___bvcc_run_03:
+  status: running
+  gpu: 6
+  start_time: '2026-06-06 02:33:55'
+config_003___singmos_run_01:
+  status: running
+  gpu: 5
+  start_time: '2026-06-06 02:33:55'
+config_003___singmos_run_02:
+  status: running
+  gpu: 1
+  start_time: '2026-06-06 02:33:55'
+config_003___singmos_run_03:
+  status: running
+  gpu: 6
+  start_time: '2026-06-06 02:34:04'
+config_004___tmhint_run_01:
+  status: running
+  gpu: 2
+  start_time: '2026-06-06 02:34:04'
+config_004___tmhint_run_02:
+  status: running
+  gpu: 5
+  start_time: '2026-06-06 02:34:04'
+config_004___tmhint_run_03:
+  status: running
+  gpu: 1
+  start_time: '2026-06-06 02:34:04'

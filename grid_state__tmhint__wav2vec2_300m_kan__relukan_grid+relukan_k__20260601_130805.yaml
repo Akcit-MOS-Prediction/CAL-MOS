@@ -1,0 +1,50 @@
+config_001_k2_g6__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-06-01 13:08:21'
+  end_time: '2026-06-01 15:39:33'
+config_002_k3_g6__tmhint_run_01:
+  status: done
+  gpu: 2
+  start_time: '2026-06-01 13:08:21'
+  end_time: '2026-06-01 15:32:46'
+config_003_k4_g4__tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-06-01 13:08:21'
+  end_time: '2026-06-01 15:34:22'
+config_004_k4_g5__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-06-01 13:08:21'
+  end_time: '2026-06-01 15:34:04'
+config_005_k5_g4__tmhint_run_01:
+  status: done
+  gpu: 2
+  start_time: '2026-06-01 15:32:57'
+  end_time: '2026-06-01 18:08:43'
+config_006_k5_g5__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-06-01 15:34:14'
+  end_time: '2026-06-01 18:12:10'
+config_007_k5_g6__tmhint_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-06-01 15:34:32'
+  end_time: '2026-06-01 18:12:14'
+config_008_k6_g4__tmhint_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-06-01 15:39:44'
+  end_time: '2026-06-01 18:16:45'
+config_009_k6_g5__tmhint_run_01:
+  status: done
+  gpu: 2
+  start_time: '2026-06-01 18:08:53'
+  end_time: '2026-06-01 20:28:13'
+config_010_k6_g6__tmhint_run_01:
+  status: done
+  gpu: 5
+  start_time: '2026-06-01 18:12:20'
+  end_time: '2026-06-01 20:31:18'

@@ -1,0 +1,84 @@
+config_001_lr1e-3_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-04 20:12:52'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/j1v50h0e/resolved_config.yaml
+config_002_lr1e-3_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-04 20:12:52'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/r6tpqgn2/resolved_config.yaml
+config_003_lr1e-3_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-04 23:56:58'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/z6gzvixa/resolved_config.yaml
+config_004_lr5e-3_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-05 01:03:25'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/p3vgg80g/resolved_config.yaml
+config_005_lr5e-3_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-05 03:46:14'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/5bhlpn84/resolved_config.yaml
+config_006_lr5e-3_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-05 05:53:20'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/mrev8qy6/resolved_config.yaml
+config_007_lr1e-4_mlp_dropout0.1__tmhint_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-05-05 07:21:44'
+  end_time: '2026-05-05 09:32:50'
+  error_msg: '[Errno 28] No space left on device'
+  config_path: temp_configs/config_007_lr1e-4_mlp_dropout0.1__tmhint_run_01.yaml
+config_008_lr1e-4_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-05 09:33:02'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/86jw7dxi/resolved_config.yaml
+config_009_lr1e-4_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-05 10:46:54'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/sr0zhhzw/resolved_config.yaml
+config_010_lr5e-4_mlp_dropout0.1__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-05 15:28:43'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/ovw3cu2l/resolved_config.yaml
+config_011_lr5e-4_mlp_dropout0.2__tmhint_run_01:
+  status: running
+  gpu: 3
+  start_time: '2026-05-05 19:07:49'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/ntrghdow/resolved_config.yaml
+config_012_lr5e-4_mlp_dropout0.3__tmhint_run_01:
+  status: running
+  gpu: 6
+  start_time: '2026-05-05 20:46:10'
+  end_time: null
+  error_msg: null
+  config_path: /checkpoints/mos-prediction/itmeevtd/resolved_config.yaml

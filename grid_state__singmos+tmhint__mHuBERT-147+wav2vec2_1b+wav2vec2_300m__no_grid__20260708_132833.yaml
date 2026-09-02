@@ -1,0 +1,96 @@
+config_001___singmos_run_01:
+  status: done
+  gpu: 6
+  start_time: '2026-07-08 13:28:48'
+  end_time: '2026-07-08 16:57:31'
+config_001___singmos_run_02:
+  status: done
+  gpu: 5
+  start_time: '2026-07-08 13:28:48'
+  end_time: '2026-07-08 16:50:53'
+config_001___singmos_run_03:
+  status: done
+  gpu: 1
+  start_time: '2026-07-08 13:28:48'
+  end_time: '2026-07-08 17:06:06'
+config_002___singmos_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-08 13:28:48'
+  end_time: '2026-07-08 17:58:00'
+config_002___singmos_run_02:
+  status: done
+  gpu: 5
+  start_time: '2026-07-08 16:51:03'
+  end_time: '2026-07-08 22:32:16'
+config_002___singmos_run_03:
+  status: done
+  gpu: 6
+  start_time: '2026-07-08 16:57:40'
+  end_time: '2026-07-09 01:17:47'
+config_003___singmos_run_01:
+  status: done
+  gpu: 1
+  start_time: '2026-07-08 17:06:15'
+  end_time: '2026-07-08 19:32:39'
+config_003___singmos_run_02:
+  status: done
+  gpu: 4
+  start_time: '2026-07-08 17:58:10'
+  end_time: '2026-07-08 21:09:30'
+config_003___singmos_run_03:
+  status: done
+  gpu: 1
+  start_time: '2026-07-08 19:32:49'
+  end_time: '2026-07-08 22:10:57'
+config_004___tmhint_run_01:
+  status: done
+  gpu: 4
+  start_time: '2026-07-08 21:09:39'
+  end_time: '2026-07-09 04:46:24'
+config_004___tmhint_run_02:
+  status: done
+  gpu: 1
+  start_time: '2026-07-08 22:11:07'
+  end_time: '2026-07-09 06:43:20'
+config_004___tmhint_run_03:
+  status: done
+  gpu: 5
+  start_time: '2026-07-08 22:32:26'
+  end_time: '2026-07-09 06:50:35'
+config_005___tmhint_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-09 01:17:58'
+  error_msg: No supported gpu backend found!
+  end_time: '2026-07-09 01:18:03'
+config_005___tmhint_run_02:
+  status: error
+  gpu: 6
+  start_time: '2026-07-09 01:18:14'
+  error_msg: No supported gpu backend found!
+  end_time: '2026-07-09 01:18:19'
+config_005___tmhint_run_03:
+  status: error
+  gpu: 6
+  start_time: '2026-07-09 01:18:29'
+  error_msg: No supported gpu backend found!
+  end_time: '2026-07-09 01:18:35'
+config_006___tmhint_run_01:
+  status: error
+  gpu: 6
+  start_time: '2026-07-09 01:18:46'
+  error_msg: No supported gpu backend found!
+  end_time: '2026-07-09 01:18:49'
+config_006___tmhint_run_02:
+  status: error
+  gpu: 6
+  start_time: '2026-07-09 01:19:00'
+  error_msg: No supported gpu backend found!
+  end_time: '2026-07-09 01:19:03'
+config_006___tmhint_run_03:
+  status: error
+  gpu: 6
+  start_time: '2026-07-09 01:19:14'
+  error_msg: No supported gpu backend found!
+  end_time: '2026-07-09 01:19:16'

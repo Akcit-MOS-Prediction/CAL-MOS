@@ -1,0 +1,103 @@
+datasets:
+  train:
+  - name: Train
+    metadata_path: /workspace/datasets/TMHINTQI/sets/train.csv
+    base_dir: /workspace/datasets/TMHINTQI
+    filename_column: filepath
+    target_column: mos
+  val:
+  - name: Validation
+    metadata_path: /workspace/datasets/TMHINTQI/sets/val.csv
+    base_dir: /workspace/datasets/TMHINTQI
+    filename_column: filepath
+    target_column: mos
+  test:
+  - name: Test
+    metadata_path: /workspace/datasets/TMHINTQI/sets/test.csv
+    base_dir: /workspace/datasets/TMHINTQI
+    filename_column: filepath
+    target_column: mos
+data:
+  use_seqaug: false
+  num_classes: 1
+  target_sr: 16000
+  mixup_alpha: 0.0
+  use_rand_truncation: false
+  min_duration: 2.0
+  min_white_noise_amp: 0.01
+  max_white_noise_amp: 0.1
+  insert_white_noise: false
+train:
+  batch_size: 32
+  shuffle: true
+  num_workers: 12
+wandb_entity: snaxofc10-utfpr-medianeira
+title: CAL-MOS-facebook/wav2vec2-xls-r-1b-(epochs-100)-(bs-32)-(LR-0.0005)-(WD-1e-06)-tmhint-lr5e-4_mlp_dropout0.3-(run-01)
+model:
+  model_type: dynamic
+  model_name: facebook/wav2vec2-xls-r-1b
+  mlp_input_dim: 1280
+  mlp_hidden_dim: ${model.mlp_input_dim}
+  mlp_num_layers: 1
+  mlp_output_size: ${data.num_classes}
+  mlp_dropout: 0.3
+  mlp_activation_func: relu
+  layer_weight_strategy: per_layer
+  num_feature_layers: -1
+  specific_layer_idx: -1
+  pooling_strategy: mean
+  freeze_backbone: true
+  transformer_hidden_size: ${model.mlp_input_dim}
+  transformer_nhead: 4
+  transformer_dim_feedforward: 2048
+  transformer_activation: gelu
+  transformer_dropout: 0.1
+  transformer_layer_norm_eps: 1.0e-05
+  transformer_bias: true
+  transformer_num_hidden_layers: 2
+optimizer:
+  name: adamw
+  params:
+    min_learning_rate: 1.0e-05
+    learning_rate: 0.0005
+    eps: 1.0e-08
+    weight_decay: 1.0e-06
+    betas:
+    - 0.9
+    - 0.98
+scheduler:
+  name: CosineWarmupLR
+  params:
+    warmup_lr: 500
+tags:
+- ${train.batch_size}-BS
+- LR-${optimizer.params.learning_rate}
+- WD-${optimizer.params.weight_decay}
+- ${model.model_name}-HS
+- ${model.mlp_input_dim}-AH
+- ${model.mlp_hidden_dim}-HL
+- ${model.mlp_num_layers}-IS
+trainer:
+  accelerator: gpu
+  max_epochs: 100
+  num_sanity_val_steps: 2
+  overfit_batches: 0.0
+  log_every_n_steps: 10
+  gradient_clip_val: 10.0
+  gradient_clip_algorithm: norm
+  val_check_interval: 1.0
+  accumulate_grad_batches: 8
+model_checkpoint:
+  mode: max
+  save_last: true
+  save_weights_only: true
+  monitor: val/spearman
+  dirpath: ../checkpoints/mos-prediction
+  filename: '{epoch:02d}-{step:02d}-{val/spearman:.4f}'
+early_stopping:
+  monitor: val/spearman
+  patience: 20
+  mode: max
+  min_delta: 0.001
+  verbose: true
+dataset_name: tmhint
