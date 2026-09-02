@@ -167,3 +167,5 @@ Dockerfile
 *.csv
 *.txt
 *.ckpt
+wandb2/
+config/

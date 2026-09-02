@@ -757,7 +757,23 @@ class CalMOSDynamicKANModel(ReLuKANBaseModel):
 
     def _get_embedding_dim(self) -> int:
         return self.mlp.layers[0].in_features
-
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # 1. Desempacota a lista vinda do Wrapper
+        input_features, sr_ids = x 
+        
+        # 2. Pega os embeddings APENAS com o dicionário de features reais
+        embeddings = self._get_embeddings(input_features)
+        
+        # 3. Aplica os pesos das camadas
+        embeddings = self._apply_layer_weighting(embeddings)
+        
+        # 4. Aplica o pooling
+        logits_input = self._apply_pooling(embeddings)  # [B,F] ou [B,2F]
+        
+        # 5. Classificação na camada KAN
+        logits = self.mlp(logits_input).squeeze(-1)
+        
+        return logits
 
 class CalMOSAllLayersEmbeddingModel(BaseModel):
     """

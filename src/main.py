@@ -1,6 +1,7 @@
 import os
 import argparse
 
+import torch
 import wandb
 from omegaconf import OmegaConf
 from lightning.pytorch import Trainer
@@ -14,6 +15,77 @@ def warn(*args, **kwargs):
 
 import warnings
 warnings.warn = warn
+
+
+def tensor_fingerprint(tensor: torch.Tensor, n_values: int = 1024) -> float:
+    flat = tensor.detach().float().cpu().reshape(-1)
+    return float(flat[: min(n_values, flat.numel())].sum().item())
+
+
+def load_finetune_weights(model: CALMOSWrapper, checkpoint_path: str) -> None:
+    if not checkpoint_path:
+        return
+    if not os.path.isfile(checkpoint_path):
+        raise FileNotFoundError(f"Fine-tuning checkpoint not found: {checkpoint_path}")
+
+    print(f"Loading fine-tuning weights from: {checkpoint_path}")
+    try:
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    except TypeError:
+        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+    state_dict = checkpoint.get("state_dict", checkpoint) if isinstance(checkpoint, dict) else checkpoint
+    model_state = model.state_dict()
+    matched_keys = [
+        key for key, value in state_dict.items()
+        if key in model_state and tuple(model_state[key].shape) == tuple(value.shape)
+    ]
+    if not matched_keys:
+        raise RuntimeError(
+            "O checkpoint não possui tensores compatíveis com o modelo de destino."
+        )
+
+    trainable_keys = {
+        key for key, parameter in model.named_parameters()
+        if parameter.requires_grad
+    }
+    missing_trainable_keys = sorted(trainable_keys.difference(matched_keys))
+    if missing_trainable_keys:
+        preview = ", ".join(missing_trainable_keys[:10])
+        raise RuntimeError(
+            "O checkpoint não cobre todos os parâmetros treináveis; o teste de "
+            f"retenção seria inválido. Ausentes ({len(missing_trainable_keys)}): {preview}"
+        )
+
+    probe_keys = matched_keys[:3]
+    before = {
+        key: tensor_fingerprint(model_state[key])
+        for key in probe_keys
+    }
+
+    missing, unexpected = model.load_state_dict(state_dict, strict=False)
+    loaded_state = model.state_dict()
+    after = {
+        key: tensor_fingerprint(loaded_state[key])
+        for key in probe_keys
+    }
+    ckpt = {
+        key: tensor_fingerprint(state_dict[key])
+        for key in probe_keys
+    }
+
+    print(
+        "Fine-tuning weights loaded "
+        f"(checkpoint_tensors={len(state_dict)}, matched_tensors={len(matched_keys)}, "
+        f"trainable_tensors={len(trainable_keys)}, "
+        f"missing={len(missing)}, unexpected={len(unexpected)})."
+    )
+    print("Fine-tuning checkpoint verification:")
+    for key in probe_keys:
+        print(
+            f"  {key}: before={before[key]:.6f} "
+            f"checkpoint={ckpt[key]:.6f} after={after[key]:.6f}"
+        )
+
 
 def run_train(config, args) -> dict:
     if config.data.get("use_seqaug", False):
@@ -43,6 +115,11 @@ def run_train(config, args) -> dict:
     OmegaConf.save(config=config, f=config_save_path)
     print(f"Resolved config saved at: {config_save_path}")
 
+    model = CALMOSWrapper(config)
+    load_finetune_weights(model, config.get("finetune", {}).get("init_checkpoint"))
+
+    print(model)
+
     wandb.init(
         project="MOS-Prediction",
         name=exp_title,
@@ -67,10 +144,6 @@ def run_train(config, args) -> dict:
         LearningRateMonitor("step"),
         EarlyStopping(**config["early_stopping"]),
     ]
-
-    model = CALMOSWrapper(config)
-
-    print(model)
 
     trainer = Trainer(
         **config["trainer"],
