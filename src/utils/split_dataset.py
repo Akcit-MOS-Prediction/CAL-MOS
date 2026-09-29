@@ -23,7 +23,7 @@ for file in input_files:
     sr_match = re.search(r'utt_(\d+)k\.csv', file)
     if sr_match:
         sr_khz = int(sr_match.group(1))
-        sr_code = sr_code_map[sr_khz] 
+        sr_code = sr_code_map[sr_khz]
     else:
         raise ValueError(f"Não foi possível extrair o SR do nome do arquivo: {file}")
 
@@ -33,8 +33,8 @@ for file in input_files:
         'rating': 'mean',
     }).reset_index()
 
-    df["sr_khz"] = sr_khz    
-    df["sr_code"] = sr_code   
+    df["sr_khz"] = sr_khz
+    df["sr_code"] = sr_code
 
     dataframes_with_sr.append(df)
 

@@ -1,0 +1,21 @@
+model:
+    model_type: "dynamic"
+
+    model_name: "facebook/mms-300m"
+
+    mlp_input_dim: 1024 # Must be adapted to the model
+    mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
+    mlp_num_layers: 1
+    mlp_output_size: ${data.num_classes}
+    mlp_dropout: 0.1
+    mlp_activation_func: "relu"
+    layer_weight_strategy: "per_layer"
+    num_feature_layers: 25 # Must be adapted to the model
+    specific_layer_idx: -1 # Take the last layer
+    pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+
+    freeze_backbone: false # Freeze the backbone model
+
+    # Reinitialization strategy
+    use_top_k_reinit: true # Whether to reinitialize the top k layers
+    reinit_k: 3 # Number of top layers to reinitialize

@@ -32,6 +32,8 @@ def load_model(model_name="wav2vec2-xls-r-300m"):
         model_path = "facebook/wav2vec2-large-robust"
     elif (model_name == "mms-300m"):
         model_path = "facebook/mms-300m"
+
+    print("Loading model:", model_path)
     model = Wav2Vec2Model.from_pretrained(model_path)
     model = model.to(device)
     model.eval()
@@ -39,6 +41,7 @@ def load_model(model_name="wav2vec2-xls-r-300m"):
     return model, feature_extractor
 
 
+@torch.inference_mode()
 def extract_wav2vec_embeddings(
     filelist: List[str],
     input_dir: str,
@@ -53,13 +56,16 @@ def extract_wav2vec_embeddings(
             print("file {} doesnt exist!".format(filepath))
             continue
 
-        # Determine the relative path structure
-        rel_path = relpath(filepath, input_dir)
-        # Get the subdirectory structure
-        sub_dir = dirname(rel_path)
-        # Create the same subdirectory structure in output_dir
-        output_subdir = join(output_dir, sub_dir)
-        os.makedirs(output_subdir, exist_ok=True)
+        # # Determine the relative path structure
+        # rel_path = relpath(filepath, input_dir)
+        # # Get the subdirectory structure
+        # sub_dir = dirname(rel_path)
+        # # Create the same subdirectory structure in output_dir
+        # output_subdir = join(output_dir, sub_dir)
+
+        output_path = filepath.replace(input_dir, output_dir)
+
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         audio_data, sr = torchaudio.load(filepath)
         # If stereo, convert to mono
@@ -82,13 +88,15 @@ def extract_wav2vec_embeddings(
         # Concatenate all layers
         all_layers_embeddings = torch.stack(hidden_states) # [num_layers,B,T,F], B=1
         # transform to [num_layers,T,F]
-        all_layers_embeddings = all_layers_embeddings.squeeze(1)
+        all_layers_embeddings = all_layers_embeddings.squeeze()
         if specific_layer is not None:
             all_layers_embeddings = all_layers_embeddings[specific_layer]
         # Saving embedding with the same subdirectory structure
         output_filename = basename(filepath).split(".")[0] + ".pt"
-        output_filepath = join(output_subdir, output_filename)
+        output_filepath = output_path.replace(basename(output_path), output_filename)
         torch.save(all_layers_embeddings.cpu(), output_filepath)
+        # print(all_layers_embeddings.shape)
+        # print(filepath, output_filepath)
 
 
 def main():
@@ -100,14 +108,8 @@ def main():
         help="Path to the base directory"
     )
     parser.add_argument(
-        "-i",
-        "--input-dir-name",
-        required=True,
-        help="Name of the input directory, inside the base directory",
-    )
-    parser.add_argument(
         "-o",
-        "--output-dir-name",
+        "--output-dir",
         default="output_embeddings",
         help="Name of output directory",
     )
@@ -148,10 +150,11 @@ def main():
     )
     args = parser.parse_args()
 
-    input_dir = os.path.join(args.base_dir, args.input_dir_name)
-    output_dir = os.path.join(args.base_dir, args.output_dir_name)
+    input_dir = args.base_dir
+    output_dir = args.output_dir
 
     if args.specific_layer is not None:
+        print("Using specific layer:", args.specific_layer)
         assert args.specific_layer >= 0, "Layer index should be non-negative"
 
         output_dir += f"_layer-{args.specific_layer}"

@@ -3,7 +3,12 @@ import pandas as pd
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoFeatureExtractor
 
-from utils.dataloader import EmbeddingDataset, DynamicDataset
+from utils.dataloader import (
+    EmbeddingDataset,
+    DynamicDataset,
+    MultiLayerEmbeddingDataset,
+    MultiLayerEmbeddingWeightedSumDataset
+)
 
 
 def build_dataloaders(config):
@@ -70,6 +75,46 @@ def build_dataloaders(config):
             filename_column=config.datasets.train[0].filename_column,
             target_column=config.datasets.train[0].target_column,
             base_dir=config.datasets.train[0].base_dir,
+            data_type="val",
+        )
+    elif config.model.model_type.lower() == "multiple_layer_embedding":
+        train_dataset = MultiLayerEmbeddingDataset(
+            data=train_data,
+            filename_column=config.datasets.train[0].filename_column,
+            target_column=config.datasets.train[0].target_column,
+            base_dir=config.datasets.train[0].base_dir,
+            target_dir=config.datasets.train[0].get("target_dir", None),
+            layer_id=config.model.specific_layer_idx,
+            use_seqaug=config.data.use_seqaug,
+            data_type="train",
+        )
+
+        val_dataset = MultiLayerEmbeddingDataset(
+            data=val_data,
+            filename_column=config.datasets.train[0].filename_column,
+            target_column=config.datasets.train[0].target_column,
+            base_dir=config.datasets.train[0].base_dir,
+            target_dir=config.datasets.train[0].get("target_dir", None),
+            layer_id=config.model.specific_layer_idx,
+            data_type="val",
+        )
+    elif config.model.model_type.lower() == "multiple_layer_embedding_weighted_sum":
+        train_dataset = MultiLayerEmbeddingWeightedSumDataset(
+            data=train_data,
+            filename_column=config.datasets.train[0].filename_column,
+            target_column=config.datasets.train[0].target_column,
+            base_dir=config.datasets.train[0].base_dir,
+            target_dir=config.datasets.train[0].get("target_dir", None),
+            use_seqaug=config.data.use_seqaug,
+            data_type="train",
+        )
+
+        val_dataset = MultiLayerEmbeddingWeightedSumDataset(
+            data=val_data,
+            filename_column=config.datasets.train[0].filename_column,
+            target_column=config.datasets.train[0].target_column,
+            base_dir=config.datasets.train[0].base_dir,
+            target_dir=config.datasets.train[0].get("target_dir", None),
             data_type="val",
         )
 

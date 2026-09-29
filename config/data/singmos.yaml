@@ -1,0 +1,22 @@
+datasets:
+    name: "SingMOS"
+    train:
+        - name: Train
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/SingMOS/DATA/singmos_train.csv"
+          base_dir: ""
+          filename_column: "wav_path"
+          target_column: "avg_score"
+
+    val:
+        - name: Validation
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/SingMOS/DATA/singmos_dev.csv"
+          base_dir: ""
+          filename_column: "wav_path"
+          target_column: "avg_score"
+
+    test:
+        - name: Test
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/SingMOS/DATA/singmos_test.csv"
+          base_dir: ""
+          filename_column: "wav_path"
+          target_column: "avg_score"

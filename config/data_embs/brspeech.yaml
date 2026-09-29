@@ -1,0 +1,26 @@
+datasets:
+    name: "BRSpeech"
+    train:
+        - name: Train
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/train.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          target_dir: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/embeddings/BSpeech-MOS-Prediction/${model.normalized_model_name}"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    val:
+        - name: Validation
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/val.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          target_dir: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/embeddings/BSpeech-MOS-Prediction/${model.normalized_model_name}"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    test:
+        - name: Test
+          metadata_path: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2/test.csv"
+          base_dir: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/BSpeech-MOS-Prediction/BRSPEECH_MOS_DATASET_v2"
+          target_dir: "/hadatasets/alef.ferreira/MOS-Prediction/DATASETS/embeddings/BSpeech-MOS-Prediction/${model.normalized_model_name}"
+          filename_column: "filepath"
+          target_column: "mos"
+          sys_id_column: "db"

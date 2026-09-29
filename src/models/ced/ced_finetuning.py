@@ -38,18 +38,18 @@ class FineTuneCED(nn.Module):
         if freeze_backbone_flag:
             self.freeze_backbone()
 
-        self.proj_layer = nn.Sequential(
-            nn.Linear(embedding_dim, proj_size),
-            nn.ReLU(),
-            nn.Dropout(proj_dropout),
-            nn.Linear(proj_size, proj_size),
-        )
+        # self.proj_layer = nn.Sequential(
+        #     nn.Linear(embedding_dim, proj_size),
+        #     nn.ReLU(),
+        #     nn.Dropout(proj_dropout),
+        #     nn.Linear(proj_size, proj_size),
+        # )
 
     def freeze_backbone(self):
         for param in self.backbone.parameters():
             param.requires_grad = False
 
     def forward(self, x: torch.Tensor, **kwargs):
-        x = self.backbone(x)
-        embeddings = self.proj_layer(x)
+        embeddings = self.backbone(x)
+        # embeddings = self.proj_layer(embeddings)
         return embeddings

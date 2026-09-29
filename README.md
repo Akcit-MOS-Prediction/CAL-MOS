@@ -111,6 +111,11 @@ pip install -r requirements.txt
     - Input Dim: 1280
     - openai/whisper-large-v3
 
+- Data2Vec Large
+    - 25 Layers
+    - Input Dim: 1024
+    - facebook/data2vec-audio-large
+
 ## Model Architecture
 
 <img src="resources/CAL-MOS.png" alt="Model Architecture" style="display: block; margin: 0 auto;" width="600">

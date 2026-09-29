@@ -10,6 +10,7 @@ import pandas as pd
 from torch.utils.data import Dataset
 from transformers import WhisperFeatureExtractor
 from transformers import AutoModel, AutoFeatureExtractor
+from safetensors.torch import load_file as load_safetensors_file
 
 
 class EmbeddingDataset(Dataset):
@@ -126,37 +127,173 @@ class EmbeddingDataset(Dataset):
         return features, target
 
 
-class OneLayerEmbeddingCollate:
+class MultiLayerEmbeddingDataset(Dataset):
     def __init__(
         self,
-        padding_value: float = 0.0,
+        data: pd.DataFrame,
+        filename_column: str,
+        target_column: str,
+        base_dir: str,
+        target_dir: str = None,
+        layer_id: int = None,
+        use_seqaug: bool = False,
+        data_type: str = "train",
     ):
-        """
-        Collation function for dynamic batching of audio data.
+        """Initialization"""
+        self.data = data
+
+        # Cache filepaths and targets
+        self.filenames = self.data[filename_column].values
+        self.targets = self.data[target_column].values
+
+        self.filename_column = filename_column
+        self.target_column = target_column
+
+        self.use_seqaug = use_seqaug
+
+        self.base_dir = base_dir
+        self.target_dir = target_dir
+        self.data_type = data_type
+
+        self.layer_id = layer_id
+
+        print(f"Using layer_id: {self.layer_id} for MultiLayerEmbeddingDataset")
+
+    def __len__(self):
+        return len(self.data)
+
+    def _load_file(self, filepath: str) -> torch.Tensor:
+        """Load an audio file
 
         Params:
-            padding_value (float): Value to use for padding shorter sequences.
+
+        filepath (str): Path to the audio file
+
+        Returns:
+
+        torch.Tensor: Audio tensor
         """
+        # features = torch.load(filepath)
+        features = load_safetensors_file(filepath)["embeddings"]
+
+        return features[self.layer_id]
+
+    def seqaug(self, input_tensor, alpha: float = 0.2):
+        """
+        Applies SeqAug (https://arxiv.org/abs/2305.01954) augmentation to the input tensor.
+
+        Params:
+            input_tensor (torch.Tensor): Input tensor of shape [sequence_length, feature_size].
+            alpha (float): Parameter for the Beta distribution (α ∈ [0, 1]).
+
+        Returns:
+            output_tensor (torch.Tensor): Augmented tensor of the same shape as input_tensor.
+        """
+        # Get dimensions
+        sequence_length, feature_size = input_tensor.shape
+
+        # Sample proportion p from Beta(α, α)
+        beta_dist = torch.distributions.Beta(alpha, alpha)
+        p = beta_dist.sample()
+
+        # Determine the number of feature addresses to sample
+        num_features_to_sample = int(p.item() * feature_size)
+        num_features_to_sample = max(num_features_to_sample, 1)  # Ensure at least one feature is selected
+
+        # Randomly select feature addresses (indices) to permute
+        selected_features = torch.randperm(feature_size)[:num_features_to_sample]
+
+        # Generate a random permutation of the time indices
+        perm = torch.randperm(sequence_length)
+
+        # Create a copy of the input tensor to hold the augmented data
+        output_tensor = input_tensor.clone()
+
+        # Permute the selected features along the time axis according to the random permutation
+        output_tensor[:, selected_features] = input_tensor[perm][:, selected_features]
+
+        return output_tensor
+
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, List[str]]:
+        """Get an item from the dataset
+
+        Params:
+
+        index (int): Index of the item to get
+
+        Returns:
+
+        Dict[torch.Tensor, np.ndarray]: A dictionary containing the audio and the caption
+        """
+        filename = self.filenames[index]
+
+        # Handle relative paths
+        if self.base_dir is not None and filename.startswith("./"):
+            # print("1", filename)
+            filename = filename[2:]
+            # print("2", filename)
+            filename = os.path.join(self.base_dir, filename)
+            # print("3", filename)
+
+        # Modify path if target_dir is provided
+        if self.target_dir is not None and self.base_dir is not None:
+            filename = filename.replace(self.base_dir, self.target_dir)
+
+        # Ensure the filename has the correct extension
+        if filename.endswith(".wav"):
+            filename = filename[:-4] + ".safetensors"
+
+        target = self.targets[index]
+
+        features = self._load_file(filename)
+        if self.use_seqaug and self.data_type == "train":
+            features = self.seqaug(features)
+
+        # Convert features to float
+        features = features.float()
+
+        return features, target
+
+
+class OneLayerEmbeddingCollate:
+    def __init__(self, padding_value: float = 0.0):
         self.padding_value = padding_value
 
-    def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+    def __call__(
+        self,
+        batch: List[Tuple[torch.Tensor, torch.Tensor]]
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         features, targets = zip(*batch)
+
+        features = list(features)
         batch_size = len(features)
         feature_dim = features[0].shape[-1]
 
-        features = list(features)
-        targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
-
-        lengths = [feature.shape[0] for feature in features]
+        lengths = [f.shape[0] for f in features]
         max_length = max(lengths)
 
-        padded_features = torch.full((batch_size, max_length, feature_dim), self.padding_value)
+        # Keep same dtype/device as input features
+        padded_features = features[0].new_full(
+            (batch_size, max_length, feature_dim),
+            fill_value=self.padding_value,
+        )
 
-        for i, feature in enumerate(features):
-            length = feature.shape[0]
-            padded_features[i, :length, :] = feature
+        # 1 for valid positions, 0 for padding
+        attention_mask = torch.zeros(
+            (batch_size, max_length),
+            dtype=torch.long,          # or torch.bool if you prefer
+            device=padded_features.device,
+        )
 
-        return padded_features, targets
+        for i, f in enumerate(features):
+            L = f.shape[0]
+            padded_features[i, :L, :] = f
+            attention_mask[i, :L] = 1
+
+        # Targets -> float tensor (keeps your original behavior)
+        targets = torch.stack([torch.as_tensor(t, dtype=torch.float32) for t in targets])
+
+        return (padded_features, attention_mask), targets
 
 
 class AllLayersEmbeddingCollate:
@@ -417,7 +554,7 @@ class DynamicAudioCollate:
         self.padding_value = padding_value
 
     def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-        audios, targets = zip(*batch)
+        audios, _, targets = zip(*batch)
 
         audios = list(audios)
         targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
@@ -445,3 +582,121 @@ class DynamicAudioCollate:
             padded_audios[i, :length] = torch.from_numpy(audio)
 
         return (processed, padded_audios), targets.float()
+
+
+class MultiLayerEmbeddingWeightedSumDataset(Dataset):
+    """
+    For weighted-sum models: returns features with ALL layers.
+
+    Each item returns:
+      features: [L, T, F]  (float32)
+      target:   scalar/float
+    """
+    def __init__(
+        self,
+        data: pd.DataFrame,
+        filename_column: str,
+        target_column: str,
+        base_dir: str,
+        target_dir: str = None,
+        use_seqaug: bool = False,
+        data_type: str = "train",
+    ):
+        self.data = data
+        self.filenames = self.data[filename_column].values
+        self.targets = self.data[target_column].values
+
+        self.filename_column = filename_column
+        self.target_column = target_column
+
+        self.use_seqaug = use_seqaug
+        self.base_dir = base_dir
+        self.target_dir = target_dir
+        self.data_type = data_type
+
+    def __len__(self):
+        return len(self.data)
+
+    def _load_file(self, filepath: str) -> torch.Tensor:
+        """
+        Expected safetensors key: ["embeddings"] with shape [L, T, F]
+        """
+        feats = load_safetensors_file(filepath)["embeddings"]  # [L,T,F]
+        return feats
+
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, torch.Tensor]:
+        filename = self.filenames[index]
+
+        # Handle relative paths
+        if self.base_dir is not None and filename.startswith("./"):
+            filename = filename[2:]
+            filename = os.path.join(self.base_dir, filename)
+
+        # Modify path if target_dir is provided
+        if self.target_dir is not None and self.base_dir is not None:
+            filename = filename.replace(self.base_dir, self.target_dir)
+
+        # Ensure correct extension
+        if filename.endswith(".wav"):
+            filename = filename[:-4] + ".safetensors"
+
+        target = self.targets[index]
+
+        features = self._load_file(filename)  # [L,T,F]
+
+        return features.float(), torch.as_tensor(target, dtype=torch.float32)
+
+
+class MultiLayerEmbeddingWeightedSumCollate:
+    """
+    Pads variable-length sequences on time dimension for multilayer features.
+
+    Input items:
+      features: [L,T,F]
+      target: scalar
+
+    Output:
+      (padded_features, attention_mask), targets
+      padded_features: [B,L,Tmax,F]
+      attention_mask:  [B,Tmax]
+      targets:         [B]
+    """
+    def __init__(self, padding_value: float = 0.0):
+        self.padding_value = padding_value
+
+    def __call__(
+        self,
+        batch: List[Tuple[torch.Tensor, torch.Tensor]]
+    ) -> Tuple[Tuple[torch.Tensor, torch.Tensor], torch.Tensor]:
+        features_list, targets = zip(*batch)
+
+        features_list = list(features_list)
+        batch_size = len(features_list)
+
+        # features are [L,T,F]
+        L = features_list[0].shape[0]
+        Fdim = features_list[0].shape[-1]
+
+        lengths = [x.shape[1] for x in features_list]  # time lengths
+        Tmax = max(lengths)
+
+        padded = features_list[0].new_full(
+            (batch_size, L, Tmax, Fdim),
+            fill_value=self.padding_value,
+        )
+
+        attention_mask = torch.zeros(
+            (batch_size, Tmax),
+            dtype=torch.long,
+            device=padded.device,
+        )
+
+        for i, x in enumerate(features_list):
+            # x: [L,Ti,F]
+            Ti = x.shape[1]
+            padded[i, :, :Ti, :] = x
+            attention_mask[i, :Ti] = 1
+
+        targets = torch.stack([torch.as_tensor(t, dtype=torch.float32) for t in targets])
+
+        return (padded, attention_mask), targets

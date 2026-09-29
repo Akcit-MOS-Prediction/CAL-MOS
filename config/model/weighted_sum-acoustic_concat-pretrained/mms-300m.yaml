@@ -1,0 +1,33 @@
+model:
+    model_type: "dynamic_melspec"
+
+    model_name: "facebook/mms-300m"
+
+    mlp_input_dim: 1216 # Must be adapted to the model
+    mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
+    mlp_num_layers: 1
+    mlp_output_size: ${data.num_classes}
+    mlp_dropout: 0.1
+    mlp_activation_func: "relu"
+    layer_weight_strategy: "layer_adapter"
+    adapter_input_dim: 1024
+    adapter_dim: 1024
+    num_feature_layers: 25 # Must be adapted to the model
+    specific_layer_idx: -1 # Take the last layer
+    pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+
+    freeze_backbone: true # Freeze the backbone model
+
+    # MelSpec encoder
+    ced_embedding_dim: 192 # tiny
+    # ced_embedding_dim: 256 # mini
+    # ced_embedding_dim: 384 # small
+    # ced_embedding_dim: 768 # base
+    ced_proj_size: 512
+    ced_proj_dropout: 0.1
+    ced_pretrained: true
+    ced_freeze: false
+
+    # CKA loss
+    use_cka_loss: false
+    cka_weight: 0.1

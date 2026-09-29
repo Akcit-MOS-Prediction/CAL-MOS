@@ -17,6 +17,7 @@ from utils.dataloader import (
     OneLayerEmbeddingCollate,
     DynamicCollate,
     DynamicAudioCollate,
+    MultiLayerEmbeddingWeightedSumCollate,
 )
 
 
@@ -62,8 +63,11 @@ class CALMOSWrapper(pl.LightningModule):
             )
         elif self.config.model.model_type.lower() == "all_layers_embedding":
             collate_fn = AllLayersEmbeddingCollate()
-        elif self.config.model.model_type.lower() == "one_layer_embedding":
+        elif self.config.model.model_type.lower() == "one_layer_embedding" or \
+            self.config.model.model_type.lower() == "multiple_layer_embedding":
             collate_fn = OneLayerEmbeddingCollate()
+        elif self.config.model.model_type.lower() == "multiple_layer_embedding_weighted_sum":
+            collate_fn = MultiLayerEmbeddingWeightedSumCollate()
         else:
             raise ValueError(f"Invalid model type: {self.config.model.model_type}")
 
@@ -92,8 +96,11 @@ class CALMOSWrapper(pl.LightningModule):
             )
         elif self.config.model.model_type.lower() == "all_layers_embedding":
             collate_fn = AllLayersEmbeddingCollate()
-        elif self.config.model.model_type.lower() == "one_layer_embedding":
+        elif self.config.model.model_type.lower() == "one_layer_embedding" \
+            or self.config.model.model_type.lower() == "multiple_layer_embedding":
             collate_fn = OneLayerEmbeddingCollate()
+        elif self.config.model.model_type.lower() == "multiple_layer_embedding_weighted_sum":
+            collate_fn = MultiLayerEmbeddingWeightedSumCollate()
         else:
             raise ValueError(f"Invalid model type: {self.config.model.model_type}")
 
@@ -213,8 +220,26 @@ class CALMOSWrapper(pl.LightningModule):
         """Training step."""
         input_features, target = train_batch
 
-        logits = self.forward(input_features)
-        loss = self.loss(logits, target)
+        out = self.forward(input_features)
+
+        if isinstance(out, (tuple, list)) and len(out) == 2:
+            logits, aux_loss = out
+
+            print(f"Aux loss: {aux_loss.item()}")
+        else:
+            logits, aux_loss = out, None
+
+        ce_loss = self.loss(logits, target)
+
+        loss = ce_loss
+
+        if aux_loss is not None:
+            w = float(getattr(self.config.loss, "cka_weight", 1.0))
+            loss = ce_loss + w * aux_loss
+
+            # optional logs
+            self.log("train/cka_loss", aux_loss, on_step=True, on_epoch=True, prog_bar=False, logger=True)
+            self.log("train/ce_loss",  ce_loss,  on_step=True, on_epoch=True, prog_bar=False, logger=True)
 
         self.train_mse(logits, target)
         self.train_pearson(logits, target)
@@ -231,8 +256,23 @@ class CALMOSWrapper(pl.LightningModule):
         """Validation step."""
         input_features, target = val_batch
 
-        logits = self.forward(input_features)
-        loss = self.loss(logits, target)
+        out = self.forward(input_features)
+
+        if isinstance(out, (tuple, list)) and len(out) == 2:
+            logits, aux_loss = out
+        else:
+            logits, aux_loss = out, None
+
+        ce_loss = self.loss(logits, target)
+
+        loss = ce_loss
+
+        if aux_loss is not None:
+            w = float(getattr(self.config.loss, "cka_weight", 1.0))
+            loss = ce_loss + w * aux_loss
+
+            self.log("val/cka_loss", aux_loss, on_step=False, on_epoch=True, prog_bar=False, logger=True)
+            self.log("val/ce_loss",  ce_loss,  on_step=False, on_epoch=True, prog_bar=False, logger=True)
 
         self.val_mse(logits, target)
         self.val_pearson(logits, target)
