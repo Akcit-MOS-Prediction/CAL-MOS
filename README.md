@@ -1,7 +1,8 @@
 # CAL-MOS Bridging Layers with Adapters for Robust MOS Prediction Across Speech Foundation Models
 
-[![arXiv](https://img.shields.io/badge/arXiv-2609.14956-b31b1b.svg)](https://arxiv.org/abs/2609.14956)
 [![ISCA Archive](https://img.shields.io/badge/ISCA%20Archive-Interspeech%202026-1a73e8.svg)](https://www.isca-archive.org/interspeech_2026/ferreira26_interspeech.html)
+[![arXiv](https://img.shields.io/badge/arXiv-2609.14956-b31b1b.svg)](https://arxiv.org/abs/2609.14956)
+
 
 Official repository for the paper: **CAL-MOS Bridging Layers with Adapters for Robust MOS Prediction Across Speech Foundation Models**, accepted at Interspeech 2026.
 
@@ -252,17 +253,6 @@ This entry point takes one merged config rather than the three part split, so pa
 
 Metrics are reported at two levels. Utterance level compares per file predictions against per file MOS. System level first averages predictions and references inside each system, using the system id column, and then compares those averages. Both report MSE, LCC, SRCC, and KTAU.
 
-## Ranking backbones
-
-Single runs per setting make raw metric ordering fragile, so backbone selection uses a stratified paired bootstrap over the saved prediction files, with Holm Bonferroni correction across comparisons against the best method:
-
-```bash
-cd src
-python rank_backbones_bootstrap.py
-```
-
-It reads `predictions_utt.csv` and `predictions_sys.csv` from every experiment directory and reports a ranking along with which gaps are significant. Run it with `-h` for the available options, which cover the experiments directory, the dataset list, the metric, utterance or system level, the number of resamples, and how many methods to recommend.
-
 ## Pre extracted embeddings
 
 Training directly on cached hidden states avoids repeated forward passes through a frozen backbone. Extract first:
@@ -315,8 +305,6 @@ Other backbones the code handles, for adding new configs:
 | Whisper Large v3 | `openai/whisper-large-v3` | 33 | 1280 |
 | Whisper Large v2 | `openai/whisper-large-v2` | 33 | 1280 |
 
-Whisper is an encoder decoder model and only the encoder is loaded.
-
 To add a backbone, copy a model YAML from the regime you want, set `model_name`, and match `num_feature_layers`, `mlp_input_dim`, and `adapter_input_dim` to the table above.
 
 ## Citation
@@ -332,10 +320,6 @@ To add a backbone, copy a model YAML from the regime you want, set `model_name`,
   issn      = {2958-1796},
 }
 ```
-
-## Acknowledgements
-
-This work was funded by the project Research and Development of Algorithms for Construction of Digital Human Technological Components, supported by the Advanced Knowledge Center in Immersive Technologies (AKCIT), with financial resources from the PPI IoT of the MCTI grant number 057/2023, signed with EMBRAPII. We also thank the Artificial Intelligence Lab at Recod.ai and the Institute of Computing, University of Campinas, for granting access to the computational infrastructure used in the experiments.
 
 ## License
 
