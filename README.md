@@ -308,6 +308,15 @@ Other backbones the code handles, for adding new configs:
 
 To add a backbone, copy a model YAML from the regime you want, set `model_name`, and match `num_feature_layers`, `mlp_input_dim`, and `adapter_input_dim` to the table above.
 
+## Best Checkpoints
+
+The configuration that got the best results was W2vBERT 2.0 + Adapters + Mean Pooling.
+
+- [W2v-BERT 2.0 (BVCC)](https://huggingface.co/alefiury/CALMOS-W2V-BERT-2.0-BVCC)
+- [W2v-BERT 2.0 (BRSpeech)](https://huggingface.co/alefiury/CALMOS-W2V-BERT-2.0-BRSpeech)
+- [W2v-BERT 2.0 (SingMOS)](https://huggingface.co/alefiury/CALMOS-W2V-BERT-2.0-SingMOS)
+- [W2v-BERT 2.0 (TMHINT-QI)](https://huggingface.co/alefiury/CALMOS-W2V-BERT-2.0-TMHINT-QI)
+
 ## Citation
 
 ```bibtex
