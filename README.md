@@ -1,5 +1,8 @@
 # CAL-MOS Bridging Layers with Adapters for Robust MOS Prediction Across Speech Foundation Models
 
+[![arXiv](https://img.shields.io/badge/arXiv-2609.14956-b31b1b.svg)](https://arxiv.org/abs/2609.14956)
+[![ISCA Archive](https://img.shields.io/badge/ISCA%20Archive-Interspeech%202026-1a73e8.svg)](https://www.isca-archive.org/interspeech_2026/ferreira26_interspeech.html)
+
 Official repository for the paper: **CAL-MOS Bridging Layers with Adapters for Robust MOS Prediction Across Speech Foundation Models**, accepted at Interspeech 2026.
 
 ## Overview
