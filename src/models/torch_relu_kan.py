@@ -45,11 +45,21 @@ class ReLUKANLayer(nn.Module):
 
 
 class ReLUKAN(nn.Module):
-    def __init__(self, width, grid, k):
+    def __init__(self, width, grid, k, use_layer_norm=True, layer_norm_eps=1e-5, layer_norm_affine=False, debug=False):
         super().__init__()
+        self.debug = debug
+        self._debug_layer_norm_logged = False
         self.width = width
         self.grid = grid
         self.k = k
+        self.input_layer_norm = (
+            nn.LayerNorm(
+                width[0],
+                eps=layer_norm_eps,
+                elementwise_affine=layer_norm_affine,
+            )
+            if use_layer_norm else nn.Identity()
+        )
         self.rk_layers = []
         for i in range(len(width) - 1):
             self.rk_layers.append(ReLUKANLayer(width[i], grid, k, width[i+1]))
@@ -58,6 +68,14 @@ class ReLUKAN(nn.Module):
         self.rk_layers = nn.ModuleList(self.rk_layers)
 
     def forward(self, x):
+        normalized = self.input_layer_norm(x)
+        if self.debug and not self._debug_layer_norm_logged:
+            before = x[0].detach().cpu().reshape(-1).tolist()
+            after = normalized[0].detach().cpu().reshape(-1).tolist()
+            print(f"[DEBUG][KAN][LayerNorm] before shape={tuple(x.shape)} vector={before}")
+            print(f"[DEBUG][KAN][LayerNorm] after  shape={tuple(normalized.shape)} vector={after}")
+            self._debug_layer_norm_logged = True
+        x = normalized
         for rk_layer in self.rk_layers:
             x = rk_layer(x)
         # x = x.reshape((len(x), self.width[-1]))

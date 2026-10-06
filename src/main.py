@@ -5,9 +5,10 @@ import wandb
 from omegaconf import OmegaConf
 from lightning.pytorch import Trainer
 from lightning.pytorch.loggers import WandbLogger
-from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor
+from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor, EarlyStopping
 
 from models.calmos_wrapper import CALMOSWrapper
+from utils.forgetting_metrics import ForgettingMetrics
 
 # Disable warnings
 def warn(*args, **kwargs):
@@ -38,6 +39,12 @@ def main() -> None:
         required=False,
         type=str,
         default="../checkpoints/mos-prediction",
+    )
+
+    parser.add_argument(
+        "--init-checkpoint",
+        type=str,
+        help="Load model weights from the previous stage; optimizer/scheduler start fresh",
     )
 
     args = parser.parse_args()
@@ -76,14 +83,49 @@ def main() -> None:
         config=OmegaConf.to_container(config, resolve=True)
     )
 
-    config["model_checkpoint"].pop("dirpath")
+    checkpoint_settings = OmegaConf.to_container(config.model_checkpoint, resolve=True)
+    checkpoint_settings["dirpath"] = os.path.abspath(args.checkpoint_dir)
+    checkpoint_settings["save_top_k"] = 1
+    checkpoint_settings["save_last"] = False
+
+    monitor = checkpoint_settings.get("monitor")
+    if not monitor:
+        raise ValueError("model_checkpoint.monitor must name a validation metric")
+
+    early_stopping_settings = (
+        OmegaConf.to_container(config.early_stopping, resolve=True)
+        if config.get("early_stopping") else {}
+    )
+    early_stopping_settings.update(
+        monitor=monitor,
+        mode=checkpoint_settings.get("mode", "max"),
+        patience=25,
+        min_delta=0.0,
+        check_on_train_epoch_end=False,
+    )
 
     callbacks = [
-        ModelCheckpoint(**config["model_checkpoint"]),
+        ModelCheckpoint(**checkpoint_settings),
+        EarlyStopping(**early_stopping_settings),
         LearningRateMonitor("step"),
     ]
+    if config.get("only_mlp", False):
+        protocol = config.get("forgetting_metrics") or {}
+        callbacks.append(ForgettingMetrics(
+            output_dir=os.path.dirname(os.path.abspath(args.checkpoint_dir)),
+            val_loss_target=protocol.get("val_loss_target", 0.05),
+            budget_seconds=protocol.get("budget_seconds", 1800.0),
+        ))
 
-    model = CALMOSWrapper(config)
+    if args.init_checkpoint:
+        if not config.get("only_mlp", False) or not config.model.get("freeze_backbone", False):
+            raise ValueError("--init-checkpoint requires only_mlp=true and freeze_backbone=true")
+        model = CALMOSWrapper.load_from_checkpoint(
+            args.init_checkpoint, config=config, map_location="cpu", strict=True
+        )
+        print(f"Initialized model weights from: {args.init_checkpoint}")
+    else:
+        model = CALMOSWrapper(config)
 
     print(model)
 

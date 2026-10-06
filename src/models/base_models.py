@@ -8,6 +8,7 @@ import torch.nn.init as init
 import torch.nn.functional as F
 from transformers import AutoModel, AutoConfig
 from models.torch_relu_kan import ReLUKAN
+from models.layer_selection import resolve_layer_index
 
 # Backward compatibility with older versions of the repository
 try:
@@ -45,6 +46,68 @@ class SinusoidalPositionalEncoding(nn.Module):
         return x
 
 
+class PowerTransformerYeoJohnson(nn.Module):
+    """Apply a train-fitted sklearn Yeo-Johnson transform to pooled features."""
+
+    def __init__(self, specification: dict):
+        super().__init__()
+        if specification.get("params_path"):
+            import json
+            from pathlib import Path
+
+            params_path = Path(str(specification["params_path"])).expanduser().resolve(strict=True)
+            with params_path.open(encoding="utf-8") as stream:
+                fitted = json.load(stream)
+            specification = {**dict(specification), **fitted}
+        if str(specification.get("method", "")).lower() != "yeo-johnson":
+            raise ValueError("input_power_transform.method must be 'yeo-johnson'")
+        if not specification.get("standardize", False):
+            raise ValueError("PowerTransformer Yeo-Johnson must use standardize=true")
+
+        lambdas = torch.as_tensor(list(specification["lambdas"]), dtype=torch.float64)
+        mean = torch.as_tensor(list(specification["mean"]), dtype=torch.float64)
+        scale = torch.as_tensor(list(specification["scale"]), dtype=torch.float64)
+        if lambdas.ndim != 1 or mean.shape != lambdas.shape or scale.shape != lambdas.shape:
+            raise ValueError("Yeo-Johnson lambdas, mean and scale must be equal-length vectors")
+        if (not torch.isfinite(lambdas).all() or not torch.isfinite(mean).all()
+                or not torch.isfinite(scale).all() or (scale <= 0).any()):
+            raise ValueError("Yeo-Johnson parameters must be finite and scales positive")
+        self.register_buffer("lambdas", lambdas)
+        self.register_buffer("mean", mean)
+        self.register_buffer("scale", scale)
+
+    def forward(self, values: torch.Tensor) -> torch.Tensor:
+        if values.shape[-1] != self.lambdas.numel():
+            raise ValueError(
+                f"Yeo-Johnson expected {self.lambdas.numel()} features, got {values.shape[-1]}"
+            )
+        input_dtype = values.dtype
+        x = values.to(dtype=torch.float64)
+        positive_mask = x >= 0
+        positive_x = x.clamp_min(0)
+        negative_x = x.clamp_max(0)
+
+        positive_log = torch.log1p(positive_x)
+        positive_lambda = self.lambdas
+        positive_denominator = torch.where(
+            positive_lambda == 0, torch.ones_like(positive_lambda), positive_lambda
+        )
+        positive_power = torch.expm1(positive_lambda * positive_log) / positive_denominator
+        positive = torch.where(positive_lambda == 0, positive_log, positive_power)
+
+        negative_log = torch.log1p(-negative_x)
+        negative_exponent = 2.0 - self.lambdas
+        negative_denominator = torch.where(
+            negative_exponent == 0, torch.ones_like(negative_exponent), negative_exponent
+        )
+        negative_power = -torch.expm1(negative_exponent * negative_log) / negative_denominator
+        negative = torch.where(negative_exponent == 0, -negative_log, negative_power)
+
+        transformed = torch.where(positive_mask, positive, negative)
+        transformed = (transformed - self.mean) / self.scale
+        return transformed.to(dtype=input_dtype)
+
+
 class MLPBase(nn.Module):
     def __init__(
         self,
@@ -54,8 +117,23 @@ class MLPBase(nn.Module):
         output_size: int = 7,
         dropout: float = 0.1,
         activation_func: str = "relu",
+        use_layer_norm: bool = True,
+        layer_norm_eps: float = 1e-5,
+        layer_norm_affine: bool = False,
+        debug: bool = False,
     ) -> None:
         super().__init__()
+        self.debug = debug
+        self._debug_layer_norm_logged = False
+
+        self.input_layer_norm = (
+            nn.LayerNorm(
+                input_size,
+                eps=layer_norm_eps,
+                elementwise_affine=layer_norm_affine,
+            )
+            if use_layer_norm else nn.Identity()
+        )
 
         # Validate and set the activation function
         activation_func = activation_func.lower()
@@ -100,7 +178,14 @@ class MLPBase(nn.Module):
                     init.zeros_(module.bias)
 
     def forward(self, x):
-        logits = self.layers(x)
+        normalized = self.input_layer_norm(x)
+        if self.debug and not self._debug_layer_norm_logged:
+            before = x[0].detach().cpu().reshape(-1).tolist()
+            after = normalized[0].detach().cpu().reshape(-1).tolist()
+            print(f"[DEBUG][MLP][LayerNorm] before shape={tuple(x.shape)} vector={before}")
+            print(f"[DEBUG][MLP][LayerNorm] after  shape={tuple(normalized.shape)} vector={after}")
+            self._debug_layer_norm_logged = True
+        logits = self.layers(normalized)
         return logits
 
 
@@ -167,10 +252,16 @@ class BaseModel(nn.Module, ABC):
         mlp_output_size: int = 7,
         mlp_dropout: float = 0.1,
         mlp_activation_func: str = "relu",
+        use_layer_norm: bool = True,
+        layer_norm_eps: float = 1e-5,
+        layer_norm_affine: bool = False,
+        last_layer: bool = False,
+        debug: bool = False,
         layer_weight_strategy: str = "per_layer", # "per_layer" or "weighted_sum"
         num_feature_layers: int = 25,
         specific_layer_idx: int = -1,
         pooling_strategy: str = "mean", # "mean" or "attpool"
+        input_power_transform: dict | None = None,
         **kwargs,
     ):
         super().__init__()
@@ -181,8 +272,19 @@ class BaseModel(nn.Module, ABC):
             output_size=mlp_output_size,
             dropout=mlp_dropout,
             activation_func=mlp_activation_func,
+            use_layer_norm=use_layer_norm,
+            layer_norm_eps=layer_norm_eps,
+            layer_norm_affine=layer_norm_affine,
+            debug=debug,
+        )
+        self.input_transform = (
+            PowerTransformerYeoJohnson(input_power_transform)
+            if input_power_transform else nn.Identity()
         )
 
+        self.last_layer = last_layer
+        self.debug = debug
+        self._layer_selection_logged = False
         self.layer_weight_strategy = layer_weight_strategy
         self.num_feature_layers = num_feature_layers
         self.specific_layer_idx = specific_layer_idx
@@ -230,7 +332,12 @@ class BaseModel(nn.Module, ABC):
                 f"Invalid pooling strategy: {pooling_strategy}. Choose 'mean' or 'attpool'."
             )
 
-        self.attpool = None
+        if pooling_strategy == "attpool":
+            if mlp_input_dim % 2:
+                raise ValueError("attpool requires an even mlp_input_dim")
+            self.attpool = AttentiveStatisticsPooling(input_size=mlp_input_dim // 2)
+        else:
+            self.attpool = None
 
     def _transformers_init_weights(self):
         for layer in self.transformer_layers:
@@ -325,23 +432,46 @@ class BaseModel(nn.Module, ABC):
     def _get_embedding_dim(self) -> int:
         pass
 
+    def _select_configured_layer(self, embeddings: torch.Tensor) -> torch.Tensor:
+        num_layers = embeddings.shape[1]
+        layer_idx = resolve_layer_index(
+            num_layers=num_layers,
+            specific_layer_idx=self.specific_layer_idx,
+            last_layer=self.last_layer,
+        )
+        if not self._layer_selection_logged:
+            print(
+                f"[LayerSelection][{self.__class__.__name__}] "
+                f"last_layer={self.last_layer}; using layer index "
+                f"{layer_idx} of {num_layers} hidden-state layers"
+            )
+            self._layer_selection_logged = True
+        return self._specific_layer(embeddings, layer_idx)
+
     def _apply_layer_weighting(self, embeddings: torch.Tensor) -> torch.Tensor:
         """
-        Apply the chosen layer_weight_strategy.
-        After weighting:
-        - per_layer: [B,F] -> reshape to [B,1,F]
-        - weighted_sum: [B,F] -> reshape to [B,1,F]
-        - transformer: [B,F] -> reshape to [B,1,F]
+        Apply the configured layer strategy. When last_layer=True, always
+        select the final hidden state and bypass aggregation.
         """
+        if self.last_layer:
+            return self._select_configured_layer(embeddings)
         if self.layer_weight_strategy == "transformer":
             embeddings = self._transformer_aggregation(embeddings)
+            strategy_description = "transformer aggregation over all hidden-state layers"
         elif self.layer_weight_strategy == "per_layer":
-            embeddings = self._specific_layer(embeddings, self.specific_layer_idx) # [B,T,F]
+            return self._select_configured_layer(embeddings)
         elif self.layer_weight_strategy == "weighted_sum":
-            embeddings = self._weighted_sum(embeddings) # [B,T,F]
+            embeddings = self._weighted_sum(embeddings)
+            strategy_description = "weighted sum over all hidden-state layers"
         else:
             raise ValueError(f"Invalid layer weight strategy: {self.layer_weight_strategy}")
-
+        if not self._layer_selection_logged:
+            print(
+                f"[LayerSelection][{self.__class__.__name__}] "
+                f"last_layer=False; using {strategy_description} "
+                f"(num layers={embeddings.shape[1] if embeddings.ndim > 1 else 'n/a'})"
+            )
+            self._layer_selection_logged = True
         return embeddings
 
     def _apply_pooling(self, embeddings: torch.Tensor) -> torch.Tensor:
@@ -355,9 +485,6 @@ class BaseModel(nn.Module, ABC):
             return embeddings.mean(dim=1)  # [B,F]
 
         elif self.pooling_strategy == "attpool":
-            # AttentiveStatisticsPooling requires initialization once we know F
-            input_dim = embeddings.size(-1)
-            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
             return self.attpool(embeddings)
 
         else:
@@ -371,6 +498,7 @@ class BaseModel(nn.Module, ABC):
         embeddings = self._apply_layer_weighting(embeddings)
         # Apply pooling
         logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
+        logits_input = self.input_transform(logits_input)
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
@@ -399,14 +527,35 @@ class ReLuKANBaseModel(nn.Module, ABC):
         pooling_strategy: str = "mean",
         relukan_grid: int = 3,  # New parameters for ReLUKAN
         relukan_k: int = 3,
+        use_layer_norm: bool = True,
+        layer_norm_eps: float = 1e-5,
+        layer_norm_affine: bool = False,
+        last_layer: bool = False,
+        debug: bool = False,
+        input_power_transform: dict | None = None,
         **kwargs,
     ):
         super().__init__()
         # Construct ReLUKAN width list
         width = [mlp_input_dim] + [mlp_hidden_dim] * mlp_num_layers + [mlp_output_size]
-        self.mlp = ReLUKAN(width=width, grid=relukan_grid, k=relukan_k)
+        self.mlp = ReLUKAN(
+            width=width,
+            grid=relukan_grid,
+            k=relukan_k,
+            use_layer_norm=use_layer_norm,
+            layer_norm_eps=layer_norm_eps,
+            layer_norm_affine=layer_norm_affine,
+            debug=debug,
+        )
+        self.input_transform = (
+            PowerTransformerYeoJohnson(input_power_transform)
+            if input_power_transform else nn.Identity()
+        )
         
         # Existing code for layer weighting strategy, pooling, etc.
+        self.last_layer = last_layer
+        self.debug = debug
+        self._layer_selection_logged = False
         self.layer_weight_strategy = layer_weight_strategy
         self.num_feature_layers = num_feature_layers
         self.specific_layer_idx = specific_layer_idx
@@ -453,7 +602,12 @@ class ReLuKANBaseModel(nn.Module, ABC):
                 f"Invalid pooling strategy: {pooling_strategy}. Choose 'mean' or 'attpool'."
             )
 
-        self.attpool = None
+        if pooling_strategy == "attpool":
+            if mlp_input_dim % 2:
+                raise ValueError("attpool requires an even mlp_input_dim")
+            self.attpool = AttentiveStatisticsPooling(input_size=mlp_input_dim // 2)
+        else:
+            self.attpool = None
 
     def _transformers_init_weights(self):
         for layer in self.transformer_layers:
@@ -548,23 +702,46 @@ class ReLuKANBaseModel(nn.Module, ABC):
     def _get_embedding_dim(self) -> int:
         pass
 
+    def _select_configured_layer(self, embeddings: torch.Tensor) -> torch.Tensor:
+        num_layers = embeddings.shape[1]
+        layer_idx = resolve_layer_index(
+            num_layers=num_layers,
+            specific_layer_idx=self.specific_layer_idx,
+            last_layer=self.last_layer,
+        )
+        if not self._layer_selection_logged:
+            print(
+                f"[LayerSelection][{self.__class__.__name__}] "
+                f"last_layer={self.last_layer}; using layer index "
+                f"{layer_idx} of {num_layers} hidden-state layers"
+            )
+            self._layer_selection_logged = True
+        return self._specific_layer(embeddings, layer_idx)
+
     def _apply_layer_weighting(self, embeddings: torch.Tensor) -> torch.Tensor:
         """
-        Apply the chosen layer_weight_strategy.
-        After weighting:
-        - per_layer: [B,F] -> reshape to [B,1,F]
-        - weighted_sum: [B,F] -> reshape to [B,1,F]
-        - transformer: [B,F] -> reshape to [B,1,F]
+        Apply the configured layer strategy. When last_layer=True, always
+        select the final hidden state and bypass aggregation.
         """
+        if self.last_layer:
+            return self._select_configured_layer(embeddings)
         if self.layer_weight_strategy == "transformer":
             embeddings = self._transformer_aggregation(embeddings)
+            strategy_description = "transformer aggregation over all hidden-state layers"
         elif self.layer_weight_strategy == "per_layer":
-            embeddings = self._specific_layer(embeddings, self.specific_layer_idx) # [B,T,F]
+            return self._select_configured_layer(embeddings)
         elif self.layer_weight_strategy == "weighted_sum":
-            embeddings = self._weighted_sum(embeddings) # [B,T,F]
+            embeddings = self._weighted_sum(embeddings)
+            strategy_description = "weighted sum over all hidden-state layers"
         else:
             raise ValueError(f"Invalid layer weight strategy: {self.layer_weight_strategy}")
-
+        if not self._layer_selection_logged:
+            print(
+                f"[LayerSelection][{self.__class__.__name__}] "
+                f"last_layer=False; using {strategy_description} "
+                f"(num layers={embeddings.shape[1] if embeddings.ndim > 1 else 'n/a'})"
+            )
+            self._layer_selection_logged = True
         return embeddings
 
     def _apply_pooling(self, embeddings: torch.Tensor) -> torch.Tensor:
@@ -578,9 +755,6 @@ class ReLuKANBaseModel(nn.Module, ABC):
             return embeddings.mean(dim=1)  # [B,F]
 
         elif self.pooling_strategy == "attpool":
-            # AttentiveStatisticsPooling requires initialization once we know F
-            input_dim = embeddings.size(-1)
-            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
             return self.attpool(embeddings)
 
         else:
@@ -594,6 +768,7 @@ class ReLuKANBaseModel(nn.Module, ABC):
         embeddings = self._apply_layer_weighting(embeddings)
         # Apply pooling
         logits_input = self._apply_pooling(embeddings)  # [B,F] or [B,2F]
+        logits_input = self.input_transform(logits_input)
         # MLP classification
         logits = self.mlp(logits_input).squeeze(-1)
         return logits
@@ -734,7 +909,17 @@ class CalMOSDynamicKANModel(ReLuKANBaseModel):
         return all_layers
 
     def _get_embedding_dim(self) -> int:
-        return self.mlp.layers[0].in_features
+        return self.mlp.width[0]
+
+    def forward(self, x: tuple) -> torch.Tensor:
+        # DynamicCollate returns (feature-extractor output, sample-rate IDs).
+        # The KAN head does not use the IDs, as in the MLP path when
+        # use_sr_embeddings=False.
+        input_features, _source_srs = x
+        embeddings = self._get_embeddings(input_features)
+        embeddings = self._apply_layer_weighting(embeddings)
+        logits_input = self._apply_pooling(embeddings)
+        return self.mlp(logits_input).squeeze(-1)
 
 
 class CalMOSAllLayersEmbeddingModel(BaseModel):
@@ -765,6 +950,11 @@ class CalMOSAllLayersEmbeddingModel(BaseModel):
         num_feature_layers: int = 25,
         specific_layer_idx: int = -1,
         pooling_strategy: str = "mean",
+        use_layer_norm: bool = True,
+        layer_norm_eps: float = 1e-5,
+        layer_norm_affine: bool = False,
+        last_layer: bool = False,
+        debug: bool = False,
     ):
         super().__init__(
             mlp_input_dim=mlp_input_dim,
@@ -777,6 +967,11 @@ class CalMOSAllLayersEmbeddingModel(BaseModel):
             num_feature_layers=num_feature_layers,
             specific_layer_idx=specific_layer_idx,
             pooling_strategy=pooling_strategy,
+            use_layer_norm=use_layer_norm,
+            layer_norm_eps=layer_norm_eps,
+            layer_norm_affine=layer_norm_affine,
+            last_layer=last_layer,
+            debug=debug,
         )
 
     def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
@@ -918,10 +1113,21 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
         mlp_dropout: float = 0.1,
         mlp_activation_func: str = "relu",
         pooling_strategy: str = "mean",
+        use_layer_norm: bool = True,
+        layer_norm_eps: float = 1e-5,
+        layer_norm_affine: bool = False,
+        last_layer: bool = False,
+        debug: bool = False,
     ):
         super().__init__()
 
         self.pooling_strategy = pooling_strategy
+        if pooling_strategy == "attpool":
+            if mlp_input_dim % 2:
+                raise ValueError("attpool requires an even mlp_input_dim")
+            self.attpool = AttentiveStatisticsPooling(input_size=mlp_input_dim // 2)
+        else:
+            self.attpool = None
         self.mlp = MLPBase(
             input_size=mlp_input_dim,
             hidden_dim=mlp_hidden_dim,
@@ -929,6 +1135,10 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
             output_size=mlp_output_size,
             dropout=mlp_dropout,
             activation_func=mlp_activation_func,
+            use_layer_norm=use_layer_norm,
+            layer_norm_eps=layer_norm_eps,
+            layer_norm_affine=layer_norm_affine,
+            debug=debug,
         )
 
     def _get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
@@ -956,9 +1166,6 @@ class CalMOSOneLayerEmbeddingModel(nn.Module):
             return embeddings.mean(dim=1)  # [B,F]
 
         elif self.pooling_strategy == "attpool":
-            # AttentiveStatisticsPooling requires initialization once we know F
-            input_dim = embeddings.size(-1)
-            self.attpool = AttentiveStatisticsPooling(input_size=input_dim).to(embeddings.device)
             return self.attpool(embeddings)
 
         else:

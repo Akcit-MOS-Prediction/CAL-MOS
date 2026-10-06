@@ -1,0 +1,39 @@
+datasets:
+    train:
+        - name: Train
+          metadata_path: "/workspace/datasets/SingMOS/sets/train.csv"
+          base_dir: "/workspace/datasets/SingMOS"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    val:
+        - name: Validation
+          metadata_path: "/workspace/datasets/SingMOS/sets/val.csv"
+          base_dir: "/workspace/datasets/SingMOS"
+          filename_column: "filepath"
+          target_column: "mos"
+
+    test:
+        - name: Test
+          metadata_path: "/workspace/datasets/SingMOS/sets/test.csv"
+          base_dir: "/workspace/datasets/SingMOS"
+          filename_column: "filepath"
+          target_column: "mos"
+
+data:
+    use_seqaug: false
+    num_classes: 1
+    target_sr: 16000
+    mixup_alpha: 0.0
+    use_rand_truncation: false
+    min_duration: 2.0
+    min_white_noise_amp: 0.01
+    max_white_noise_amp: 0.1
+    insert_white_noise: false
+
+train:
+    batch_size: 16
+    shuffle: True
+    num_workers: 12
+
+wandb_entity: snaxofc10-utfpr-medianeira

@@ -26,10 +26,29 @@ class CALMOSWrapper(L.LightningModule):
         self.save_hyperparameters(config)
 
         self.config = config
+        self.debug = bool(config.get("debug", False))
 
-        self.model = create_model(
-            **config.model
-        )
+        model_config = dict(config.model)
+        model_config["debug"] = self.debug
+        if self.debug:
+            print("[DEBUG][CALMOSWrapper] debug=True")
+            print("[DEBUG][CALMOSWrapper] model config:", model_config)
+
+        self.model = create_model(**model_config)
+        self.only_mlp = bool(config.get("only_mlp", False))
+        if self.only_mlp:
+            if not config.model.get("freeze_backbone", False) or config.model.get("use_peft", False):
+                raise ValueError("only_mlp requires freeze_backbone=true and use_peft=false")
+            if not hasattr(self.model, "mlp"):
+                raise ValueError("only_mlp requires a model with an mlp/KAN head")
+            for parameter in self.model.parameters():
+                parameter.requires_grad_(False)
+            for parameter in self.model.mlp.parameters():
+                parameter.requires_grad_(True)
+            trainable = sum(parameter.numel() for parameter in self.model.parameters() if parameter.requires_grad)
+            if trainable == 0:
+                raise ValueError("MLP/KAN head has no trainable parameters")
+            print(f"[Forgetting] Only mlp/KAN head is trainable: {trainable} parameters")
         self.loss = MSELoss()
         # Metrics
         # Training
@@ -45,6 +64,14 @@ class CALMOSWrapper(L.LightningModule):
         # Assign train/val datasets for use in dataloaders
         if stage == "fit":
             self.train_dataset, self.val_dataset = build_dataloaders(self.config)
+
+    def train(self, mode: bool = True):
+        super().train(mode)
+        if mode and getattr(self, "only_mlp", False):
+            for name, module in self.model.named_children():
+                if name != "mlp":
+                    module.eval()
+        return self
 
     def train_dataloader(self):
         """Return the training dataloader."""
@@ -131,10 +158,11 @@ class CALMOSWrapper(L.LightningModule):
 
         opt_params = self.config.optimizer["params"]
         scheduler_params = self.config.scheduler["params"]
+        parameters = [parameter for parameter in self.parameters() if parameter.requires_grad]
 
         if self.config.optimizer.name.lower() == "adam":
             optimizer = Adam(
-                self.parameters(),
+                parameters,
                 eps=opt_params["eps"],
                 betas=opt_params["betas"],
                 weight_decay=opt_params["weight_decay"]
@@ -142,7 +170,7 @@ class CALMOSWrapper(L.LightningModule):
 
         elif self.config.optimizer.name.lower() == "adamw":
             optimizer = AdamW(
-                self.parameters(),
+                parameters,
                 eps=opt_params["eps"],
                 betas=opt_params["betas"],
                 weight_decay=opt_params["weight_decay"]
@@ -150,7 +178,7 @@ class CALMOSWrapper(L.LightningModule):
 
         elif self.config.optimizer.name.lower() == "lion":
             optimizer = Lion(
-                self.parameters(),
+                parameters,
                 betas=opt_params["betas"],
                 weight_decay=opt_params["weight_decay"],
                 use_triton=opt_params.get("use_triton", False),
@@ -173,11 +201,25 @@ class CALMOSWrapper(L.LightningModule):
             )
 
         if self.config.scheduler.name.lower() == "cosinewarmuplr":
+            warmup_steps = scheduler_params.get("warmup_steps")
+            if warmup_steps is None:
+                # Older configs used warmup_lr as a step count.
+                legacy_warmup = scheduler_params.get("warmup_lr")
+                warmup_steps = (
+                    legacy_warmup
+                    if isinstance(legacy_warmup, int) and not isinstance(legacy_warmup, bool)
+                    else int(max_num_steps * 0.05)
+                )
+            if isinstance(warmup_steps, bool) or not isinstance(warmup_steps, int) or warmup_steps < 0:
+                raise ValueError("scheduler.params.warmup_steps must be a non-negative integer")
+            print(f"CosineWarmupLR: warmup_steps={warmup_steps}, total_steps={max_num_steps}")
+            if warmup_steps >= max_num_steps:
+                print("Warning: warmup_steps >= total_steps; cosine decay will not run.")
             scheduler = CosineWarmupLR(
                 optimizer,
                 lr_min=opt_params.get("min_learning_rate", 1.0e-6),
                 lr_max=opt_params["learning_rate"],
-                warmup=scheduler_params.get("warmup_lr", max_num_steps*0.05),
+                warmup=warmup_steps,
                 T_max=max_num_steps
             )
 

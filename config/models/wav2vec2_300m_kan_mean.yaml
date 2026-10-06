@@ -1,0 +1,109 @@
+title: KAN-MEAN-${model.model_name}-(epochs-${trainer.max_epochs})-(bs-${train.batch_size})-(LR-${optimizer.params.learning_rate})
+debug: false
+
+
+
+model:
+    model_type: "dynamic_kan"
+
+    # model_name: "microsoft/wavlm-large"
+    # model_name: "facebook/wav2vec2-base"
+    # model_name: "facebook/wav2vec2-large"
+    model_name: "facebook/wav2vec2-xls-r-300m"
+    # model_name: "facebook/wav2vec2-xls-r-1b"
+    # model_name: "facebook/w2v-bert-2.0"
+    # model_name: facebook/mms-300m
+    # model_name: facebook/mms-300m
+    # model_name: "facebook/hubert-large-ls960-ft"
+    # model_name: "openai/whisper-large-v3"
+
+    mlp_input_dim: 1024  # Must be adapted to the model
+    use_layer_norm: true
+    layer_norm_eps: 1e-5
+    layer_norm_affine: false
+    # mlp_input_dim: 1024 # Must be adapted to the model
+    mlp_hidden_dim: ${model.mlp_input_dim} # Must be adapted to the model, should be the same as mlp_input_dim
+    mlp_num_layers: 0
+    mlp_output_size: ${data.num_classes}
+    mlp_dropout: 0.1
+    mlp_activation_func: "relu"
+    layer_weight_strategy: "per_layer"
+    num_feature_layers: -1 # Must be adapted to the model
+    specific_layer_idx: -1 # Take the last layer
+    last_layer: true
+    pooling_strategy: "mean" # Take the mean of the sequence in the last layer
+    relukan_k: 6
+    relukan_grid: 6
+
+    freeze_backbone: true # Freeze the backbone model
+
+    # PEFT parameters
+    use_peft: false
+    # lora_keys: ["key", "query", "value", "linear"] # possible values: "key", "query", "value", "linear" and "whisper_linear"
+    # lora_keys: ["key", "query", "value", "whisper_linear"] # ATENÇÃO!!! "whisper_linear" é utilizado apenas para o modelo Whisper
+    lora_keys: ["key"] # ATENÇÃO!!! Essa parte é utilizada apenas para o modelo w2vbert
+    lora_r: 2
+    lora_alpha: 2
+    lora_dropout: 0.1
+    bias: "none"
+    
+    # MelSpec encoder
+    ced_embedding_dim: 192 # tiny
+    # ced_embedding_dim: 256 # mini
+    # ced_embedding_dim: 384 # small
+    # ced_embedding_dim: 768 # base
+    ced_proj_size: 512
+    ced_proj_dropout: 0.5
+    ced_pretrained: true
+    ced_freeze: false
+
+optimizer:
+    name: "adamw"
+    params:
+        min_learning_rate: 1e-5 # Same used in https://ecs.utdallas.edu/research/researchlabs/msp-lab/publications/Goncalves_2024.pdf
+        learning_rate: 1e-3 # Same used in https://ecs.utdallas.edu/research/researchlabs/msp-lab/publications/Goncalves_2024.pdf
+        eps: 1e-8
+        weight_decay: 1e-6
+        betas: [0.9, 0.98]
+
+scheduler:
+    name: "CosineWarmupLR"
+    params:
+        warmup_steps: 500   
+
+tags:
+    - ${train.batch_size}-BS
+    - LR-${optimizer.params.learning_rate}
+    - WD-${optimizer.params.weight_decay}
+    - ${model.model_name}-HS
+    - ${model.mlp_input_dim}-AH
+    - ${model.mlp_hidden_dim}-HL
+    - ${model.mlp_num_layers}-IS
+
+trainer:
+    accelerator: "gpu"
+    max_epochs: 100
+    num_sanity_val_steps: 2
+    overfit_batches: 0.0
+    log_every_n_steps: 10
+    gradient_clip_val: 10.0
+    gradient_clip_algorithm: "norm"
+    val_check_interval: 1.0 # Every 1 epoch
+    accumulate_grad_batches: 4
+
+model_checkpoint:
+    mode: "max"
+    save_last: false
+    save_top_k: 1
+    save_weights_only: true
+    monitor: "val/spearman"
+    dirpath: "../checkpoints/mos-prediction"
+    filename: "{epoch:02d}-{step:02d}-{val/spearman:.4f}"
+
+early_stopping:
+    monitor: "val/spearman"
+    patience: 25
+    check_on_train_epoch_end: false
+    mode: "max"
+    min_delta: 0.0
+    verbose: true
