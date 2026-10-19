@@ -24,7 +24,9 @@ We train non intrusive MOS predictors on top of ten SFMs across four MOS dataset
 
 ## Architecture
 
-<img src="resources/CAL-MOS.png" alt="CAL-MOS architecture" width="640">
+<p align="center">
+  <img src="resources/CAL-MOS.png" alt="CAL-MOS architecture" width="640">
+</p>
 
 Audio goes through a frozen SFM and all hidden states are collected. Each layer gets its own adapter. The adapted sequences are concatenated along time, reduced by masked mean pooling into one utterance vector, and passed to an MLP head. Predictions are clipped to the [1, 5] MOS range and trained against reference scores with MSE.
 
