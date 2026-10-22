@@ -32,7 +32,12 @@ def check_windows(test, expanded, original, ids, router):
         torch.testing.assert_close(expanded[row, start:end], original[row], rtol=0, atol=0)
         outside = torch.ones(expanded.shape[1], dtype=torch.bool, device=expanded.device)
         outside[start:end] = False
-        test.assertEqual(torch.count_nonzero(expanded[row, outside]).item(), 0)
+        test.assertTrue(torch.all(expanded[row, outside] == router.padding_value).item())
+
+
+def head_route_input(head, normalized):
+    """MLP routes LayerNorm(x); the ReLU-KAN routes sigmoid(LayerNorm(x)) into its grid."""
+    return torch.sigmoid(normalized) if isinstance(head, ReLUKAN) else normalized
 
 
 class FakeBackbone(torch.nn.Module):
@@ -184,8 +189,9 @@ class DatasetBlockTests(unittest.TestCase):
             self.assertEqual(output.shape, (4, 1))
             self.assertFalse(head.input_layer_norm.elementwise_affine)
             self.assertEqual(head.input_layer_norm.normalized_shape, (8,))
-            check_windows(self, captured[0], head.input_layer_norm(inputs), ids,
+            check_windows(self, captured[0], head_route_input(head, head.input_layer_norm(inputs)), ids,
                           head.block_expansion)
+            self.assertEqual(head.block_expansion.padding_value, 0.0 if isinstance(head, MLPBase) else -1.0)
             output.square().mean().backward()
             self.assertTrue(all(torch.isfinite(p.grad).all() for p in head.parameters() if p.grad is not None))
 
@@ -285,7 +291,7 @@ class DatasetBlockTests(unittest.TestCase):
                 self.assertEqual(output.shape, (4,))
                 self.assertTrue(torch.isfinite(output).all())
                 normalized = restored.mlp.input_layer_norm(restored.backbone(**features).hidden_states[-1].mean(1))
-                check_windows(self, captured[-1], normalized, ids,
+                check_windows(self, captured[-1], head_route_input(restored.mlp, normalized), ids,
                               restored.mlp.block_expansion)
             hook.remove()
             with self.assertRaises(ValueError):
@@ -302,6 +308,13 @@ class DatasetBlockTests(unittest.TestCase):
             spec.loader.exec_module(previous)
             old = getattr(previous, cls)(**args).eval()
             new = (MLPBase if cls == "MLPBase" else ReLUKAN)(**args).eval()
+            if cls == "ReLUKAN":
+                # The KAN now feeds sigmoid(LayerNorm(x)) into its grid: a checkpoint trained on the
+                # old inputs must be rejected loudly instead of loading with different predictions.
+                self.assertEqual(set(old.state_dict()) | {"_extra_state"}, set(new.state_dict()))
+                with self.assertRaisesRegex(RuntimeError, "predates the sigmoid"):
+                    new.load_state_dict(old.state_dict(), strict=True)
+                continue
             self.assertEqual(set(old.state_dict()), set(new.state_dict()))
             new.load_state_dict(old.state_dict(), strict=True)
             inputs = torch.randn(4, 8)

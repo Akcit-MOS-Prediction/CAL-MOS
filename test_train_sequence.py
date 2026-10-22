@@ -112,8 +112,13 @@ class SequenceTests(unittest.TestCase):
                             vectors = list(csv.DictReader(stream, delimiter=";"))
                         self.assertEqual(len(vectors), 32)
                         active = DATASET_IDS[stage["dataset"]]
-                        self.assertTrue(all(float(r["valor"].replace(",", ".")) == 0
-                                            for r in vectors if int(r["bloco"]) != active))
+                        # MLP: LayerNorm values, zero padding. KAN: sigmoid(LayerNorm) in (0, 1),
+                        # padding -1.0 below the ReLU-KAN grid [-0.4, 1.4].
+                        padding = 0.0 if head == "mlp" else -1.0
+                        values = [(int(r["bloco"]), float(r["valor"].replace(",", "."))) for r in vectors]
+                        self.assertTrue(all(value == padding for block, value in values if block != active))
+                        if head == "kan":
+                            self.assertTrue(all(0 < value < 1 for block, value in values if block == active))
                         with (attempt / "epochs.csv").open(encoding="utf-8-sig") as stream:
                             epoch = next(csv.DictReader(stream, delimiter=";"))
                         self.assertNotEqual(epoch["pred_min"], "")
@@ -155,7 +160,16 @@ class SequenceTests(unittest.TestCase):
                 self.assertEqual(config.model.dataset_block_expansion.output_multiplier, 4)
                 self.assertNotIn("block_width", config.model.dataset_block_expansion)
                 self.assertFalse(config.model.layer_norm_affine)
-                self.assertEqual(config.model.dataset_block_expansion.padding_value, 0)
+                # KAN fixture: padding below the grid [-k/g, 1 + k/g] = [-0.4, 1.4]; old fill 0.1 replaced.
+                self.assertEqual(config.model.dataset_block_expansion.padding_value, -1.0)
+
+    def test_mlp_protocol_keeps_zero_padding(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            _, plans = self.fixture(root, head="mlp")
+            for config in plans[0][2]:
+                self.assertEqual(config.model.model_type, "dynamic")
+                self.assertEqual(config.model.dataset_block_expansion.padding_value, 0.0)
 
     def test_resume_after_partial_evaluation_does_not_retrain(self):
         with tempfile.TemporaryDirectory() as temporary:

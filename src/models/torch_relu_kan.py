@@ -1,7 +1,9 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from models.dataset_blocks import build_block_expansion
+from utils.dataset_identity import block_expansion_enabled
 
 
 class ReLUKANLayer(nn.Module):
@@ -46,13 +48,31 @@ class ReLUKANLayer(nn.Module):
 
 
 class ReLUKAN(nn.Module):
+    """ReLU-KAN head whose inputs always lie inside the basis grid.
+
+    Every ReLUKANLayer only responds on [-k/g, 1 + k/g]; outside it all bases, their
+    contributions and their gradients are zero. The non-affine LayerNorm yields ~N(0, 1)
+    values, so the head squashes them with a sigmoid into (0, 1) before the first layer,
+    and repeats LayerNorm + sigmoid before every following layer. Dataset-block padding is
+    placed strictly below the grid so padded positions stay inert. The MLP head
+    (MLPBase) is unaffected: it keeps LayerNorm only.
+    """
+
+    INPUT_TRANSFORM = {"version": 2, "input": "layernorm+sigmoid", "between_layers": "layernorm+sigmoid"}
+
     def __init__(self, width, grid, k, use_layer_norm=True, layer_norm_eps=1e-5, layer_norm_affine=False, debug=False, dataset_block_expansion=None):
         super().__init__()
         self.debug = debug
         self._debug_layer_norm_logged = False
         self.input_size = width[0]
+        self.layer_norm_eps = layer_norm_eps
+        self.grid_min = -k / grid
+        self.grid_max = 1 + k / grid
         self.block_expansion = build_block_expansion(
-            self.input_size, dataset_block_expansion, use_layer_norm, layer_norm_affine
+            self.input_size,
+            self._padding_outside_grid(dataset_block_expansion),
+            use_layer_norm,
+            layer_norm_affine,
         )
         width = list(width)
         if self.block_expansion is not None:
@@ -75,16 +95,60 @@ class ReLUKAN(nn.Module):
             #     self.rk_layers.append()
         self.rk_layers = nn.ModuleList(self.rk_layers)
 
+    def _padding_outside_grid(self, specification):
+        """Default the block padding to a value below the grid and reject one inside it."""
+        if not block_expansion_enabled(specification):
+            return specification
+        specification = dict(specification)
+        if "padding_value" not in specification or specification["padding_value"] is None:
+            specification["padding_value"] = -1.0 if -1.0 < self.grid_min else self.grid_min - 0.5
+        padding = float(specification["padding_value"])
+        if self.grid_min <= padding <= self.grid_max:
+            raise ValueError(
+                f"KAN dataset-block padding_value={padding} lies inside the ReLU-KAN grid "
+                f"[{self.grid_min:g}, {self.grid_max:g}] and would bias every padded position; "
+                f"use a value below {self.grid_min:g} (default -1.0)"
+            )
+        return specification
+
+    def _squash(self, values):
+        """Map ~N(0, 1) features into (0, 1), where the ReLU-KAN bases live."""
+        return torch.sigmoid(values)
+
+    def get_extra_state(self):
+        return dict(self.INPUT_TRANSFORM)
+
+    def set_extra_state(self, state):
+        if state != self.INPUT_TRANSFORM:
+            raise ValueError(
+                f"Checkpoint ReLU-KAN input transform {state} differs from {self.INPUT_TRANSFORM}"
+            )
+
+    def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict,
+                              missing_keys, unexpected_keys, error_msgs):
+        if strict and prefix + "_extra_state" not in state_dict:
+            error_msgs.append(
+                f"{prefix}_extra_state is missing: this ReLU-KAN checkpoint predates the sigmoid "
+                "after LayerNorm, so its weights were trained on different inputs"
+            )
+        super()._load_from_state_dict(state_dict, prefix, local_metadata, strict,
+                                      missing_keys, unexpected_keys, error_msgs)
+
     def forward(self, x, dataset_ids=None):
         normalized = self.input_layer_norm(x)
+        squashed = self._squash(normalized)
         if self.debug and not self._debug_layer_norm_logged:
             before = x[0].detach().cpu().reshape(-1).tolist()
             after = normalized[0].detach().cpu().reshape(-1).tolist()
+            inside = squashed[0].detach().cpu().reshape(-1).tolist()
             print(f"[DEBUG][KAN][LayerNorm] before shape={tuple(x.shape)} vector={before}")
             print(f"[DEBUG][KAN][LayerNorm] after  shape={tuple(normalized.shape)} vector={after}")
+            print(f"[DEBUG][KAN][Sigmoid]   after  shape={tuple(squashed.shape)} vector={inside}")
             self._debug_layer_norm_logged = True
-        x = self.block_expansion(normalized, dataset_ids) if self.block_expansion else normalized
-        for rk_layer in self.rk_layers:
+        x = self.block_expansion(squashed, dataset_ids) if self.block_expansion else squashed
+        for index, rk_layer in enumerate(self.rk_layers):
+            if index > 0:
+                x = self._squash(F.layer_norm(x, (x.shape[-1],), eps=self.layer_norm_eps))
             x = rk_layer(x)
         # x = x.reshape((len(x), self.width[-1]))
         return x

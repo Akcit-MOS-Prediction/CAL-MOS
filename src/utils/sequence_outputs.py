@@ -77,17 +77,24 @@ class SequenceOutputs(Callback):
         router = head.block_expansion
         if router is None or router.output_size != 4 * head.input_size:
             raise ValueError("Expected a non-affine LayerNorm followed by exactly four blocks")
-        if router.padding_value != 0 or tuple(router.start_positions) != tuple(
-                i * head.input_size for i in range(4)):
-            raise ValueError("Expected disjoint dataset blocks padded with zero")
+        is_kan = hasattr(head, "rk_layers")
+        self.padding_value = float(router.padding_value)
+        if tuple(router.start_positions) != tuple(i * head.input_size for i in range(4)):
+            raise ValueError("Expected four disjoint dataset blocks")
+        if is_kan and not router.padding_value < head.grid_min:
+            raise ValueError("KAN dataset blocks must be padded below the ReLU-KAN grid")
+        if not is_kan and router.padding_value != 0:
+            raise ValueError("MLP dataset blocks must be padded with zero")
         first = head.rk_layers[0] if hasattr(head, "rk_layers") else head.layers[0]
         run = self._wandb_run(trainer)
         if run is not None:
             run.define_metric("debug/epoca")
             run.define_metric("debug/*", step_metric="debug/epoca")
             protocol = {"dim_original": head.input_size, "dim_head": router.output_size,
-                        "dataset_to_id": dict(router.dataset_to_id), "fill": 0,
-                        "normalization": "LayerNorm non-affine BEFORE expansion",
+                        "dataset_to_id": dict(router.dataset_to_id), "fill": router.padding_value,
+                        "normalization": ("LayerNorm non-affine + sigmoid BEFORE expansion; LayerNorm + sigmoid "
+                                          "between KAN layers" if is_kan else
+                                          "LayerNorm non-affine BEFORE expansion"),
                         "capture": "first sample of first training batch per epoch; full vector, no truncation",
                         "kan_architecture_changed": False}
             run.config.update({"debug_protocol": protocol}, allow_val_change=True)
@@ -109,7 +116,7 @@ class SequenceOutputs(Callback):
             actual = args[0].detach()
             normalized, ids = self.route_input
             width = head.input_size
-            expected = torch.zeros_like(actual)
+            expected = torch.full_like(actual, router.padding_value)
             indices = (ids[:, None] - 1) * width + torch.arange(width, device=actual.device)
             expected.scatter_(1, indices, normalized)
             if actual.shape[1] != 4 * width or not torch.isfinite(actual).all():
@@ -142,7 +149,7 @@ class SequenceOutputs(Callback):
                     active_run.save(str(self.output_dir / "head_inputs.csv"), base_path=str(self.output_dir), policy="now")
             print(f"[Sequence] epoch={trainer.current_epoch + 1} normalized={tuple(normalized.shape)} "
                   f"head_input={tuple(actual.shape)} dataset_ids={ids.tolist()} "
-                  "routing_error=0 padding=0", flush=True)
+                  f"routing_error=0 padding={router.padding_value:g}", flush=True)
             self.epoch = trainer.current_epoch
             self.route_input = None
 
@@ -231,8 +238,9 @@ class SequenceOutputs(Callback):
         blocks = values.reshape(4, width)
         vector_table = wandb.Table(columns=["indice", "valor", "bloco"],
                                    data=[[i, float(value), names[i // width]] for i, value in enumerate(values)])
-        block_table = wandb.Table(columns=["dataset", "norma_L2", "fracao_nao_zero", "grad_norm"],
-                                  data=[[name, float(np.linalg.norm(block)), float(np.mean(block != 0)),
+        padding = getattr(self, "padding_value", 0.0)
+        block_table = wandb.Table(columns=["dataset", "norma_L2", "fracao_nao_padding", "grad_norm"],
+                                  data=[[name, float(np.linalg.norm(block)), float(np.mean(block != padding)),
                                          self.grad_blocks[i] if self.grad_blocks else 0.0]
                                         for i, (name, block) in enumerate(zip(names, blocks))])
         prediction_table = wandb.Table(columns=["MOS_real", "MOS_predito"],
@@ -334,7 +342,8 @@ def result_rows(stages, config):
                 "kan" if model.model_type == "dynamic_kan" else "mlp",
                 model.get("relukan_k") if model.model_type == "dynamic_kan" else None,
                 model.get("relukan_grid") if model.model_type == "dynamic_kan" else None,
-                int(model.mlp_input_dim), 4 * int(model.mlp_input_dim), 4, 0,
+                int(model.mlp_input_dim), 4 * int(model.mlp_input_dim), 4,
+                float((model.get("dataset_block_expansion") or {}).get("padding_value", 0.0)),
                 stage["best_checkpoint"], measurement["num_examples"], srcc, mse,
                 measurement["srcc_undefined"], measurement["constant_predictions"],
                 reference_index, before, mse_before,

@@ -25,6 +25,12 @@ def relative_path(value, parent):
     return (path if path.is_absolute() else parent / path).resolve()
 
 
+def kan_padding_value(model):
+    """Block padding strictly below the ReLU-KAN grid [-k/g, 1 + k/g]."""
+    grid_min = -int(model.get("relukan_k", 3)) / int(model.get("relukan_grid", 3))
+    return -1.0 if -1.0 < grid_min else grid_min - 0.5
+
+
 def load_plan(protocol_path, config_paths=None):
     protocol_path = Path(protocol_path).resolve(strict=True)
     protocol = OmegaConf.load(protocol_path)
@@ -56,9 +62,12 @@ def load_plan(protocol_path, config_paths=None):
             model.use_layer_norm = True
             model.layer_norm_affine = False
             # Any old compact expansion, fill=0.1 or block_width is intentionally replaced.
+            # MLP: zero padding. KAN: padding below the ReLU-KAN grid (inputs are sigmoid(LN) in
+            # (0, 1)), so padded positions have zero basis, contribution and gradient.
             model.dataset_block_expansion = {
                 "enabled": True, "num_blocks": 4, "output_multiplier": 4.0,
-                "padding_value": 0.0, "dataset_to_id": DATASET_IDS,
+                "padding_value": kan_padding_value(model) if model.model_type == "dynamic_kan" else 0.0,
+                "dataset_to_id": DATASET_IDS,
             }
             if model.get("input_power_transform"):
                 raise ValueError("Remove input_power_transform: this protocol uses non-affine LayerNorm only")
