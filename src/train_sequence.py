@@ -14,7 +14,7 @@ import uuid
 from omegaconf import OmegaConf
 
 from utils.sequence_outputs import RESULT_COLUMNS, SequenceOutputs, csv_write, json_write, result_rows
-from utils.dataset_identity import DATASET_IDS
+from utils.dataset_identity import DATASET_IDS, kan_block_padding
 
 ROOT = Path(__file__).resolve().parents[1]
 SEQUENCE = ("bvcc", "singmos", "tmhint", "brspeech", "bvcc")
@@ -26,9 +26,8 @@ def relative_path(value, parent):
 
 
 def kan_padding_value(model):
-    """Block padding strictly below the ReLU-KAN grid [-k/g, 1 + k/g]."""
-    grid_min = -int(model.get("relukan_k", 3)) / int(model.get("relukan_grid", 3))
-    return -1.0 if -1.0 < grid_min else grid_min - 0.5
+    """Block padding strictly below the ReLU-KAN grid (defaults match ReLuKANBaseModel: g=3, k=3)."""
+    return kan_block_padding(model.get("relukan_grid", 3), model.get("relukan_k", 3))
 
 
 def load_plan(protocol_path, config_paths=None):

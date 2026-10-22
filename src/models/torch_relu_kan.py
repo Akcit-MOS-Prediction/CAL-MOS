@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from models.dataset_blocks import build_block_expansion
-from utils.dataset_identity import block_expansion_enabled
+from utils.dataset_identity import block_expansion_enabled, kan_block_padding
 
 
 class ReLUKANLayer(nn.Module):
@@ -66,8 +66,12 @@ class ReLUKAN(nn.Module):
         self._debug_layer_norm_logged = False
         self.input_size = width[0]
         self.layer_norm_eps = layer_norm_eps
+        self.grid = grid
+        self.k = k
         self.grid_min = -k / grid
         self.grid_max = 1 + k / grid
+        if any(int(size) < 2 for size in list(width)[1:-1]):
+            raise ValueError("ReLU-KAN hidden widths must be >= 2: LayerNorm over one unit is constant")
         self.block_expansion = build_block_expansion(
             self.input_size,
             self._padding_outside_grid(dataset_block_expansion),
@@ -78,8 +82,6 @@ class ReLUKAN(nn.Module):
         if self.block_expansion is not None:
             width[0] = self.block_expansion.output_size
         self.width = width
-        self.grid = grid
-        self.k = k
         self.input_layer_norm = (
             nn.LayerNorm(
                 self.input_size,
@@ -96,18 +98,18 @@ class ReLUKAN(nn.Module):
         self.rk_layers = nn.ModuleList(self.rk_layers)
 
     def _padding_outside_grid(self, specification):
-        """Default the block padding to a value below the grid and reject one inside it."""
+        """Default the block padding below the grid; reject any padding not strictly below it."""
         if not block_expansion_enabled(specification):
             return specification
         specification = dict(specification)
-        if "padding_value" not in specification or specification["padding_value"] is None:
-            specification["padding_value"] = -1.0 if -1.0 < self.grid_min else self.grid_min - 0.5
+        if specification.get("padding_value") is None:
+            specification["padding_value"] = kan_block_padding(self.grid, self.k)
         padding = float(specification["padding_value"])
-        if self.grid_min <= padding <= self.grid_max:
+        if not padding < self.grid_min:
             raise ValueError(
-                f"KAN dataset-block padding_value={padding} lies inside the ReLU-KAN grid "
-                f"[{self.grid_min:g}, {self.grid_max:g}] and would bias every padded position; "
-                f"use a value below {self.grid_min:g} (default -1.0)"
+                f"KAN dataset-block padding_value={padding} is not below the ReLU-KAN grid "
+                f"[{self.grid_min:g}, {self.grid_max:g}]; padded positions must be inert. "
+                f"Use a value below {self.grid_min:g} (default {kan_block_padding(self.grid, self.k):g})"
             )
         return specification
 
@@ -126,8 +128,11 @@ class ReLUKAN(nn.Module):
 
     def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict,
                               missing_keys, unexpected_keys, error_msgs):
-        if strict and prefix + "_extra_state" not in state_dict:
-            error_msgs.append(
+        # Raised here, before the child modules load, so a pre-sigmoid checkpoint (with or
+        # without dataset blocks) is reported as such, also under strict=False: its weights
+        # were trained on different inputs and would load with different predictions.
+        if prefix + "_extra_state" not in state_dict:
+            raise RuntimeError(
                 f"{prefix}_extra_state is missing: this ReLU-KAN checkpoint predates the sigmoid "
                 "after LayerNorm, so its weights were trained on different inputs"
             )

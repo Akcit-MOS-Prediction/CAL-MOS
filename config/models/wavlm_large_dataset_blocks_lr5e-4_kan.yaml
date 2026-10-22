@@ -9,7 +9,7 @@ model:
         num_blocks: 4
         output_multiplier: 4.0
         block_width: 1024
-        padding_value: 0.0
+        padding_value: -1.0  # KAN: below the ReLU-KAN grid [-k/g, 1+k/g] so padded positions are inert
         dataset_to_id:
             bvcc: 1
             singmos: 2

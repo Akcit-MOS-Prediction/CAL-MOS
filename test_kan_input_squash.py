@@ -87,14 +87,18 @@ class KanInputSquashTests(unittest.TestCase):
         torch.testing.assert_close(head(inputs, ids), before, rtol=0, atol=0)
 
     def test_padding_inside_grid_is_rejected_and_default_follows_the_grid(self):
-        for padding in (0.0, 0.5, 1.0, -0.4, 1.4):
-            with self.assertRaisesRegex(ValueError, "inside the ReLU-KAN grid"):
+        for padding in (0.0, 0.5, 1.0, -0.4, 1.4, 2.0, 5.0):
+            with self.assertRaisesRegex(ValueError, "not below the ReLU-KAN grid"):
                 ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion={**BLOCKS, "padding_value": padding})
         self.assertEqual(ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion={
-            **BLOCKS, "padding_value": 2.0}).block_expansion.padding_value, 2.0)
+            **BLOCKS, "padding_value": -3.0}).block_expansion.padding_value, -3.0)
         # g=3, k=3 -> grid [-1, 2]; -1.0 would sit on the grid edge, so the default moves below it.
         self.assertEqual(ReLUKAN([8, 16, 1], grid=3, k=3, dataset_block_expansion=BLOCKS)
                          .block_expansion.padding_value, -1.5)
+
+    def test_hidden_width_one_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "hidden widths must be >= 2"):
+            ReLUKAN([8, 1, 1], grid=5, k=2)
 
     def test_mlp_head_keeps_layernorm_only_and_zero_padding(self):
         head = MLPBase(input_size=8, hidden_dim=16, num_layers=1, output_size=1, dropout=0,
@@ -126,8 +130,15 @@ class KanInputSquashTests(unittest.TestCase):
         clone = ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion=BLOCKS)
         clone.load_state_dict(state, strict=True)
         legacy = {key: value for key, value in state.items() if key != "_extra_state"}
+        for strict in (True, False):
+            with self.assertRaisesRegex(RuntimeError, "predates the sigmoid"):
+                clone.load_state_dict(legacy, strict=strict)
+        # The real case: a feat/4times 4x KAN checkpoint (no head marker, blocks padded with 0).
+        legacy_blocks = dict(legacy)
+        legacy_blocks["block_expansion._extra_state"] = {
+            "version": 1, "input_size": 8, "num_blocks": 4, "dataset_to_id": dict(DATASET_IDS)}
         with self.assertRaisesRegex(RuntimeError, "predates the sigmoid"):
-            clone.load_state_dict(legacy, strict=True)
+            clone.load_state_dict(legacy_blocks, strict=True)
         wrong = dict(state)
         wrong["_extra_state"] = {"version": 1, "input": "layernorm"}
         with self.assertRaises(ValueError):

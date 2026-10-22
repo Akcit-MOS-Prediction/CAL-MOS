@@ -282,6 +282,9 @@ class SequenceTests(unittest.TestCase):
             self.assertEqual(snapshot["validation_predictions"].shape, (4,))
             details = json.loads((attempt / "debug_epoch_001.json").read_text())
             self.assertEqual(set(details["kan_support"]), {"0", "1"})
+            # sigmoid(LayerNorm) keeps every real input inside the grid; padding is excluded.
+            self.assertEqual(details["kan_support"]["0"]["fora_de_todas_bases"], 0.0)
+            self.assertGreater(details["kan_support"]["0"]["entrada_min"], 0.0)
             self.assertTrue(details["gradient_norms"])
             if os.environ.get("CALMOS_DEBUG_PREVIEW_DIR"):
                 destination = Path(os.environ["CALMOS_DEBUG_PREVIEW_DIR"])

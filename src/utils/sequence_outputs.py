@@ -8,6 +8,8 @@ from pathlib import Path
 import torch
 from lightning.pytorch.callbacks import Callback
 
+from utils.dataset_identity import kan_block_padding
+
 
 def json_write(path, value):
     path = Path(path)
@@ -169,9 +171,11 @@ class SequenceOutputs(Callback):
                     values = args[0].detach()
                     active = ((values.unsqueeze(-1) > module.phase_low) &
                               (values.unsqueeze(-1) < module.phase_height))
+                    # Layer 0: padded positions sit below the grid on purpose; measure real inputs only.
+                    real = (values != self.padding_value) if layer_index == 0 else torch.ones_like(values, dtype=torch.bool)
                     self.kan_support[layer_index] = {
-                        "fora_de_todas_bases": float((~active.any(-1)).float().mean()),
-                        "entrada_min": float(values.min()), "entrada_max": float(values.max()),
+                        "fora_de_todas_bases": float((~active.any(-1))[real].float().mean()),
+                        "entrada_min": float(values[real].min()), "entrada_max": float(values[real].max()),
                         "support_min": float(module.phase_low.min()),
                         "support_max": float(module.phase_height.max()),
                     }
@@ -322,6 +326,16 @@ RESULT_COLUMNS = ["etapa", "tipo", "treinado_em", "dataset_teste", "backbone", "
                   "delta_mse_etapa_anterior"]
 
 
+def block_fill(model):
+    """Padding actually used by the head: configured value, else the head's default."""
+    configured = (model.get("dataset_block_expansion") or {}).get("padding_value")
+    if configured is not None:
+        return float(configured)
+    if model.model_type == "dynamic_kan":
+        return kan_block_padding(model.get("relukan_grid", 3), model.get("relukan_k", 3))
+    return 0.0
+
+
 def result_rows(stages, config):
     """First own-dataset best checkpoint is the baseline, never a future checkpoint."""
     baselines, previous, rows = {}, {}, []
@@ -343,7 +357,7 @@ def result_rows(stages, config):
                 model.get("relukan_k") if model.model_type == "dynamic_kan" else None,
                 model.get("relukan_grid") if model.model_type == "dynamic_kan" else None,
                 int(model.mlp_input_dim), 4 * int(model.mlp_input_dim), 4,
-                float((model.get("dataset_block_expansion") or {}).get("padding_value", 0.0)),
+                block_fill(model),
                 stage["best_checkpoint"], measurement["num_examples"], srcc, mse,
                 measurement["srcc_undefined"], measurement["constant_predictions"],
                 reference_index, before, mse_before,
