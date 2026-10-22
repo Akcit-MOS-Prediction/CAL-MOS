@@ -1,5 +1,8 @@
+"""CPU-only integration tests: real heads/Lightning, synthetic tiny backbone/audio."""
 import csv
 import json
+import os
+import shutil
 from pathlib import Path
 import sys
 import tempfile
@@ -24,6 +27,7 @@ class TinyBackbone(torch.nn.Module):
         self.projection = torch.nn.Linear(1, 8)
 
     def forward(self, input_values, **kwargs):
+        # Temporal variation + nonlinear features prevent all samples having the same LN direction.
         values = input_values.unsqueeze(-1)
         hidden = torch.tanh(self.projection(values))
         return SimpleNamespace(hidden_states=(hidden * 0.5, hidden))
@@ -241,6 +245,35 @@ class SequenceTests(unittest.TestCase):
             self.assertEqual(validation["filename_column"], "validation_filename")
             self.assertEqual(validation["target_column"], "validation_mos")
             self.assertEqual(validation["base_dir"], "/different-validation-directory")
+
+    def test_wandb_offline_real_native_charts_and_full_debug_export(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            protocol, plans = self.fixture(root)
+            protocol.wandb = {"enabled": True, "offline": True, "project": "calmos-debug-tests"}
+            config = plans[0][2][0]
+            def load_audio(dataset, filepath):
+                dataset._counter = getattr(dataset, "_counter", 0) + 1
+                value = dataset._counter % 4 + 1
+                return (torch.linspace(-1, 1, 32).mul(value).add(value / 3)[None], 16000)
+            with patch("models.base_models.AutoConfig.from_pretrained", return_value=SimpleNamespace()), \
+                 patch("models.base_models.AutoModel.from_pretrained", side_effect=lambda *a, **k: TinyBackbone()), \
+                 patch("transformers.AutoFeatureExtractor.from_pretrained", return_value=processor), \
+                 patch("utils.dataloader.DynamicDataset._load_wav", new=load_audio):
+                result = sequence.train_stage(config, root / "offline-stage", None, "cpu", protocol)
+            attempt = Path(result["attempt"])
+            self.assertTrue((attempt / "debug_epoch_001.png").is_file())
+            snapshot = np.load(attempt / "debug_epoch_001.npz", allow_pickle=False)
+            self.assertEqual(snapshot["head_input"].shape, (32,))
+            self.assertEqual(snapshot["validation_predictions"].shape, (4,))
+            details = json.loads((attempt / "debug_epoch_001.json").read_text())
+            self.assertEqual(set(details["kan_support"]), {"0", "1"})
+            self.assertTrue(details["gradient_norms"])
+            if os.environ.get("CALMOS_DEBUG_PREVIEW_DIR"):
+                destination = Path(os.environ["CALMOS_DEBUG_PREVIEW_DIR"])
+                destination.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(attempt / "debug_epoch_001.png", destination / "wandb_debug_preview.png")
+                shutil.copy2(attempt / "debug_epoch_001.json", destination / "wandb_debug_preview.json")
 
 
 if __name__ == "__main__":

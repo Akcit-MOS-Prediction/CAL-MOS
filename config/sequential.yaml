@@ -2,6 +2,8 @@
 configs:
   - models/w2vbert_2.0_dataset_blocks_kan.yaml
   - models/w2vbert_2.0_dataset_blocks.yaml
+  - models/mHuBERT-147_kan.yaml
+  - models/mHuBERT-147.yaml
 
 sequence: [bvcc, singmos, tmhint, brspeech, bvcc]
 datasets:
@@ -15,7 +17,7 @@ inference_batch_size: 8
 save_head_inputs: true  # Full first sample entering the head, once per epoch.
 continue_on_error: true  # Continue independent configs, never skip a failed stage in a chain.
 wandb:
-  enabled: false  # CSVs are always saved, with or without W&B.
+  enabled: true  # CSVs are also always saved locally.
   project: MOS-Prediction
   offline: false
 
@@ -23,4 +25,12 @@ wandb:
 # optimizer:
 #   params:
 #     learning_rate: 0.00005
-overrides: {}
+overrides:
+  model:
+    relukan_k: 2
+    relukan_grid: 5
+    last_layer: true
+    pooling_strategy: mean
+  train:
+    batch_size: 8
+    num_workers: 4

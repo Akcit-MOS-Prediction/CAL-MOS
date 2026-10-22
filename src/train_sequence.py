@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Configurable BVCC -> SingMOS -> TMHINT -> BRSpeech -> BVCC head training."""
 import argparse
 from contextlib import contextmanager
 import gc
@@ -164,10 +166,17 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
         wandb_logger = WandbLogger(
             project=wandb_options.get("project", "MOS-Prediction"),
             entity=wandb_options.get("entity", config.get("wandb_entity")),
-            name=config.title, group=stage_dir.parent.name,
+            name=f"{stage_dir.parent.name}-{stage_dir.name}",
+            group=wandb_options.get("group", stage_dir.parent.name),
+            tags=["sequencial", "blocos4", "layernorm-nao-afim", stage_dir.name,
+                  config.model.model_name, config.model.model_type],
             save_dir=str(attempt), offline=wandb_options.get("offline", False),
         )
         wandb_logger.log_hyperparams(OmegaConf.to_container(config, resolve=True))
+        run = wandb_logger.experiment
+        json_write(attempt / "wandb_run.json", {"id": run.id, "url": run.url,
+                                                 "entity": run.entity, "project": run.project})
+        run.save(str(attempt / "config.yaml"), base_path=str(attempt), policy="now")
         loggers.append(wandb_logger)
     model = (CALMOSWrapper.load_from_checkpoint(str(previous_checkpoint), config=config,
                                                map_location="cpu", strict=True)
@@ -190,6 +199,11 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
         result = {"best_checkpoint": str(best.resolve()), "initialized_from": previous_checkpoint,
                   "monitor": monitor, "mode": mode, "score": float(checkpoint.best_model_score),
                   "attempt": str(attempt), "seed": int(config.seed)}
+        if wandb_logger is not None:
+            result["wandb"] = load_json(attempt / "wandb_run.json")
+            wandb_logger.experiment.summary.update({"best_checkpoint": str(best.resolve()),
+                                                    "best_validation_score": result["score"],
+                                                    "initialized_from": previous_checkpoint})
         json_write(stage_dir / "trained.json", result)
         return result
     finally:
@@ -306,6 +320,18 @@ def run_experiment(directory, configs, protocol, gpu, resume=False):
             json_write(directory / "progress.json", {"status": "running", "stages": stages})
             csv_write(directory / "results.csv", result_rows(stages, configs[0]), RESULT_COLUMNS)
         print(f"[Sequence] completed stage {index}/5: {name}; best={previous}", flush=True)
+        if protocol.get("wandb", {}).get("enabled", False) and trained.get("wandb"):
+            import wandb
+            tracking = trained["wandb"]
+            with wandb.init(entity=tracking["entity"], project=tracking["project"],
+                            id=tracking["id"], resume="must") as run:
+                rows = result_rows(stages, configs[0])
+                run.log({"tests/etapa": index, "tests/resultados": wandb.Table(
+                    columns=RESULT_COLUMNS, data=[[row[key] for key in RESULT_COLUMNS] for row in rows]),
+                    **{f"tests/{dataset}/{key}": measurement[key]
+                       for dataset, measurement in stage["evaluations"].items()
+                       for key in ("mse", "srcc", "constant_predictions") if measurement[key] is not None}})
+                run.save(str(directory / "results.csv"), base_path=str(directory), policy="now")
     json_write(directory / "progress.json", {"status": "finished", "stages": stages})
     return stages
 
