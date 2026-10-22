@@ -9,6 +9,7 @@ import torch.nn.functional as F
 from transformers import AutoModel, AutoConfig
 from models.torch_relu_kan import ReLUKAN
 from models.layer_selection import resolve_layer_index
+from models.dataset_blocks import build_block_expansion, unpack_dynamic_inputs
 
 # Backward compatibility with older versions of the repository
 try:
@@ -121,10 +122,15 @@ class MLPBase(nn.Module):
         layer_norm_eps: float = 1e-5,
         layer_norm_affine: bool = False,
         debug: bool = False,
+        dataset_block_expansion: dict | None = None,
     ) -> None:
         super().__init__()
         self.debug = debug
         self._debug_layer_norm_logged = False
+        self.input_size = input_size
+        self.block_expansion = build_block_expansion(
+            input_size, dataset_block_expansion, use_layer_norm, layer_norm_affine
+        )
 
         self.input_layer_norm = (
             nn.LayerNorm(
@@ -146,7 +152,7 @@ class MLPBase(nn.Module):
         activation_layer = ACTIVATIONS_FUNCS[self.activation_func]
 
         layers: List[nn.Module] = []
-        current_dim = input_size
+        current_dim = self.block_expansion.output_size if self.block_expansion else input_size
 
         for _ in range(num_layers):
             layers.append(nn.Linear(current_dim, hidden_dim))
@@ -177,7 +183,7 @@ class MLPBase(nn.Module):
                 if module.bias is not None:
                     init.zeros_(module.bias)
 
-    def forward(self, x):
+    def forward(self, x, dataset_ids=None):
         normalized = self.input_layer_norm(x)
         if self.debug and not self._debug_layer_norm_logged:
             before = x[0].detach().cpu().reshape(-1).tolist()
@@ -185,7 +191,8 @@ class MLPBase(nn.Module):
             print(f"[DEBUG][MLP][LayerNorm] before shape={tuple(x.shape)} vector={before}")
             print(f"[DEBUG][MLP][LayerNorm] after  shape={tuple(normalized.shape)} vector={after}")
             self._debug_layer_norm_logged = True
-        logits = self.layers(normalized)
+        head_input = self.block_expansion(normalized, dataset_ids) if self.block_expansion else normalized
+        logits = self.layers(head_input)
         return logits
 
 
@@ -262,6 +269,7 @@ class BaseModel(nn.Module, ABC):
         specific_layer_idx: int = -1,
         pooling_strategy: str = "mean", # "mean" or "attpool"
         input_power_transform: dict | None = None,
+        dataset_block_expansion: dict | None = None,
         **kwargs,
     ):
         super().__init__()
@@ -276,6 +284,7 @@ class BaseModel(nn.Module, ABC):
             layer_norm_eps=layer_norm_eps,
             layer_norm_affine=layer_norm_affine,
             debug=debug,
+            dataset_block_expansion=dataset_block_expansion,
         )
         self.input_transform = (
             PowerTransformerYeoJohnson(input_power_transform)
@@ -533,6 +542,7 @@ class ReLuKANBaseModel(nn.Module, ABC):
         last_layer: bool = False,
         debug: bool = False,
         input_power_transform: dict | None = None,
+        dataset_block_expansion: dict | None = None,
         **kwargs,
     ):
         super().__init__()
@@ -546,6 +556,7 @@ class ReLuKANBaseModel(nn.Module, ABC):
             layer_norm_eps=layer_norm_eps,
             layer_norm_affine=layer_norm_affine,
             debug=debug,
+            dataset_block_expansion=dataset_block_expansion,
         )
         self.input_transform = (
             PowerTransformerYeoJohnson(input_power_transform)
@@ -797,6 +808,9 @@ class CalMOSDynamicModel(BaseModel):
     ):
         super().__init__(**kwargs)
 
+        if self.mlp.block_expansion is not None and use_sr_embeddings:
+            raise ValueError("Dataset block expansion cannot be combined with sampling-rate embeddings")
+
         if freeze_backbone and use_peft:
             raise ValueError("Parameters 'freeze_backbone' and 'use_peft' cannot be 'True' at the same time.")
 
@@ -848,10 +862,10 @@ class CalMOSDynamicModel(BaseModel):
         return all_layers
 
     def _get_embedding_dim(self) -> int:
-        return self.mlp.layers[0].in_features
+        return self.mlp.input_size
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        input_features, sr_ids = x
+        input_features, sr_ids, dataset_ids = unpack_dynamic_inputs(x)
         # Get embeddings
         embeddings = self._get_embeddings(input_features)
         # Apply layer weighting
@@ -864,7 +878,7 @@ class CalMOSDynamicModel(BaseModel):
             # Concatenate the embeddings
             logits_input = torch.cat((sr_embeddings, logits_input), dim=-1)
         # MLP classification
-        logits = self.mlp(logits_input).squeeze(-1)
+        logits = self.mlp(logits_input, dataset_ids=dataset_ids).squeeze(-1)
         return logits
 
 
@@ -909,17 +923,17 @@ class CalMOSDynamicKANModel(ReLuKANBaseModel):
         return all_layers
 
     def _get_embedding_dim(self) -> int:
-        return self.mlp.width[0]
+        return self.mlp.input_size
 
     def forward(self, x: tuple) -> torch.Tensor:
         # DynamicCollate returns (feature-extractor output, sample-rate IDs).
         # The KAN head does not use the IDs, as in the MLP path when
         # use_sr_embeddings=False.
-        input_features, _source_srs = x
+        input_features, _source_srs, dataset_ids = unpack_dynamic_inputs(x)
         embeddings = self._get_embeddings(input_features)
         embeddings = self._apply_layer_weighting(embeddings)
         logits_input = self._apply_pooling(embeddings)
-        return self.mlp(logits_input).squeeze(-1)
+        return self.mlp(logits_input, dataset_ids=dataset_ids).squeeze(-1)
 
 
 class CalMOSAllLayersEmbeddingModel(BaseModel):

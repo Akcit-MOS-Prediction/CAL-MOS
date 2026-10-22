@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
+from models.dataset_blocks import build_block_expansion
 
 
 class ReLUKANLayer(nn.Module):
@@ -45,16 +46,23 @@ class ReLUKANLayer(nn.Module):
 
 
 class ReLUKAN(nn.Module):
-    def __init__(self, width, grid, k, use_layer_norm=True, layer_norm_eps=1e-5, layer_norm_affine=False, debug=False):
+    def __init__(self, width, grid, k, use_layer_norm=True, layer_norm_eps=1e-5, layer_norm_affine=False, debug=False, dataset_block_expansion=None):
         super().__init__()
         self.debug = debug
         self._debug_layer_norm_logged = False
+        self.input_size = width[0]
+        self.block_expansion = build_block_expansion(
+            self.input_size, dataset_block_expansion, use_layer_norm, layer_norm_affine
+        )
+        width = list(width)
+        if self.block_expansion is not None:
+            width[0] = self.block_expansion.output_size
         self.width = width
         self.grid = grid
         self.k = k
         self.input_layer_norm = (
             nn.LayerNorm(
-                width[0],
+                self.input_size,
                 eps=layer_norm_eps,
                 elementwise_affine=layer_norm_affine,
             )
@@ -67,7 +75,7 @@ class ReLUKAN(nn.Module):
             #     self.rk_layers.append()
         self.rk_layers = nn.ModuleList(self.rk_layers)
 
-    def forward(self, x):
+    def forward(self, x, dataset_ids=None):
         normalized = self.input_layer_norm(x)
         if self.debug and not self._debug_layer_norm_logged:
             before = x[0].detach().cpu().reshape(-1).tolist()
@@ -75,7 +83,7 @@ class ReLUKAN(nn.Module):
             print(f"[DEBUG][KAN][LayerNorm] before shape={tuple(x.shape)} vector={before}")
             print(f"[DEBUG][KAN][LayerNorm] after  shape={tuple(normalized.shape)} vector={after}")
             self._debug_layer_norm_logged = True
-        x = normalized
+        x = self.block_expansion(normalized, dataset_ids) if self.block_expansion else normalized
         for rk_layer in self.rk_layers:
             x = rk_layer(x)
         # x = x.reshape((len(x), self.width[-1]))

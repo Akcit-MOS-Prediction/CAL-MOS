@@ -29,6 +29,18 @@ model:
     specific_layer_idx: -1
     last_layer: true
     pooling_strategy: "mean"
+
+    # Enable only for experiments that route the normalized embedding by dataset.
+    dataset_block_expansion:
+        enabled: false
+        num_blocks: 4
+        output_multiplier: 4.0
+        dataset_to_id:
+            bvcc: 1
+            singmos: 2
+            tmhint: 3
+            brspeech: 4
+
     relukan_k: 3                                # ← KAN
     relukan_grid: 5                             # ← KAN
 

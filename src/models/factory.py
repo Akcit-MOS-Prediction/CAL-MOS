@@ -10,6 +10,7 @@ from models.base_models import (
 )
 
 from typing import Union
+from utils.dataset_identity import block_expansion_enabled
 
 ModelLike = Union[BaseModel, ReLuKANBaseModel]
 
@@ -23,6 +24,8 @@ def create_model(
     model_type: "dynamic" or "embedding"
     kwargs: parameters to be passed to the model constructors
     """
+    if block_expansion_enabled(kwargs.get("dataset_block_expansion")) and model_type.lower() not in {"dynamic", "dynamic_kan"}:
+        raise ValueError("Dataset block expansion is supported by dynamic MLP/KAN models")
     if model_type.lower() == "dynamic":
         return CalMOSDynamicModel(**kwargs)
     if model_type.lower() == "dynamic_kan":

@@ -15,7 +15,7 @@ model:
     # model_name: "openai/whisper-large"
     model_name: "utter-project/mHuBERT-147"  # HuBERT base arch, 95M params, 147 langs
 
-    mlp_input_dim: 768          # HuBERT base hidden size (era 1024 no xls-r-300m)
+    mlp_input_dim: 768
     use_layer_norm: true
     layer_norm_eps: 1e-5
     layer_norm_affine: false
@@ -29,6 +29,17 @@ model:
     specific_layer_idx: -1
     last_layer: true
     pooling_strategy: "mean"
+
+    # Enable only for experiments that route the normalized embedding by dataset.
+    dataset_block_expansion:
+        enabled: false
+        num_blocks: 4
+        output_multiplier: 4.0
+        dataset_to_id:
+            bvcc: 1
+            singmos: 2
+            tmhint: 3
+            brspeech: 4
 
     freeze_backbone: true
 

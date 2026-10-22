@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoFeatureExtractor
 
 from utils.dataloader import EmbeddingDataset, DynamicDataset
+from utils.dataset_identity import dataset_id_for_split
 
 
 def build_dataloaders(config):
@@ -40,19 +41,21 @@ def build_dataloaders(config):
             data_type="train",
             class_num=config.data.num_classes,
             target_sr=config.data.target_sr,
+            dataset_id=dataset_id_for_split(config, config.datasets.train[0]),
         )
 
         val_dataset = DynamicDataset(
             data=val_data,
-            filename_column=config.datasets.train[0].filename_column,
-            target_column=config.datasets.train[0].target_column,
-            sr_column=config.datasets.train[0].get("sr_column", None), # Backward compatibility
+            filename_column=config.datasets.val[0].filename_column,
+            target_column=config.datasets.val[0].target_column,
+            sr_column=config.datasets.val[0].get("sr_column", None), # Backward compatibility
             sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
-            base_dir=config.datasets.train[0].base_dir,
+            base_dir=config.datasets.val[0].base_dir,
             mixup_alpha=config.data.mixup_alpha,
             data_type="val",
             class_num=config.data.num_classes,
             target_sr=config.data.target_sr,
+            dataset_id=dataset_id_for_split(config, config.datasets.val[0]),
         )
     elif config.model.model_type.lower() == "all_layers_embedding" \
         or config.model.model_type.lower() == "one_layer_embedding":

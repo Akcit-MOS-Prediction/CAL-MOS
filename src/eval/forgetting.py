@@ -119,6 +119,8 @@ def main():
     checkpoint = Path(args.checkpoint).resolve(strict=True)
     if not checkpoint.is_file():
         raise ValueError(f"Checkpoint is not a file: {checkpoint}")
+    from utils.dataset_identity import dataset_id_for_split
+
     test = config.datasets.test[0]
     data = pd.read_csv(test.metadata_path)
     model_type = config.model.model_type.lower()
@@ -134,6 +136,7 @@ def main():
             data_type="test",
             class_num=config.data.num_classes,
             target_sr=config.data.target_sr,
+            dataset_id=dataset_id_for_split(config, test),
         )
         processor = AutoFeatureExtractor.from_pretrained(config.model.model_name)
         collate = (

@@ -28,6 +28,7 @@ from utils.dataloader import (
 )
 from models.calmos_wrapper import CALMOSWrapper
 from transformers import AutoFeatureExtractor
+from utils.dataset_identity import dataset_id_for_split
 
 
 @torch.no_grad
@@ -142,6 +143,7 @@ if __name__ == '__main__':
         sr_dictionary=config.data.get("sr_dictionary", None), # Backward compatibility
         base_dir=config.datasets.test[0].base_dir,
         data_type="test",
+        dataset_id=dataset_id_for_split(config, config.datasets.test[0]),
     )
 
     if config.model.model_type.lower() == "dynamic" or config.model.model_type.lower() == "dynamic_kan":

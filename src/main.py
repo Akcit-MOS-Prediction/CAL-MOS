@@ -3,7 +3,7 @@ import argparse
 
 import wandb
 from omegaconf import OmegaConf
-from lightning.pytorch import Trainer
+from lightning.pytorch import Trainer, seed_everything
 from lightning.pytorch.loggers import WandbLogger
 from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor, EarlyStopping
 
@@ -50,6 +50,8 @@ def main() -> None:
     args = parser.parse_args()
 
     config = OmegaConf.load(args.config_path)
+    if config.get("seed") is not None:
+        seed_everything(int(config.seed), workers=True)
 
     if config.data.get("use_seqaug", False):
         print(f"Using sequence augmentation!")
@@ -69,6 +71,7 @@ def main() -> None:
     tags += [dataset["name"] for dataset in config.datasets.train]  # add training datasets as tags
     tags += config.tags  # add tags defined for experiments
     wandb.init(
+        mode=config.get("wandb_mode", None),
         project="MOS-Prediction",
         name=exp_title,
         tags=tags,

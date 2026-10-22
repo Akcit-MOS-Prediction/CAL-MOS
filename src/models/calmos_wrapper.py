@@ -157,12 +157,13 @@ class CALMOSWrapper(L.LightningModule):
         print(f"Max number of steps: {max_num_steps}")
 
         opt_params = self.config.optimizer["params"]
-        scheduler_params = self.config.scheduler["params"]
+        scheduler_params = self.config.scheduler.get("params", {}) if self.config.get("scheduler") else {}
         parameters = [parameter for parameter in self.parameters() if parameter.requires_grad]
 
         if self.config.optimizer.name.lower() == "adam":
             optimizer = Adam(
                 parameters,
+                lr=opt_params["learning_rate"],
                 eps=opt_params["eps"],
                 betas=opt_params["betas"],
                 weight_decay=opt_params["weight_decay"]
@@ -171,6 +172,7 @@ class CALMOSWrapper(L.LightningModule):
         elif self.config.optimizer.name.lower() == "adamw":
             optimizer = AdamW(
                 parameters,
+                lr=opt_params["learning_rate"],
                 eps=opt_params["eps"],
                 betas=opt_params["betas"],
                 weight_decay=opt_params["weight_decay"]
@@ -179,6 +181,7 @@ class CALMOSWrapper(L.LightningModule):
         elif self.config.optimizer.name.lower() == "lion":
             optimizer = Lion(
                 parameters,
+                lr=opt_params["learning_rate"],
                 betas=opt_params["betas"],
                 weight_decay=opt_params["weight_decay"],
                 use_triton=opt_params.get("use_triton", False),
@@ -194,7 +197,7 @@ class CALMOSWrapper(L.LightningModule):
         if self.config.scheduler.name.lower() == "reducelronplateau":
             scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
                 optimizer,
-                "min",
+                mode=scheduler_params.get("mode", "min"),
                 patience=scheduler_params.get("patience", max_num_steps*0.25),
                 factor=0.9,
                 min_lr=opt_params.get("min_learning_rate", 1.0e-6)
@@ -233,11 +236,16 @@ class CALMOSWrapper(L.LightningModule):
                 verbose=scheduler_params.get("verbose", False)
             )
 
+        if scheduler is None:
+            raise ValueError(f"Invalid scheduler: {self.config.scheduler.name}")
+
+        plateau = self.config.scheduler.name.lower() == "reducelronplateau"
         return {
             "optimizer": optimizer,
             "lr_scheduler": {
                 "scheduler": scheduler,
-                "interval": "step"
+                "interval": "epoch" if plateau else "step",
+                **({"monitor": scheduler_params.get("monitor", "val/loss")} if plateau else {}),
             }
         }
 

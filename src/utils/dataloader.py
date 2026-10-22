@@ -10,6 +10,7 @@ import pandas as pd
 from torch.utils.data import Dataset
 from transformers import WhisperFeatureExtractor
 from transformers import AutoModel, AutoFeatureExtractor
+from utils.dataset_identity import validate_dataset_id
 
 
 class EmbeddingDataset(Dataset):
@@ -211,10 +212,12 @@ class DynamicDataset(Dataset):
         data_type: str = "train",
         class_num: int = 15,
         target_sr: int = 16000,
+        dataset_id: Optional[int] = None,
     ):
         """Initialization"""
         self.data = data
         self.base_dir = base_dir
+        self.dataset_id = validate_dataset_id(dataset_id) if dataset_id is not None else None
 
         # Cache filepaths and targets
         self.filenames = self.data[filename_column].values
@@ -350,7 +353,8 @@ class DynamicDataset(Dataset):
             white_noise_amp = torch.rand(1) * (self.max_white_noise_amp - self.min_white_noise_amp) + self.min_white_noise_amp
             audio = audio + white_noise_amp * torch.randn_like(audio)
 
-        return audio.squeeze(0).numpy(), source_sr, target
+        example = (audio.squeeze(0).numpy(), source_sr, target)
+        return (*example, self.dataset_id) if self.dataset_id is not None else example
 
 
 class DynamicCollate:
@@ -373,7 +377,15 @@ class DynamicCollate:
         self.padding_value = padding_value
 
     def __call__(self, batch: List[Tuple[torch.Tensor, torch.Tensor]]) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-        audios, source_srs, targets = zip(*batch)
+        widths = {len(example) for example in batch}
+        if widths == {4}:
+            audios, source_srs, targets, ids = zip(*batch)
+            dataset_ids = torch.tensor([validate_dataset_id(i) for i in ids], dtype=torch.long)
+        elif widths == {3}:
+            audios, source_srs, targets = zip(*batch)
+            dataset_ids = None
+        else:
+            raise ValueError("Dynamic batches must consistently include dataset IDs or omit them")
 
         audios = list(audios)
         targets = torch.stack([torch.tensor(t, dtype=torch.float32) for t in targets])
@@ -394,7 +406,10 @@ class DynamicCollate:
                 sampling_rate=self.target_sr,
             )
 
-        return (processed, source_srs), targets.float()
+        features = (processed, source_srs)
+        if dataset_ids is not None:
+            features = (*features, dataset_ids)
+        return features, targets.float()
 
 
 class DynamicAudioCollate:

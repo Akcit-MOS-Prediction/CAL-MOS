@@ -1,0 +1,26 @@
+# Paths below are relative to THIS file. Add any supported MLP/KAN model config.
+configs:
+  - models/w2vbert_2.0_dataset_blocks_kan.yaml
+  - models/w2vbert_2.0_dataset_blocks.yaml
+
+sequence: [bvcc, singmos, tmhint, brspeech, bvcc]
+datasets:
+  bvcc: datasets/bvcc.yaml
+  singmos: datasets/singmos.yaml
+  tmhint: datasets/tmhint.yaml
+  brspeech: datasets/brspeech.yaml
+
+seed: 42
+inference_batch_size: 8
+save_head_inputs: true  # Full first sample entering the head, once per epoch.
+continue_on_error: true  # Continue independent configs, never skip a failed stage in a chain.
+wandb:
+  enabled: false  # CSVs are always saved, with or without W&B.
+  project: MOS-Prediction
+  offline: false
+
+# Optional shared overrides, applied AFTER model and dataset configs.
+# optimizer:
+#   params:
+#     learning_rate: 0.00005
+overrides: {}
