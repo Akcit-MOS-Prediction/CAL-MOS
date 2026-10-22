@@ -28,9 +28,9 @@ Branch: `feat/kan-sigmoid-input` a partir de `origin/feat/4times` (979c3ee). Mod
 - [x] (WS3) 3 Testes
   - [x] 3.1 novo arquivo de testes da KAN (faixa, padding inerte, gradiente zero no padding, entre camadas, erro de padding, checkpoint antigo, MLP inalterada)
   - [x] 3.2 ajustar testes existentes que esperam zeros fora da janela na KAN
-- [ ] (WS4) 4 Validação real
+- [x] (WS4) 4 Validação real
   - [x] 4.1 embeddings WavLM-large do subset BVCC local
-  - [ ] 4.2 treino de cabeça: KAN antiga × KAN nova × MLP, mesmo LR do config wavlm (1e-3)
+  - [x] 4.2 treino de cabeça sem blocos: KAN antiga × KAN-sigmoide, 3 sementes (blocos 4x interrompido a pedido do usuário)
 
 - [x] (REVIEW) 5 Achados do revisor independente
   - [x] 5.1 checkpoint KAN 4x antigo rejeitado com mensagem errada (bloco falhava antes) — erro levantado antes dos filhos
@@ -63,3 +63,7 @@ Branch: `feat/kan-sigmoid-input` a partir de `origin/feat/4times` (979c3ee). Mod
 - Branch: test_kan_input_squash 8/8; test_dataset_blocks 16/19 (mesmos 3 stubs; com ROOT dos fontes originais o teste de checkpoint passa); test_train_sequence 9/9 com shim de scipy.
 - MLP: saida bit-identica a feat/4times (mesmos pesos, mesma entrada).
 - Review independente: 0 ALTA; 3 MEDIA + 4 BAIXA corrigidos (itens 5.x).
+- Treino real (WavLM-large congelado, subset BVCC local 2254/387/741, cabeça sem blocos, LR 1e-3, 40 épocas, 3 sementes):
+  KAN antiga: val SRCC 0.722 ± 0.020, teste SRCC 0.790 ± 0.020; entrada da 2ª camada 95-96% fora da grade.
+  KAN-sigmoide: val SRCC 0.780 ± 0.002, teste SRCC 0.857 ± 0.006; fora da grade ≤ 2.2%. Val MSE ép. 40: ~0.32 vs ~0.55.
+  KAN antiga com blocos 4x (1 semente): predição constante ao final (reproduz o problema). KAN-sigmoide com blocos: não rodado.
