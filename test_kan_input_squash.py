@@ -33,7 +33,7 @@ class KanInputSquashTests(unittest.TestCase):
     def setUp(self):
         torch.manual_seed(0)
 
-    def test_first_layer_receives_sigmoid_of_layernorm_with_padding_below_grid(self):
+    def test_first_layer_receives_sigmoid_of_layernorm_with_zero_padding(self):
         head = ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion=BLOCKS)
         inputs, ids = torch.randn(4, 8) * 50, torch.tensor([1, 2, 3, 4])
         captured, handles = capture_inputs(head)
@@ -42,7 +42,7 @@ class KanInputSquashTests(unittest.TestCase):
             handle.remove()
         first = captured[0]
         expected = torch.sigmoid(F.layer_norm(inputs, (8,)))
-        self.assertEqual(head.block_expansion.padding_value, -1.0)
+        self.assertEqual(head.block_expansion.padding_value, 0.0)
         for row, identifier in enumerate(ids.tolist()):
             start, end = head.block_expansion.windows[identifier - 1]
             torch.testing.assert_close(first[row, start:end], expected[row], rtol=0, atol=0)
@@ -50,11 +50,10 @@ class KanInputSquashTests(unittest.TestCase):
             self.assertTrue(((window > 0) & (window < 1)).all())
             outside = torch.ones(first.shape[1], dtype=torch.bool)
             outside[start:end] = False
-            self.assertTrue((first[row, outside] == -1.0).all())
-            # Every real coordinate activates at least one basis; every padded one activates none.
+            self.assertTrue((first[row, outside] == 0.0).all())
+            # Every real coordinate activates at least one basis.
             activity = grid_activity(head.rk_layers[0], first[row:row + 1])[0]
             self.assertTrue((activity[start:end] > 0).all())
-            self.assertTrue((activity[outside] == 0).all())
 
     def test_inner_layers_receive_sigmoid_of_layernorm_even_when_activations_grow(self):
         head = ReLUKAN([8, 16, 16, 1], grid=5, k=2)
@@ -70,31 +69,14 @@ class KanInputSquashTests(unittest.TestCase):
             self.assertTrue(((values > 0) & (values < 1)).all(), f"layer {index} input outside (0, 1)")
             self.assertTrue((grid_activity(head.rk_layers[index], values) > 0).all())
 
-    def test_padded_positions_get_exactly_zero_gradient_and_no_influence(self):
-        head = ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion=BLOCKS)
-        inputs, ids = torch.randn(5, 8), torch.full((5,), 2)
-        head(inputs, ids).square().sum().backward()
-        gradient = head.rk_layers[0].equal_size_conv.weight.grad  # [out, 1, g+k, 4*8]
-        start, end = head.block_expansion.windows[1]
-        padded = torch.ones(gradient.shape[-1], dtype=torch.bool)
-        padded[start:end] = False
-        self.assertEqual(torch.count_nonzero(gradient[..., padded]).item(), 0)
-        self.assertGreater(torch.count_nonzero(gradient[..., ~padded]).item(), 0)
-        before = head(inputs, ids).detach()
-        with torch.no_grad():
-            head.rk_layers[0].equal_size_conv.weight[..., padded] = torch.randn_like(
-                head.rk_layers[0].equal_size_conv.weight[..., padded])
-        torch.testing.assert_close(head(inputs, ids), before, rtol=0, atol=0)
-
-    def test_padding_inside_grid_is_rejected_and_default_follows_the_grid(self):
-        for padding in (0.0, 0.5, 1.0, -0.4, 1.4, 2.0, 5.0):
-            with self.assertRaisesRegex(ValueError, "not below the ReLU-KAN grid"):
-                ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion={**BLOCKS, "padding_value": padding})
-        self.assertEqual(ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion={
-            **BLOCKS, "padding_value": -3.0}).block_expansion.padding_value, -3.0)
-        # g=3, k=3 -> grid [-1, 2]; -1.0 would sit on the grid edge, so the default moves below it.
-        self.assertEqual(ReLUKAN([8, 16, 1], grid=3, k=3, dataset_block_expansion=BLOCKS)
-                         .block_expansion.padding_value, -1.5)
+    def test_padding_defaults_to_zero_like_the_mlp_and_honors_configured_values(self):
+        self.assertEqual(ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion=BLOCKS)
+                         .block_expansion.padding_value, 0.0)
+        self.assertEqual(MLPBase(8, 16, 1, 1, dataset_block_expansion=BLOCKS)
+                         .block_expansion.padding_value, 0.0)
+        for padding in (0.0, 0.1, -1.0):
+            head = ReLUKAN([8, 16, 1], grid=5, k=2, dataset_block_expansion={**BLOCKS, "padding_value": padding})
+            self.assertEqual(head.block_expansion.padding_value, padding)
 
     def test_hidden_width_one_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "hidden widths must be >= 2"):

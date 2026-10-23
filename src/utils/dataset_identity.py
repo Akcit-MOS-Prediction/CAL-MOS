@@ -53,15 +53,6 @@ def block_expansion_padding_value(specification):
     return value
 
 
-def kan_block_padding(grid, k):
-    """Dataset-block padding for a ReLU-KAN head: strictly below its grid [-k/g, 1 + k/g].
-
-    -1.0 when that is already below the grid, otherwise half a unit under its lower edge.
-    """
-    grid_min = -float(k) / float(grid)
-    return -1.0 if -1.0 < grid_min else grid_min - 0.5
-
-
 def validate_dataset_id(dataset_id):
     if isinstance(dataset_id, bool) or not isinstance(dataset_id, Integral) or not 1 <= dataset_id <= 4:
         raise ValueError(f"dataset_id must be an integer from 1 to 4, got {dataset_id!r}")

@@ -8,8 +8,6 @@ from pathlib import Path
 import torch
 from lightning.pytorch.callbacks import Callback
 
-from utils.dataset_identity import kan_block_padding
-
 
 def json_write(path, value):
     path = Path(path)
@@ -83,10 +81,8 @@ class SequenceOutputs(Callback):
         self.padding_value = float(router.padding_value)
         if tuple(router.start_positions) != tuple(i * head.input_size for i in range(4)):
             raise ValueError("Expected four disjoint dataset blocks")
-        if is_kan and not router.padding_value < head.grid_min:
-            raise ValueError("KAN dataset blocks must be padded below the ReLU-KAN grid")
-        if not is_kan and router.padding_value != 0:
-            raise ValueError("MLP dataset blocks must be padded with zero")
+        if router.padding_value != 0:
+            raise ValueError("Dataset blocks must be padded with zero")
         first = head.rk_layers[0] if hasattr(head, "rk_layers") else head.layers[0]
         run = self._wandb_run(trainer)
         if run is not None:
@@ -171,7 +167,7 @@ class SequenceOutputs(Callback):
                     values = args[0].detach()
                     active = ((values.unsqueeze(-1) > module.phase_low) &
                               (values.unsqueeze(-1) < module.phase_height))
-                    # Layer 0: padded positions sit below the grid on purpose; measure real inputs only.
+                    # Layer 0: measure the real (sigmoid) inputs only, not the zero-padded positions.
                     real = (values != self.padding_value) if layer_index == 0 else torch.ones_like(values, dtype=torch.bool)
                     self.kan_support[layer_index] = {
                         "fora_de_todas_bases": float((~active.any(-1))[real].float().mean()),
@@ -329,11 +325,7 @@ RESULT_COLUMNS = ["etapa", "tipo", "treinado_em", "dataset_teste", "backbone", "
 def block_fill(model):
     """Padding actually used by the head: configured value, else the head's default."""
     configured = (model.get("dataset_block_expansion") or {}).get("padding_value")
-    if configured is not None:
-        return float(configured)
-    if model.model_type == "dynamic_kan":
-        return kan_block_padding(model.get("relukan_grid", 3), model.get("relukan_k", 3))
-    return 0.0
+    return float(configured) if configured is not None else 0.0
 
 
 def result_rows(stages, config):
