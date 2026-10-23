@@ -61,7 +61,7 @@ optimizer:
     name: "adamw"
     params:
         min_learning_rate: 1e-5 # Same used in https://ecs.utdallas.edu/research/researchlabs/msp-lab/publications/Goncalves_2024.pdf
-        learning_rate: 1e-3 # Same used in https://ecs.utdallas.edu/research/researchlabs/msp-lab/publications/Goncalves_2024.pdf
+        learning_rate: 5e-4
         eps: 1e-8
         weight_decay: 1e-6
         betas: [0.9, 0.98]
