@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from models.dataset_blocks import build_block_expansion
+from utils.dataset_identity import block_expansion_enabled, kan_block_padding
 
 
 class ReLUKANLayer(nn.Module):
@@ -52,9 +53,9 @@ class ReLUKAN(nn.Module):
     Every ReLUKANLayer only responds on [-k/g, 1 + k/g]; outside it all bases, their
     contributions and their gradients are zero. The non-affine LayerNorm yields ~N(0, 1)
     values, so the head squashes them with a sigmoid into (0, 1) before the first layer,
-    and repeats LayerNorm + sigmoid before every following layer. Dataset-block padding uses
-    the configured value (default 0, the same as the MLP head). The MLP head (MLPBase)
-    keeps LayerNorm only.
+    and repeats LayerNorm + sigmoid before every following layer. Dataset-block padding is
+    placed strictly below the grid so padded positions stay inert. The MLP head
+    (MLPBase) is unaffected: it keeps LayerNorm only.
     """
 
     INPUT_TRANSFORM = {"version": 2, "input": "layernorm+sigmoid", "between_layers": "layernorm+sigmoid"}
@@ -67,11 +68,13 @@ class ReLUKAN(nn.Module):
         self.layer_norm_eps = layer_norm_eps
         self.grid = grid
         self.k = k
+        self.grid_min = -k / grid
+        self.grid_max = 1 + k / grid
         if any(int(size) < 2 for size in list(width)[1:-1]):
             raise ValueError("ReLU-KAN hidden widths must be >= 2: LayerNorm over one unit is constant")
         self.block_expansion = build_block_expansion(
             self.input_size,
-            dataset_block_expansion,
+            self._padding_outside_grid(dataset_block_expansion),
             use_layer_norm,
             layer_norm_affine,
         )
@@ -93,6 +96,22 @@ class ReLUKAN(nn.Module):
             # if len(width) - i > 2:
             #     self.rk_layers.append()
         self.rk_layers = nn.ModuleList(self.rk_layers)
+
+    def _padding_outside_grid(self, specification):
+        """Default the block padding below the grid; reject any padding not strictly below it."""
+        if not block_expansion_enabled(specification):
+            return specification
+        specification = dict(specification)
+        if specification.get("padding_value") is None:
+            specification["padding_value"] = kan_block_padding(self.grid, self.k)
+        padding = float(specification["padding_value"])
+        if not padding < self.grid_min:
+            raise ValueError(
+                f"KAN dataset-block padding_value={padding} is not below the ReLU-KAN grid "
+                f"[{self.grid_min:g}, {self.grid_max:g}]; padded positions must be inert. "
+                f"Use a value below {self.grid_min:g} (default {kan_block_padding(self.grid, self.k):g})"
+            )
+        return specification
 
     def _squash(self, values):
         """Map ~N(0, 1) features into (0, 1), where the ReLU-KAN bases live."""

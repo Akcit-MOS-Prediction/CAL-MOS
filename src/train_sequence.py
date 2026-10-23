@@ -14,7 +14,7 @@ import uuid
 from omegaconf import OmegaConf
 
 from utils.sequence_outputs import RESULT_COLUMNS, SequenceOutputs, csv_write, json_write, result_rows
-from utils.dataset_identity import DATASET_IDS
+from utils.dataset_identity import DATASET_IDS, kan_block_padding
 
 ROOT = Path(__file__).resolve().parents[1]
 SEQUENCE = ("bvcc", "singmos", "tmhint", "brspeech", "bvcc")
@@ -23,6 +23,11 @@ SEQUENCE = ("bvcc", "singmos", "tmhint", "brspeech", "bvcc")
 def relative_path(value, parent):
     path = Path(value).expanduser()
     return (path if path.is_absolute() else parent / path).resolve()
+
+
+def kan_padding_value(model):
+    """Block padding strictly below the ReLU-KAN grid (defaults match ReLuKANBaseModel: g=3, k=3)."""
+    return kan_block_padding(model.get("relukan_grid", 3), model.get("relukan_k", 3))
 
 
 def load_plan(protocol_path, config_paths=None):
@@ -56,10 +61,11 @@ def load_plan(protocol_path, config_paths=None):
             model.use_layer_norm = True
             model.layer_norm_affine = False
             # Any old compact expansion, fill=0.1 or block_width is intentionally replaced.
-            # Zero padding for both heads (MLP and KAN).
+            # MLP: zero padding. KAN: padding below the ReLU-KAN grid (inputs are sigmoid(LN) in
+            # (0, 1)), so padded positions have zero basis, contribution and gradient.
             model.dataset_block_expansion = {
                 "enabled": True, "num_blocks": 4, "output_multiplier": 4.0,
-                "padding_value": 0.0,
+                "padding_value": kan_padding_value(model) if model.model_type == "dynamic_kan" else 0.0,
                 "dataset_to_id": DATASET_IDS,
             }
             if model.get("input_power_transform"):

@@ -191,7 +191,7 @@ class DatasetBlockTests(unittest.TestCase):
             self.assertEqual(head.input_layer_norm.normalized_shape, (8,))
             check_windows(self, captured[0], head_route_input(head, head.input_layer_norm(inputs)), ids,
                           head.block_expansion)
-            self.assertEqual(head.block_expansion.padding_value, 0.0)
+            self.assertEqual(head.block_expansion.padding_value, 0.0 if isinstance(head, MLPBase) else -1.0)
             output.square().mean().backward()
             self.assertTrue(all(torch.isfinite(p.grad).all() for p in head.parameters() if p.grad is not None))
 

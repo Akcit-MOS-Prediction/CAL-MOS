@@ -112,8 +112,9 @@ class SequenceTests(unittest.TestCase):
                             vectors = list(csv.DictReader(stream, delimiter=";"))
                         self.assertEqual(len(vectors), 32)
                         active = DATASET_IDS[stage["dataset"]]
-                        # Zero padding for both heads. KAN active block: sigmoid(LayerNorm) in (0, 1).
-                        padding = 0.0
+                        # MLP: LayerNorm values, zero padding. KAN: sigmoid(LayerNorm) in (0, 1),
+                        # padding -1.0 below the ReLU-KAN grid [-0.4, 1.4].
+                        padding = 0.0 if head == "mlp" else -1.0
                         values = [(int(r["bloco"]), float(r["valor"].replace(",", "."))) for r in vectors]
                         self.assertTrue(all(value == padding for block, value in values if block != active))
                         if head == "kan":
@@ -159,8 +160,8 @@ class SequenceTests(unittest.TestCase):
                 self.assertEqual(config.model.dataset_block_expansion.output_multiplier, 4)
                 self.assertNotIn("block_width", config.model.dataset_block_expansion)
                 self.assertFalse(config.model.layer_norm_affine)
-                # Old fill 0.1 replaced by zero padding (same for KAN and MLP).
-                self.assertEqual(config.model.dataset_block_expansion.padding_value, 0.0)
+                # KAN fixture: padding below the grid [-k/g, 1 + k/g] = [-0.4, 1.4]; old fill 0.1 replaced.
+                self.assertEqual(config.model.dataset_block_expansion.padding_value, -1.0)
 
     def test_mlp_protocol_keeps_zero_padding(self):
         with tempfile.TemporaryDirectory() as temporary:
