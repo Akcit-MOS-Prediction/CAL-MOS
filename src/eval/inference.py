@@ -167,11 +167,13 @@ if __name__ == '__main__':
     else:
         raise ValueError(f"Invalid model type: {config.model.model_type}")
 
+    worker_count = int(config.train.num_workers)
     test_dataloader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=16,
         shuffle=False,
-        num_workers=config.train.num_workers,
+        num_workers=worker_count,
+        multiprocessing_context="spawn" if worker_count > 0 else None,
         pin_memory=True,
         collate_fn=collate_fn,
     )

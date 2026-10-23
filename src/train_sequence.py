@@ -165,16 +165,21 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
     stop = OmegaConf.to_container(config.get("early_stopping", {}), resolve=True)
     stop.update(monitor=monitor, mode=mode, check_on_train_epoch_end=False)
     stop.setdefault("patience", 25)
-    outputs = SequenceOutputs(attempt, save_head_inputs=protocol.get("save_head_inputs", True))
+    stage_dataset = stage_dir.name.split("-", 1)[-1].lower()
+    outputs = SequenceOutputs(attempt, save_head_inputs=protocol.get("save_head_inputs", True),
+                              active_dataset=stage_dataset)
     callbacks = [checkpoint, EarlyStopping(**stop), LearningRateMonitor("step"), outputs]
     loggers = [CSVLogger(str(attempt), name="lightning")]
     wandb_options = protocol.get("wandb", {})
     wandb_logger = None
     if wandb_options.get("enabled", False):
+        head_label = (f"kan-k{config.model.relukan_k}-g{config.model.relukan_grid}"
+                      if config.model.model_type == "dynamic_kan" else "mlp")
+        backbone_label = config.model.model_name.split("/")[-1].lower()
         wandb_logger = WandbLogger(
             project=wandb_options.get("project", "MOS-Prediction"),
             entity=wandb_options.get("entity", config.get("wandb_entity")),
-            name=f"{stage_dir.parent.name}-{stage_dir.name}",
+            name=f"{backbone_label}-{head_label}-{stage_dir.name}",
             group=wandb_options.get("group", stage_dir.parent.name),
             tags=["sequencial", "blocos4", "layernorm-nao-afim", stage_dir.name,
                   config.model.model_name, config.model.model_type],
@@ -182,6 +187,17 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
         )
         wandb_logger.log_hyperparams(OmegaConf.to_container(config, resolve=True))
         run = wandb_logger.experiment
+        parent_run = {}
+        if previous_checkpoint:
+            parent_run_path = Path(previous_checkpoint).parent.parent / "wandb_run.json"
+            if parent_run_path.is_file():
+                parent_run = load_json(parent_run_path)
+        run.config.update({"debug_stage_dataset": stage_dataset,
+                           "initialized_from_checkpoint": previous_checkpoint,
+                           "initialized_from_wandb_run_id": parent_run.get("id"),
+                           "initialized_from_wandb_run_url": parent_run.get("url"),
+                           "parameter_drift_reference": "loaded head weights at the beginning of this stage"},
+                          allow_val_change=True)
         json_write(attempt / "wandb_run.json", {"id": run.id, "url": run.url,
                                                  "entity": run.entity, "project": run.project})
         run.save(str(attempt / "config.yaml"), base_path=str(attempt), policy="now")
@@ -189,6 +205,11 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
     model = (CALMOSWrapper.load_from_checkpoint(str(previous_checkpoint), config=config,
                                                map_location="cpu", strict=True)
              if previous_checkpoint else CALMOSWrapper(config))
+    initial_head = None
+    if previous_checkpoint is None and protocol.get("comparison", {}).get("enabled", True):
+        initial_head = attempt / "initial_head.pt"
+        torch.save({"head_state": {key: value.detach().cpu().clone() if torch.is_tensor(value) else value
+                                   for key, value in model.model.mlp.state_dict().items()}}, initial_head)
     trainer_options = OmegaConf.to_container(config.trainer, resolve=True)
     for reserved in ("devices", "logger", "callbacks", "default_root_dir", "strategy", "num_nodes"):
         trainer_options.pop(reserved, None)
@@ -207,6 +228,21 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
         result = {"best_checkpoint": str(best.resolve()), "initialized_from": previous_checkpoint,
                   "monitor": monitor, "mode": mode, "score": float(checkpoint.best_model_score),
                   "attempt": str(attempt), "seed": int(config.seed)}
+        if initial_head is not None:
+            result["initial_head_checkpoint"] = str(initial_head.resolve())
+        outputs.log_best_checkpoint(
+            model, best, wandb_logger.experiment if wandb_logger is not None else None,
+            getattr(checkpoint, "best_epoch", None),
+        )
+        debug_files = {
+            "parameter_drift": str((attempt / "best_checkpoint_parameter_drift.csv").resolve()),
+            "dataset_block_weights": str((attempt / "best_checkpoint_dataset_block_weights.csv").resolve()),
+            "summary": str((attempt / "best_checkpoint_diagnostics.json").resolve()),
+        }
+        spline_diagnostics = attempt / "best_checkpoint_kan_spline_drift.csv"
+        if spline_diagnostics.is_file():
+            debug_files["kan_spline_drift"] = str(spline_diagnostics.resolve())
+        result["debug_diagnostics"] = debug_files
         if wandb_logger is not None:
             result["wandb"] = load_json(attempt / "wandb_run.json")
             wandb_logger.experiment.summary.update({"best_checkpoint": str(best.resolve()),
@@ -224,7 +260,7 @@ def train_stage(config, stage_dir, previous_checkpoint, gpu, protocol):
             torch.cuda.empty_cache()
 
 
-def evaluate(config, checkpoint, output_dir, gpu, batch_size):
+def evaluate(config, checkpoint, output_dir, gpu, batch_size, probe_path=None, probe_samples=64):
     import pandas as pd
     import torch
     from scipy.stats import spearmanr
@@ -242,11 +278,22 @@ def evaluate(config, checkpoint, output_dir, gpu, batch_size):
                              dataset_id=DATASET_IDS[split.dataset_name])
     collate = DynamicCollate(target_sr=config.data.target_sr,
                              processor=AutoFeatureExtractor.from_pretrained(config.model.model_name))
-    loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False,
-                                         num_workers=config.train.num_workers, collate_fn=collate)
+    worker_count = int(config.train.num_workers)
+    loader = torch.utils.data.DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=worker_count,
+        multiprocessing_context="spawn" if worker_count > 0 else None,
+        collate_fn=collate,
+    )
     device = torch.device("cpu" if gpu == "cpu" else f"cuda:{gpu}")
     model = CALMOSWrapper.load_from_checkpoint(str(checkpoint), config=config,
                                                map_location="cpu", strict=True).to(device).eval()
+    collector = None
+    if probe_path is not None and not Path(probe_path).exists():
+        from utils.sequence_comparison import ProbeCollector
+        collector = ProbeCollector(model.model.mlp, probe_samples)
     predicted, observed = [], []
     try:
         with torch.inference_mode():
@@ -274,8 +321,18 @@ def evaluate(config, checkpoint, output_dir, gpu, batch_size):
                   "test_metadata_path": str(split.metadata_path),
                   "test_metadata_sha256": hashlib.sha256(Path(split.metadata_path).read_bytes()).hexdigest()}
         json_write(output_dir / "metrics.json", result)
+        if collector is not None:
+            collector.save(probe_path, observed, data[split.filename_column].astype(str).tolist(), {
+                "dataset": split.dataset_name, "split": "test",
+                "test_metadata_sha256": result["test_metadata_sha256"],
+                "backbone": config.model.model_name, "input_dim": int(config.model.mlp_input_dim),
+                "selection": "first N metadata rows in deterministic test order",
+                "used_for_model_selection": False,
+            })
         return result
     finally:
+        if collector is not None:
+            collector.close()
         del model
         gc.collect()
         if torch.cuda.is_available():
@@ -287,8 +344,10 @@ def run_experiment(directory, configs, protocol, gpu, resume=False):
         raise FileExistsError(f"{directory} exists. Use --resume or a different --output.")
     directory.mkdir(parents=True, exist_ok=True)
     resolved = [OmegaConf.to_container(config, resolve=True) for config in configs]
+    signature_protocol = OmegaConf.to_container(protocol, resolve=True)
+    signature_protocol.pop("comparison", None)  # Operational reporting options do not change training lineage.
     signature = hashlib.sha256(json.dumps({"configs": resolved, "protocol":
-        OmegaConf.to_container(protocol, resolve=True)}, sort_keys=True).encode()).hexdigest()
+        signature_protocol}, sort_keys=True).encode()).hexdigest()
     manifest_path = directory / "manifest.json"
     if manifest_path.exists() and load_json(manifest_path)["signature"] != signature:
         raise ValueError("Resume config/protocol changed; use a new output directory")
@@ -317,9 +376,13 @@ def run_experiment(directory, configs, protocol, gpu, resume=False):
         for tested in seen:
             output_dir = stage_dir / "evaluations" / tested
             metrics_path = output_dir / "metrics.json"
+            comparison = protocol.get("comparison", {})
+            probe_options = ({"probe_path": directory / "comparison/probes" / f"{tested}.npz",
+                              "probe_samples": int(comparison.get("probe_samples", 64))}
+                             if comparison.get("enabled", True) else {})
             measurement = (load_json(metrics_path) if resume and metrics_path.exists() else
                            evaluate(evaluations[tested], previous, output_dir, gpu,
-                                    int(protocol.get("inference_batch_size", config.train.batch_size))))
+                                    int(protocol.get("inference_batch_size", config.train.batch_size)), **probe_options))
             split = evaluations[tested].datasets.test[0]
             if measurement["checkpoint"] != previous or measurement["test_metadata_sha256"] != hashlib.sha256(
                     Path(split.metadata_path).read_bytes()).hexdigest():
@@ -382,6 +445,14 @@ def main():
                         combined.extend({"experimento": saved_label, **row} for row in result_rows(
                             load_json(progress)["stages"], saved_configs[0]))
                 csv_write(args.output / "results.csv", combined, ["experimento"] + RESULT_COLUMNS)
+        try:
+            from utils.sequence_comparison import schedule_comparison
+            schedule_comparison(args.output.resolve(), [args.output.resolve() / label for label, _, _ in plans],
+                                OmegaConf.to_container(protocol, resolve=True))
+        except Exception as exc:
+            # Diagnostic failure must not turn a successfully trained sequence into a failed training task.
+            json_write(args.output / "comparison/status.json", {"status": "schedule_failed", "error": str(exc)})
+            print(f"[Comparison] Could not schedule diagnostics: {exc}", file=sys.stderr, flush=True)
         if failures:
             raise SystemExit(1)
 

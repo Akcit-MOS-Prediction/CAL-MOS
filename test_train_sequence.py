@@ -184,7 +184,7 @@ class SequenceTests(unittest.TestCase):
                 record = {"best_checkpoint": str(best), "initialized_from": previous}
                 sequence.json_write(stage_dir / "trained.json", record)
                 return record
-            def fake_evaluate(config, checkpoint, output_dir, gpu, batch_size):
+            def fake_evaluate(config, checkpoint, output_dir, gpu, batch_size, probe_path=None, probe_samples=64):
                 result = {"srcc": 0.7, "mse": 0.4, "num_examples": 4,
                           "srcc_undefined": False, "constant_predictions": False,
                           "checkpoint": checkpoint, "test_metadata_sha256": sequence.hashlib.sha256(
@@ -197,6 +197,7 @@ class SequenceTests(unittest.TestCase):
                     sequence.run_experiment(root / "output", configs, protocol, "cpu")
             with patch.object(sequence, "train_stage", side_effect=fake_train), \
                  patch.object(sequence, "evaluate", side_effect=fake_evaluate):
+                protocol.comparison = {"enabled": True, "grid_points": 101}
                 sequence.run_experiment(root / "output", configs, protocol, "cpu", resume=True)
             self.assertEqual(len(counter), 5)  # first stage reused; not trained twice
 

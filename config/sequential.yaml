@@ -16,6 +16,17 @@ seed: 42
 inference_batch_size: 8
 save_head_inputs: true  # Full first sample entering the head, once per epoch.
 continue_on_error: true  # Continue independent configs, never skip a failed stage in a chain.
+comparison:
+  enabled: true
+  wandb: true  # One separate comparison run AFTER all five stages of every grouped config finish.
+  probe_samples: 64  # Fixed first N test embeddings, captured during the existing test pass.
+  grid_points: 201  # Same [0,1] coordinates for every KAN best checkpoint.
+  inputs_per_block: 2  # Fixed sampled connections; complete weight drift is also saved.
+  outputs_per_layer: 1
+  response_points: 33  # Whole-head MOS response, also for MLP, on the same raw-embedding anchors.
+  conditional_dims: 1
+  change_atol: 0.000001
+  change_rtol: 0.001
 wandb:
   enabled: true  # CSVs are also always saved locally.
   project: MOS-Prediction

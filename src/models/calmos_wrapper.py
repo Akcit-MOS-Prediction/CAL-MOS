@@ -75,6 +75,7 @@ class CALMOSWrapper(L.LightningModule):
 
     def train_dataloader(self):
         """Return the training dataloader."""
+        worker_count = int(self.config.train.num_workers)
         if self.config.model.model_type.lower() == "dynamic" or self.config.model.model_type.lower() == "dynamic_kan":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicCollate(
@@ -98,13 +99,15 @@ class CALMOSWrapper(L.LightningModule):
             self.train_dataset,
             batch_size=self.config.train.batch_size,
             shuffle=self.config.train.shuffle,
-            num_workers=self.config.train.num_workers,
+            num_workers=worker_count,
+            multiprocessing_context="spawn" if worker_count > 0 else None,
             pin_memory=True,
             collate_fn=collate_fn,
         )
 
     def val_dataloader(self):
         """Return the validation dataloader."""
+        worker_count = int(self.config.train.num_workers)
         if self.config.model.model_type.lower() == "dynamic" or self.config.model.model_type.lower() == "dynamic_kan":
             processor = AutoFeatureExtractor.from_pretrained(self.config.model.model_name)
             collate_fn = DynamicCollate(
@@ -128,7 +131,8 @@ class CALMOSWrapper(L.LightningModule):
             self.val_dataset,
             batch_size=self.config.train.batch_size,
             shuffle=False,
-            num_workers=self.config.train.num_workers,
+            num_workers=worker_count,
+            multiprocessing_context="spawn" if worker_count > 0 else None,
             pin_memory=True,
             collate_fn=collate_fn,
         )

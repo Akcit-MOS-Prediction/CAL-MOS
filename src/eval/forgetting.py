@@ -157,11 +157,13 @@ def main():
     else:
         raise ValueError(f"Unsupported model_type: {model_type}")
 
+    worker_count = int(config.train.num_workers)
     loader = torch.utils.data.DataLoader(
         dataset,
         batch_size=args.batch_size,
         shuffle=False,
-        num_workers=config.train.num_workers,
+        num_workers=worker_count,
+        multiprocessing_context="spawn" if worker_count > 0 else None,
         pin_memory=True,
         collate_fn=collate,
     )
